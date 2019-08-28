@@ -1,0 +1,774 @@
+﻿@model PkpmGX.Models.SysViewModels
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+ 
+ 
+<!--
+<div id="form_container" style="width:980px;height:100%;"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:150px; left: 0; right: 0; bottom: 3px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+ -->
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridbox" style="width:100%;height:600px;overflow:auto"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var checkInstCombo, dhxWins, myForm, myTabbar, mygrid, editWin, editForm, newWin, menuWin, actionWin, staticWin, areaWin, areaForm, newForm, menuForm, resetWin, resetForm, actionFrom, roleWin, roleForm, menuTree, actionTree, areaTree, myDataView, myTabbarAttach;
+    var dhxTree, myLayOut, instgrid;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+
+        var formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 120, labelWidth: 120 },
+            { type: "combo", label: "单位名称", name: "CheckUnitName" },
+            { type: "container", label: "角色分类", name: "RoleNames" },
+             { type: "newcolumn" },
+             { type: "input", label: "用户名称", name: "UserDisplayName" },
+             { type: "input", label: "账号", name: "UserName" },
+             { type: "newcolumn" },
+             {
+                 type: "block", width: "auto", list: [
+                 { type: "button", name: 'Search', value: "查询", offsetLeft: 20 },
+                 { type: "newcolumn" },
+                 { type: "button", name: 'UserAdd', value: "新增用户", offsetLeft: 20 }
+                 ]
+             }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                gridQString = '/SysUser/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+            if (name == 'UserAdd') {
+                console.log("你好");
+                newWin = dhxWins.createWindow("w1", 20, 30, 350, 500);
+                newWin.setModal(true);
+                newWin.center();
+                newWin.setText("会员新增");
+
+                newForm = newWin.attachForm();
+                var newFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 80 },
+                      { type: "combo", label: "检测单位", name: "InstId" },
+                       { type: "input", label: "监督机构编号", name: "UserCode"},
+                     { type: "input", label: "姓名", name: "DisplayName", required: true },
+                     { type: "input", label: "账号", name: "UserName", required: true },
+                     { type: "password", label: "密码", name: "UserPwd", required: true },
+                    { type: "combo", label: "角色", name: "RoleId", required: true },
+                     {
+                         type: "combo", label: "性别", name: "UserSex", options: [
+                              { text: " ", value: "" },
+                              { text: "男", value: "男" },
+                              { text: "女", value: "女" },
+                         ]
+                     },
+                     { type: "input", label: "电话", name: "Phone", },
+                     { type: "input", label: "电子邮件", name: "Email", },
+                     {
+                         type: "combo", label: "状态", name: "Status", options: [
+                                { text: " ", value: "" },
+                                { text: "正常", value: "00" },
+                                { text: "禁止", value: "01" },
+                         ]
+                     },
+                     {
+                         type: "combo", label: "有效期", name: "Valie", options: [
+                                { text: " ", value: "" },
+                                { text: "长久有效", value: "0" },
+                                { text: "有效期一天", value: "1" },
+                                { text: "有效期一周", value: "2" },
+                                { text: "有效期一月", value: "3" },
+                         ]
+                     },
+                     //{
+                     //    type: "combo", label: "用户等级", name: "Grade", options: [
+                     //            { text: " ", value: "" },
+                     //            { text: "系统管理员", value: "00" },
+                     //             { text: "监督站用户", value: "01" },
+                     //             { text: "检测站用户", value: "02" }
+                     //    ]
+                     //},
+                     { type: "button", name: 'UserAdd', value: "确定", offsetLeft: 80 }
+                ];
+
+                newForm.load(newFormStructrue, function () {
+                    var newInstCombo = newForm.getCombo("InstId");
+                    newInstCombo.enableFilteringMode('between');
+                    newInstCombo.setTemplate({
+                        input: "#name#",
+                        header: true, // if you want to hide header
+                        columns: [
+                            { header: "机构名称", width: 320, option: "#name#" }
+                        ]
+                    });
+                    checkInstCombo.forEachOption(function (optId) {
+                        newInstCombo.addOption([{ value: optId.value, text: optId.text }]);
+                    });
+                    var RoleCombo = newForm.getCombo("RoleId");
+                    RoleCombo.enableFilteringMode('between');
+                    RoleCombo.load("/SysUser/RoleCombo");
+                });
+
+                newForm.attachEvent("onButtonClick", function (name) {
+                    newForm.send("/SysUser/Create", "post", function (loader, newUserResponse) {
+                        var t = window.dhx.s2j(newUserResponse);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.alert({ text: "会员新增成功！", ok: "确定" });
+                            newWin.close();
+                            mygrid.clearAll();
+                            myTabbar.tabs("gridboxOne").progressOn();
+                            mygrid.load(gridQString, doOnGridLoaded);
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    });
+                });
+
+            }
+        });
+
+        checkInstCombo = myForm.getCombo("CheckUnitName");
+        checkInstCombo.enableFilteringMode('between');;
+        checkInstCombo.load("/SysUser/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+
+        RoleCombo = new dhtmlXCombo(myForm.getContainer("RoleNames"), null, null, "checkbox");
+        RoleCombo.load('/SysUser/RoleComboName');
+
+        RoleCombo.attachEvent("onClose", function () {
+            RoleCombo.setComboText(RoleCombo.getChecked().join(','));
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,用户名称,所属单位,账号,有效期,状态,用户类别,自定义模块,自定义按钮,自定义机构,密码重置,操作");//the headers of columns
+        mygrid.setInitWidths("30,200,*,120,100,50,90,90,90,90,80,200");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,layuijslink,layuijslink,layuijslink,layuijslink,layuijslinks");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.setEditable(false);
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/SysUser/Search?' + getQueryStr();
+
+        myTabbar.enableAutoReSize();
+        myTabbar.tabs("gridboxOne").progressOn();
+        //var myMenu = myTabbar.cells('gridboxOne').attachMenu({
+        //    iconset: "awesome"
+        //});
+        //myMenu.loadStruct('/SysUser/RoleMenu', function (role) {
+        //    myMenu.forEachItem(function (itemId) {
+        //        // your code here
+        //        var roleId = 1;
+        //        var roleCode = "ADMINISTRATOR";
+        //        if (itemId) {
+        //            roleId = itemId.split('|')[0];
+        //            roleCode = itemId.split('|')[1];
+        //        }
+        //        if (roleCode == "ADMINISTRATOR") {
+        //            gridQString += '&RoleId=' + roleId;
+        //            mygrid.load(gridQString, doOnGridLoaded);
+        //        }
+        //    });
+        //    //var itemId = "1|ADMINISTRATOR";
+
+        //});
+
+
+        //myMenu.attachEvent("onClick", function (id, zoneId, cas) {
+        //    var roleId = 1;
+        //    var roleCode = "ADMINISTRATOR";
+        //    if (id) {
+        //        roleId = id.split('|')[0];
+        //    }
+        //    gridQString = '/SysUser/Search?' + getQueryStr() + '&RoleId=' + roleId;
+        //        mygrid.clearAll();
+        //        myTabbar.tabs("gridboxOne").progressOn();
+        //        mygrid.load(gridQString, doOnGridLoaded);
+
+        //});
+        mygrid.clearAll();
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('RoleNames' + '=' + encodeURIComponent(RoleCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function personInst(id, name) {
+        var staticWin = dhxWins.createWindow("staticWin", 20, 30, 700, 600);
+        staticWin.setModal(true);
+        staticWin.center();
+        staticWin.setText(name + '自定义机构');
+        var staticWinToolbar = staticWin.attachToolbar({
+            iconset: "awesome",
+            items: [
+               { id: "Save", type: "button", text: "确定", img: "fa fa-clone" },
+               { id: "ClearAll", type: "button", text: "清空", img: "fa fa-clone" }
+            ]
+        });
+        myLayOut = staticWin.attachLayout({
+            pattern: "2U"
+        });
+
+        dhxTree = myLayOut.cells('a').attachTree();
+        myLayOut.cells('a').setText('检测机构选择');
+        staticWin.progressOn();
+        dhxTree.setImagePath("../../Dhtmlx/skins/material/imgs/dhxtree_material/");
+        dhxTree.enableCheckBoxes(1);
+        dhxTree.load("/SysUser/StatisUserCustomTree/" + id, function () {
+            staticWin.progressOff();
+        });
+
+        instgrid = myLayOut.cells('b').attachGrid();
+        myLayOut.cells('b').setText('自定义检测机构');
+        instgrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        instgrid.setHeader("检测机构");//the headers of columns
+        instgrid.setInitWidths("*");          //the widths of columns
+        instgrid.setColAlign("left");       //the alignment of columns
+        instgrid.setColTypes("ro");                //the types of columns
+        instgrid.setColSorting("int");          //the sorting types
+        instgrid.init();      //finishes initialization and renders the grid on the page
+        customGrid(instgrid);
+        instgrid.load('/SysUser/StatisUserCustomGrid/' + id);
+
+        dhxTree.attachEvent("onCheck", function (id, state) {
+            // your code here
+
+            if (state == 1) {
+                instgrid.addRow(id, [dhxTree.getItemText(id)]);
+            } else if (state == 0) {
+                instgrid.deleteRow(id);
+            }
+        });
+
+        staticWinToolbar.attachEvent("onClick", function (tid) {
+            if (tid == "Save") {
+                var selectedCustomIds = dhxTree.getAllChecked();
+                window.dhx.ajax.post("/SysUser/AddUserStatisCustom", "customIds=" + selectedCustomIds + "&id=" + id, function (response) {
+                    var t = window.dhx.s2j(response.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.alert({ text: "自定义机构设置成功！", ok: "确定" });
+                        staticWin.close();
+                    } else {
+                        dhtmlx.alert(t.ErroMsg);
+                    }
+                });
+            }
+            else if (tid == 'ClearAll') {
+
+                var selectInstIds = dhxTree.getAllChecked().split(',');
+                if (selectInstIds.length > 0) {
+                    $.each(selectInstIds, function (i, sId) {
+                        dhxTree.setCheck(sId, 0);
+                        instgrid.clearAll();
+                    });
+                }
+            }
+        });
+    }
+
+    function personAction(id) {
+        actionWin = dhxWins.createWindow("actionW", 20, 30, 380, 680);
+        actionWin.setModal(true);
+        actionWin.center();
+        actionWin.setText("按钮设置");
+
+        actionFrom = actionWin.attachForm();
+        var menuFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Menu", label: "按钮", inputHeight: 550, inputWidth: 250 },
+             { type: "button", name: 'MenuAdd', value: "确定", offsetLeft: 80 }
+        ];
+        actionFrom.load(menuFormStructrue);
+        actionTree = new dhtmlXTreeView(actionFrom.getContainer("Menu"));
+        actionTree.enableCheckboxes(true);
+        actionTree.loadStruct("/SysUser/MenuAction/" + id);
+
+        actionFrom.attachEvent("onButtonClick", function (name) {
+            var actionIds = actionTree.getAllChecked().join(',');;
+            window.dhx.ajax.post("/SysUser/AddMenuAction", "id=" + id + "&actionIds=" + actionIds, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "人员按钮设置成功！", ok: "确定" });
+                    actionWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+        });
+    }
+
+    function personModule(id) {
+        menuWin = dhxWins.createWindow("menuW", 20, 30, 380, 680);
+        menuWin.setModal(true);
+        menuWin.center();
+        menuWin.setText("模块设置");
+
+        menuForm = menuWin.attachForm();
+        var menuFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Menu", label: "模块", inputHeight: 550, inputWidth: 250 },
+             { type: "button", name: 'MenuAdd', value: "确定", offsetLeft: 80 }
+        ];
+        menuForm.load(menuFormStructrue);
+        menuTree = new dhtmlXTreeView(menuForm.getContainer("Menu"));
+        menuTree.enableCheckboxes(true);
+        menuTree.loadStruct("/SysUser/Menu/" + id);
+
+        menuForm.attachEvent("onButtonClick", function (name) {
+            var menuIds = menuTree.getAllChecked().join(',');;
+            window.dhx.ajax.post("/SysUser/AddMenu", "id=" + id + "&menuIds=" + menuIds, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "人员模块设置成功！", ok: "确定" });
+                    menuWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+        });
+    }
+
+    function PaswordRest(id) {
+        resetWin = dhxWins.createWindow("w3", 20, 30, 320, 350);
+        resetWin.setModal(true);
+        resetWin.center();
+        resetWin.setText("密码重置");
+
+        resetForm = resetWin.attachForm();
+
+        var resetFormStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 80 },
+            { type: "input", label: "重置密码", name: "ResetPwd", required: true },
+            { type: "hidden", name: "UserId", value: id },
+            { type: "button", name: 'PwdReset', value: "确定", offsetLeft: 80 }
+        ];
+
+        resetForm.load(resetFormStructure);
+
+        resetForm.attachEvent("onButtonClick", function (name) {
+            resetForm.send("/SysUser/ResetPwd", "post", function (loader, resetResponse) {
+                var t = window.dhx.s2j(resetResponse);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "会员重置密码成功！", ok: "确定" });
+                    resetWin.close();
+                    mygrid.clearAll();
+                    myTabbar.tabs("gridboxOne").progressOn();
+                    mygrid.load(gridQString, doOnGridLoaded);
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+
+            });
+        });
+    }
+
+    function roleUser(id) {
+        roleWin = dhxWins.createWindow("w4", 20, 30, 380, 550);
+        roleWin.setModal(true);
+        roleWin.center();
+        roleWin.setText("会员角色设置");
+
+        roleForm = roleWin.attachForm();
+        roleForm.loadStruct("/SysUser/Roles/" + id);
+        roleForm.attachEvent('onButtonClick', function (name) {
+            var data = [];
+            data.push('id' + "=" + id);
+            data.push('roleId' + '=' + roleForm.getItemValue('Role'));
+
+            window.dhx.ajax.post("/SysUser/AddUserIntoRole", data.join('&'), function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "会员角色设置成功！", ok: "确定" });
+                    roleWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+
+        });
+    }
+
+    function CheckStatus(id) {
+        window.dhx.ajax.get("/SysUser/CheckUser?Id=" + id, function (r) {
+            var user = window.dhx.s2j(r.xmlDoc.responseText);
+            if (user != null) {
+                editWin = dhxWins.createWindow("w2", 20, 30, 700, 600);
+                editWin.setModal(true);
+                editWin.center();
+                editWin.setText("会员审核");
+
+                editForm = editWin.attachForm();
+                var editFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 80 },
+                     { type: "input", label: "用户名称", name: "UserDisplayName", value: user.UserDisplayName, required: true },
+
+                     {
+                         type: "input", label: "账号", name: "UserName", value: user.UserName
+                     },
+
+                     { type: "input", label: "电子邮件", name: "Email", value: user.Email },
+                     { type: "image", label: "身份证照片", name: "cadPhotoPath", url: "/SysUser/Image?itemValue=" + user.cardphotopath, imageWidth: 240, imageHeight: 340, inputWidth: 260, inputHeight: 360, labelWidth: 70 },
+                     { type: "newcolumn" },
+                     { type: "input", label: "所属单位", name: "CustomId", value: user.CustomId, required: true },
+                     { type: "input", label: "用户类别", name: "Grade", value: user.Grade },
+                      { type: "input", label: "审核状态", name: "CheckStatus", value: user.CheckStatus == 1 ? "已审核" : "未审核" },
+                     { type: "image", label: "免冠照片", name: "photopath", url: "/SysUser/Image?itemValue=" + user.photopath, imageWidth: 240, imageHeight: 340, inputWidth: 260, inputHeight: 360, labelWidth: 70 },
+                     { type: "hidden", name: "UserId", value: user.Id },
+                     { type: "button", name: 'UserEdit', value: "审核", offsetLeft: 120 }
+                ];
+
+                editForm.load(editFormStructrue, function () { });
+
+                editForm.attachEvent("onButtonClick", function (name) {
+                    editForm.send("/SysUser/UpdateCheckStatus/" + id, "post", function (loader, response) {
+                        var t = window.dhx.s2j(response);
+                        if (t != null && t.IsSucc) {
+                            mygrid.cells(id, 6).setValue("已审核");
+                            dhtmlx.alert({ text: "会员审核成功！", ok: "确定" });
+                            editWin.close();
+                            mygrid.clearAll();
+                            myTabbar.tabs("gridboxOne").progressOn();
+                            mygrid.load(gridQString, doOnGridLoaded);
+                        } else {
+                            dhtmlx.alert("会员审核：" + t.ErroMsg);
+                        }
+                    });
+                });
+
+            }
+            //window.dhx.ajax.post("/SysUser/UpdateCheckStatus/" + id, function (response) {
+            //    var t = window.dhx.s2j(response.xmlDoc.responseText);
+            //    if (t != null && t.IsSucc) {
+            //        mygrid.cells(id, 6).setValue("已审核");
+            //        dhtmlx.alert({ text: "会员审核成功！", ok: "确定" });
+            //    } else {
+            //        dhtmlx.alert("会员审核：" + t.ErroMsg);
+            //    }
+            //});
+        });
+    }
+
+    function areaUser(id) {
+        //areaWin
+        areaWin = dhxWins.createWindow("areaWin", 20, 30, 470, 650);
+        areaWin.setModal(true);
+        areaWin.center();
+        areaWin.setText("会员地区设置");
+
+        areaForm = areaWin.attachForm();
+        var areaFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Areas", label: "地区", inputHeight: 550, inputWidth: 280 },
+             { type: "button", name: 'RoleAdd', value: "确定", offsetLeft: 80 }
+        ];
+        areaForm.load(areaFormStructrue, function () {
+            areaTree = new dhtmlXTreeView(areaForm.getContainer("Areas"));
+            areaTree.enableCheckboxes(true);
+            areaTree.loadStruct("/SysUser/Areas/" + id);
+        });
+
+        areaForm.attachEvent('onButtonClick', function (name) {
+            var data = [];
+            data.push('id' + "=" + id);
+            data.push('areaIds' + '=' + areaTree.getAllChecked().join(','));
+
+            window.dhx.ajax.post("/SysUser/Areas", data.join('&'), function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "会员地区设置成功！", ok: "确定" });
+                    areaWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+
+        });
+    }
+
+    function modifyUser(id) {
+        window.dhx.ajax.get("/SysUser/Edit?Id=" + id, function (r) {
+            var user = window.dhx.s2j(r.xmlDoc.responseText);
+            if (user != null) {
+                var IsQrRole=false;
+                var roles = user.UserRoles;
+                for (var i = 0; i < roles.length; i++) {
+                    if (roles[i].RoleId == 3 || roles[i].RoleId == 5) {
+                        IsQrRole=true;
+                        break;
+                    }
+                }
+                if (IsQrRole) {
+                    {
+                        editWin = dhxWins.createWindow("w2", 20, 30, 600, 750);
+                        editWin.setModal(true);
+                        editWin.center();
+                        editWin.setText("会员编辑");
+
+                        editForm = editWin.attachForm();
+                        var editFormStructrue = [
+                            {
+                                type: "block", list: [
+                                  { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 80 },
+                               { type: "input", label: "身份证号", name: "UserName", value: user.UserName, required: true },
+                               { type: "input", label: "单位", name: "UnitName", value: user.UnitName, required: true },
+                               { type: "input", label: "姓名", name: "DisplayName", value: user.UserDisplayName, required: true },
+                               {
+                                   type: "combo", label: "性别", name: "UserSex", value: user.Sex, options: [
+                                        { text: " ", value: "" },
+                                        { text: "男", value: "男" },
+                                        { text: "女", value: "女" },
+                                   ]
+                               },
+                               { type: "newcolumn" },
+                               { type: "input", label: "电话", name: "Phone", value: user.Mobile },
+                               { type: "input", label: "电子邮件", name: "Email", value: user.Email },
+                               {
+                                   type: "combo", label: "状态", name: "Status", value: user.Status, options: [
+                                          { text: " ", value: "" },
+                                          { text: "正常", value: "00" },
+                                          { text: "禁止", value: "01" },
+                                   ]
+                               },
+                               { type: "hidden", name: "Grade", value: user.Grade },
+                               { type: "hidden", name: "RoleId", value: user.UserRoles[0].RoleId },
+                               { type: "hidden", name: "UserId", value: user.Id },
+                               { type: "button", name: 'UserEdit', value: "确定", offsetLeft: 80 },
+                                ]
+                            },
+
+                             {
+                                 type: "block", list: [
+                                   {
+                                       type: "fieldset", label: "", name: 'Schedule', width: "auto", list: [
+                                           { type: "settings", position: "label-left", labelAlign: "right" },
+                                           { type: "container", name: "myTabbar", label: "", inputHeight: 500, inputWidth: 500 }
+                                       ]
+                                   },
+                                 ]
+                             }
+
+                        ];
+
+                        editForm.load(editFormStructrue, function () {
+                            var userSexCombo = editForm.getCombo("UserSex");
+                            var statusCombo = editForm.getCombo("Status");
+
+                            userSexCombo.setComboValue(user.Sex);
+                            statusCombo.setComboValue(user.Status);
+                        });
+
+                        editForm.attachEvent("onButtonClick", function (name) {
+                            editForm.send("/SysUser/Edit", "post", function (loader, userEditResponse) {
+                                var t = window.dhx.s2j(userEditResponse);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.alert({ text: "会员修改成功！", ok: "确定" });
+                                    editWin.close();
+                                    mygrid.clearAll();
+                                    myTabbar.tabs("gridboxOne").progressOn();
+                                    mygrid.load(gridQString, doOnGridLoaded);
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        });
+                        myTabbarAttach = new dhtmlXTabBar({
+                            parent: editForm.getContainer("myTabbar"),
+                            tabs: [
+                                {
+                                    id: "a",
+                                    text: "附件信息",
+                                    active: true,
+                                }
+                            ]
+                        });
+
+                        var myCarousel = myTabbarAttach.tabs("a").attachCarousel();
+                        var photopath = user.photopath;
+                        if (photopath) {
+                            myCarousel.addCell("photopath");
+                            myCarousel.cells("photopath").attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/SysUser/Image?itemValue=" + photopath + "' border='0' style='width: 100%;'></div>");
+                        }
+                        var cardphotopath = user.cardphotopath;
+                        if (cardphotopath) {
+                            myCarousel.addCell("cardphotopath");
+                            myCarousel.cells("cardphotopath").attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/SysUser/Image?itemValue=" + cardphotopath + "' border='0' style='width: 100%;'></div>");
+                        }
+                    }
+                }
+                else {
+                    {
+                        editWin = dhxWins.createWindow("w2", 20, 30, 350, 500);
+                        editWin.setModal(true);
+                        editWin.center();
+                        editWin.setText("会员编辑");
+
+                        editForm = editWin.attachForm();
+                        var editFormStructrue = [
+                             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 80 },
+                              { type: "combo", label: "检测单位", name: "InstId" },
+                                 { type: "input", label: "监督机构编号", name: "UserCode",value:user.UserCode},
+                             { type: "input", label: "姓名", name: "DisplayName", value: user.UserDisplayName, required: true },
+                             { type: "input", label: "账号", name: "UserName", value: user.UserName, required: true },
+                            { type: "combo", label: "角色", name: "RoleId", required: true },
+                             {
+                                 type: "combo", label: "性别", name: "UserSex", value: user.Sex, options: [
+                                      { text: " ", value: "" },
+                                      { text: "男", value: "男" },
+                                      { text: "女", value: "女" },
+                                 ]
+                             },
+                             { type: "input", label: "电话", name: "Phone", value: user.Mobile },
+                             { type: "input", label: "电子邮件", name: "Email", value: user.Email },
+                             {
+                                 type: "combo", label: "状态", name: "Status", value: user.Status, options: [
+                                        { text: " ", value: "" },
+                                        { text: "正常", value: "00" },
+                                        { text: "禁止", value: "01" },
+                                 ]
+                             },
+                              {
+                                  type: "combo", label: "有效期", name: "Valie",value:user.Valie, options: [
+                                         { text: " ", value: "" },
+                                         { text: "长久有效", value: "0" },
+                                         { text: "有效期一天", value: "1" },
+                                         { text: "有效期一周", value: "2" },
+                                         { text: "有效期一月", value: "3" },
+                                  ]
+                              },
+                             { type: "hidden", name: "UserId", value: user.Id },
+                             //{
+                             //    type: "combo", label: "用户等级", name: "Grade", value: user.Grade, options: [
+                             //            { text: " ", value: "" },
+                             //            { text: "系统管理员", value: "00" },
+                             //             { text: "监督站用户", value: "01" },
+                             //             { text: "检测站用户", value: "02" }
+                             //    ]
+                             //},
+                             { type: "button", name: 'UserEdit', value: "确定", offsetLeft: 80 }
+                        ];
+
+                        editForm.load(editFormStructrue, function () {
+                            var userSexCombo = editForm.getCombo("UserSex");
+                            var statusCombo = editForm.getCombo("Status");
+                            //var gradeCombo = editForm.getCombo("Grade");
+                            var editInstCombo = editForm.getCombo("InstId");
+                            var valieCombo = editForm.getCombo("Valie");
+                            userSexCombo.setComboValue(user.Sex);
+                            statusCombo.setComboValue(user.Status);
+                            //gradeCombo.setComboValue(user.Grade);
+                            valieCombo.setComboValue(user.Valie);
+                            editInstCombo.enableFilteringMode('between');;
+                            editInstCombo.load("/SysUser/InstCombo", function () {
+                                editInstCombo.setComboValue(user.CustomId);
+                            });
+                            var RoleCombo = editForm.getCombo("RoleId");
+                            RoleCombo.enableFilteringMode('between');
+                            RoleCombo.load("/SysUser/RoleCombo", function (role) {
+                                RoleCombo.setComboValue(user.UserRoles[0].RoleId);
+                            });
+                        });
+
+                        editForm.attachEvent("onButtonClick", function (name) {
+                            editForm.send("/SysUser/Edit", "post", function (loader, userEditResponse) {
+                                var t = window.dhx.s2j(userEditResponse);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.alert({ text: "会员修改成功！", ok: "确定" });
+                                    editWin.close();
+                                    mygrid.clearAll();
+                                    myTabbar.tabs("gridboxOne").progressOn();
+                                    mygrid.load(gridQString, doOnGridLoaded);
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        });
+
+                    }
+                }
+
+            }
+
+        });
+    }
+
+    function deleteUser(id) {
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要删除此会员？",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/SysUser/Delete", "id=" + id, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.alert({ text: "会员删除成功！", ok: "确定" });
+                            mygrid.clearAll();
+                            myTabbar.tabs("gridboxOne").progressOn();
+                            mygrid.load(gridQString, doOnGridLoaded);
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    });
+                }
+            }
+        });
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = newWin = editWin = menuWin = resetWin = roleWin = null;
+        }
+    }
+</script>

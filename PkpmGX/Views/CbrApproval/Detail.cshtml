@@ -1,0 +1,74 @@
+﻿@model PkpmGX.Models.CBRUnitSaveModel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="header_cq" style="height:10px">
+</div>
+<div class="layui-container">
+    <div class="layui-row" id="Detail-tableContainer">
+        <form class="layui-form" action="" lay-filter="Detail-form">
+            <div class="layui-card">
+                <div class="layui-card-header">初审表</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">初审编号<span style="color:red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="csbh" id="csbh" value="@Model.csbh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">初审内容<span style="color:red">*</span></label>
+                            <div class="layui-input-block">
+                                <textarea id="textarea" name="content" autocomplete="off" class="layui-input">@Model.content</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+
+        layedit.build('textarea');
+
+    });
+
+
+
+
+</script>
+

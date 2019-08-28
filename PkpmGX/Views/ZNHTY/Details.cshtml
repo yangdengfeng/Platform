@@ -1,0 +1,197 @@
+﻿@model PkpmGX.Models.ZNHTYFangAnViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+    </div>
+    <div class="layui-row" id="HtyInfos-Details-Container">
+        <form class="layui-form" action="" lay-filter="HtyInfos-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 工程信息 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程编码</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.PROJECTNUM:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">监督机构</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.INSPECTUNIT:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">监督机构编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.INSPECTMAN:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.PROJECTNAME:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测机构</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.UNITCODE:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程地址</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.PROJECTADDRESS:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程当前状态</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.PROJECTSTATUS: string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">结构类型</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.STRUTTYPE : string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程收费方式</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.PROJECTCHARGETYPE: string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">地理区域编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.AREAID: string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测方式</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.project.STRUCTLEVLES: string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">开工日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.project!=null?Model.PLANSTARTDATE:string.Empty)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header"> 方案信息 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">检测人员</div>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="100" />
+                                        <col width="100" />
+                                        <col />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <td>姓名</td>
+                                            <td>联系电话</td>
+                                            <td>证书号</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var item in Model.people)
+                                            {
+                                                <tr>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Tel</td>
+                                                    <td>@item.PostNum</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测设备编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="testingequipment" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">现场检测计划开始结束时间</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="Time" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">方案名称</div>
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" id="filename">@Model.programme.filename</button>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">会签表</div>
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" id="hqfilename">@Model.programme.hqfilename</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.config({
+        base: '../../static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "layer", "upload"], function () {
+        var $ = layui.$,
+            form = layui.form;
+
+        form.val('HtyInfos-Details-form', {
+            "testingequipment": "@Model.EquipNums",
+            "Time": "@Model.date",
+        })
+    });
+    $('#filename').on("click", function () {
+        var filepath = encodeURIComponent("@(Model.programme.filepath)");
+        window.location = "/ZNHTY/Download?filepath=" + filepath + "&fileName=" + "@(Model.programme.filename)";
+    });
+
+    $('#hqfilename').on("click", function () {
+         var filepath = encodeURIComponent("@(Model.programme.hqfilepath)");
+        window.location = "/ZNHTY/Download?filepath=" + filepath + "&fileName=" + "@(Model.programme.hqfilename)";
+    });
+
+
+</script>

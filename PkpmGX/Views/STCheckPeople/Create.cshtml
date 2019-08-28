@@ -1,0 +1,670 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<script src="~/static/layuiadmin/lib/layedit.js"></script>
+<script src="~/static/layuiadmin/lib/formSelects-v4.js"></script>
+<div class="layui-container">
+    <div class="layui-row" id="CheckPeopleManager-Details-Container">
+        <form class="layui-form" action="" lay-filter="CheckPeopleManager-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">检测机构名称<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="selfnumPath" id="selfnumPath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="PhotoPath" id="PhotoPath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="educationpath" id="educationpath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="PostPath" id="PostPath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="sbnumpath" id="sbnumpath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="postTypeCode" id="postTypeCode" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                                        <input type="text" name="id" placeholder="" autocomplete="off" class="layui-hide">
+                                        <select name="Customid" lay-search="" lay-verify="required">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.allSTUnit)
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">性别</div>
+                                    <div class="layui-input-block">
+                                        <select name="Sex" lay-search="">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.Sex)
+                                                {
+                                                    <option value="@item.Name">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">姓名<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">出生年月<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Birthday" lay-verify="required" id="Birthday" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">身份证号<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="SelfNum" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书编号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="PostNum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否有岗位证书<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <select name="ishaspostnum" lay-search="" lay-verify="required" >
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.NoYes)
+                                                {
+                                                    <option value="@item.KeyValue">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书有效期</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Postnumdate" id="Postnumdate" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书获得时间</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="PostDate" id="PostDate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">毕业学校<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="School" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">最高学历<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Education" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">职称<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <select name="Title"  lay-verify="required">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.STPersonnelTitles)
+                                                {
+                                                    <option value="@item.KeyValue">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">专业<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Professional" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">联系电话</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Tel" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">职务<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="zw" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">电子邮箱</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Email" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">社保号码</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="SBNum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否是工程技术人员<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <select name="isjs" lay-search="" lay-verify="required">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.NoYes)
+                                                {
+                                                    <option value="@item.KeyValue">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否是管理人员<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <select name="ismanager" lay-search="" lay-verify="required">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.NoYes)
+                                                {
+                                                  <option value="@item.KeyValue">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否是实验室人员<span style="color:red">*</span></div>
+                                    <div class="layui-input-block">
+                                        <select name="issy" lay-search="" lay-verify="required">
+                                            <option value=""></option>
+                                            @{
+                                                foreach (var item in Model.NoYes)
+                                                {
+                                                   <option value="@item.KeyValue">@item.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位资格类别</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="PostType" id="PostType"  placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">岗位信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">岗位证书延续注册情况</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="" id="postDelayReg" name="postDelayReg" class="layui-textarea"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">其他信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12 layui-col-space15">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title">
+                                    <li>变更情况</li>
+                                    <li>继续教育情况</li>
+                                    <li>获奖情况</li>
+                                    <li>处罚情况</li>
+                                </ul>
+                                <div class="layui-tab-content" style="height:100%">
+                                    <div class="layui-tab-item layui-show">
+                                        <label class="layui-form-label">
+                                            变更情况
+                                            <br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="ChangeAddCheckItem">[增加]</a>
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="ChangeCheckItems-table">
+                                                <colgroup>
+                                                    <col width="200" />
+                                                    <col />
+                                                    <col width="50" />
+                                                    <col width="50" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>变更时间</th>
+                                                        <th>变更内容</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @*@{
+                                                        foreach (var item in Model.STCheckPeopleChange)
+                                                        {
+                                                            <tr id="@item.Id">
+                                                                <td class="ChaDate" data-CheckPeopleChange="ChaDate">@item.ChaDate</td>
+                                                                <td class="ChaContent" data-CheckPeopleChange="ChaContent">@item.ChaContent</td>
+                                                                <td><button class="layui-btn ChangeCheckItems-table-table-btnDel">删除</button></td>
+
+                                                            </tr>
+                                                        }
+                                                    }*@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            继续教育情况
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="EducationAddCheckItem">[增加]</a>
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="EducationCheckItems-table">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col />
+                                                    <col width="200" />
+                                                    <col width="200" />
+                                                    <col width="100" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>时间</th>
+                                                        <th>内容</th>
+                                                        <th>培训机构</th>
+                                                        <th>考试时间</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @*@{
+                                                        foreach (var item in Model.STCheckPeopleEducation)
+                                                        {
+                                                            <tr>
+                                                                <td data-CheckPeopleEducation="TrainDate">@item.TrainDate</td>
+                                                                <td data-CheckPeopleEducation="TrainContent">@item.TrainContent</td>
+                                                                <td data-CheckPeopleEducation="TrainUnit">@item.TrainUnit</td>
+                                                                <td data-CheckPeopleEducation="TestDate">@item.TestDate</td>
+                                                                <td><button class="layui-btn EducationCheckItems-table-table-btnDel">删除</button></td>
+                                                            </tr>
+                                                        }
+                                                    }*@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            获奖情况
+                                            <br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="AwardsAddCheckItem">[增加]</a>
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="AwardsCheckItems-table">
+                                                <colgroup>
+                                                    <col width="200" />
+                                                    <col />
+                                                    <col width="200" />
+                                                    <col width="100" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>日期</th>
+                                                        <th>获奖名称</th>
+                                                        <th>发奖单位</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @*@{
+                                                        foreach (var item in Model.STCheckPeopleAwards)
+                                                        {
+                                                            <tr>
+                                                                <td data-CheckPeopleAwards="AwaDate">@item.AwaDate</td>
+                                                                <td data-CheckPeopleAwards="AwaContent">@item.AwaContent</td>
+                                                                <td data-CheckPeopleAwards="AwaUnit">@item.AwaUnit</td>
+                                                                <td><button class="layui-btn AwardsCheckItems-table-table-btnDel">删除</button></td>
+                                                            </tr>
+                                                        }
+                                                    }*@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            处罚情况
+                                            <br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="PunishAddCheckItem">[增加]</a>
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="PunishCheckItems-table">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col />
+                                                    <col width="150" />
+                                                    <col width="150" />
+                                                    <col width="100" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>日期</th>
+                                                        <th>处罚名称</th>
+                                                        <th>处罚机构</th>
+                                                        <th>处罚内容</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @*@{
+                                                        foreach (var item in Model.STCheckPeoplePunish)
+                                                        {
+                                                            <tr>
+
+                                                                <td data-CheckPeoplePunish="PunDate">@item.PunDate</td>
+                                                                <td data-CheckPeoplePunish="PunName">@item.PunName</td>
+                                                                <td data-CheckPeoplePunish="PunUnit">@item.PunUnit</td>
+                                                                <td data-CheckPeoplePunish="PunContent">@item.PunContent</td>
+                                                                <td><button class="layui-btn PunishCheckItems-table-table-btnDel">删除</button></td>
+                                                            </tr>
+                                                        }
+                                                    }*@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space15">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.STCheckPeopleFile)
+                                        {
+                                            <tr id="@item.Number">
+                                                <td>@item.FileName</td>
+                                                <td class="state">@item.FileState</td>
+                                                <td><a href="javascript:void(0);" onclick=fileGrid_Edit("@item.FileName","@item.Number","@item.Type")>查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit lay-filter="STCheckPeople-Create-save">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#ChangeCheckItems-table').on('click', '.ChangeCheckItems-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+    $('#EducationCheckItems-table').on('click', '.EducationCheckItems-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+    $('#AwardsCheckItems-table').on('click', '.AwardsCheckItems-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+    $('#PunishCheckItems-table').on('click', '.PunishCheckItems-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+
+
+    $('#ChangeAddCheckItem').on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '变更情况新增',
+            content: '/STCheckPeople/ChangeAddCheckItem'
+        });
+    })
+    $('#EducationAddCheckItem').on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '继续教育情况新增',
+            content: '/STCheckPeople/EducationAddCheckItem'
+        });
+    })
+    $('#AwardsAddCheckItem').on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '获奖情况新增',
+            content: '/STCheckPeople/AwardsAddCheckItem'
+        });
+    })
+    $('#PunishAddCheckItem').on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '处罚情况新增',
+            content: '/STCheckPeople/PunishAddCheckItem'
+        });
+    })
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+    layui.use(["form", "element", "layer", "table", "view", 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            element = layui.element,
+            view = layui.view,
+            laydate = layui.laydate,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+        laydate.render({
+            elem: '#Birthday'
+        });
+
+        laydate.render({
+            elem: '#Postnumdate',
+            range: true
+        });
+
+        laydate.render({
+            elem: '#PostDate'
+        });
+
+        form.on('submit(STCheckPeople-Create-save)', function (data) {
+            var dataField = data.field;
+            var peoAward = '', peoPunish = '', peoEducation = '', peoChange = '';
+            var peoAwards = [], peoPunishs = [], peoEducations = [], peoChanges = [];
+            console.log($('#PostType').val());
+            console.log(dataField);
+
+            $.each($('#AwardsCheckItems-table tr'), function (i) {
+                var onepeoAward = {};
+                $(this).find('td').each(function (i) {
+                    $td = $(this);
+                    onepeoAward[$td.attr("data-CheckPeopleAwards")] = $td.text();
+                    if (i == 3) {
+                        peoAwards.push(onepeoAward);
+                        onepeoAward = {};
+                    }
+                })
+            });
+            $.each($('#PunishCheckItems-table tr'), function (i) {
+                var onepeoPunish = {};
+                $(this).find('td').each(function (i) {
+                    $td = $(this);
+                    onepeoPunish[$td.attr("data-CheckPeoplePunish")] = $td.text();
+                    if (i == 4) {
+                        peoPunishs.push(onepeoPunish);
+                        onepeoPunish = {};
+                    }
+                })
+            });
+            $.each($('#ChangeCheckItems-table tr'), function (index, value) {
+                var onepeoChange = {};
+                $(this).find('td').each(function (i) {
+                    $td = $(this);
+                    onepeoChange[$td.attr("data-CheckPeopleChange")] = $td.text();
+                    if (i == 2) {
+                        peoChanges.push(onepeoChange);
+                        onepeoChange = {};
+                    }
+                })
+            });
+
+            $.each($('#EducationCheckItems-table tr'), function (i) {
+                var onepeoEducation = {};
+                $(this).find('td').each(function (i) {
+                    $td = $(this);
+                    onepeoEducation[$td.attr("data-CheckPeopleEducation")] = $td.text();
+                    if (i == 4) {
+                        peoEducations.push(onepeoEducation);
+                        onepeoEducation = {};
+                    }
+                })
+            });
+            dataField["peoAward"] = peoAwards;
+            dataField["peoPunish"] = peoPunishs;
+            dataField["peoEducation"] = peoEducations;
+            dataField["peoChange"] = peoChanges;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/STCheckPeople/Create",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('商砼人员新增成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/STCheckPeople/Create/");
+                            },
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('商砼人员新增失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        });
+    });
+
+    function fileGrid_Edit(FileName, Number, Type) {
+
+        var fileUrl = $('#' + Type).val();
+        console.log(fileUrl);
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            title: FileName,
+            content: "/STCheckPeople/EditFile?filePath=" + encodeURIComponent(fileUrl) + "&id=" + Number + "&name=" + FileName.split("编辑")[0],
+
+            cancel: function (index, layero) {
+
+                if ($('#filePath').val()) {
+                    if (Number == 0) {
+                        $('#selfnumPath').val($('#filePath').val());
+                        console.log($('selfnumPath').val());
+                    } else if (Number == 1) {
+                        $('#PhotoPath').val($('#filePath').val());
+                    } else if (Number == 2) {
+                        $('#educationpath').val($('#filePath').val());
+                    } else if (Number == 3) {
+                        $('#PostPath').val($('#filePath').val());
+                    } else if (Number == 4) {
+                        $('#sbnumpath').val($('#filePath').val());
+                    }
+                }
+            }
+        });
+    }
+
+</script>
+

@@ -1,0 +1,127 @@
+﻿@model PkpmGX.Models.ProjectInfoDetailModels
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="ReportInfo-Details-Container">
+        <form class="layui-form" action="" lay-filter="ReportInfo-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">工程概况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectname" value="@Model.projectname" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测机构</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="customname" value="@Model.customname" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">所在城市</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="areainfo" value="@Model.areainfo" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程备案登记号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectregnum" value="@Model.projectregnum" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md8">
+                            <div class="layui-form-label">工程地址</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectaddress" value="@Model.projectaddress" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">建设单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="constructionunit" value="" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">监理单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="supervisionunit" value="@Model.supervisionunit" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="designunit" value="@Model.designunit" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">	施工单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="constructionunits" value="@Model.constructionunits" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">项目负责人名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="personinchargename" value="@Model.personinchargename" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">项目负责人电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="personinchargetel" value="@Model.personinchargetel" placeholder="" autocomplete="off" disabled class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">见证人员</div>
+                <div class="layui-card-body">
+
+                    @{
+                        foreach (var item in Model.JZPeople)
+                        {
+                            <div class="layui-form-item">
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">姓名</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="name"  value="@item.name" placeholder="" autocomplete="off" disabled class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">联系电话</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="phone" value="@item.phone" placeholder="" autocomplete="off" disabled class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">证书号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="postnum" value="@item.postnum" placeholder="" autocomplete="off" disabled class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

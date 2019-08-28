@@ -1,0 +1,171 @@
+﻿<error errorId="10202bf9-96df-4900-8212-65c275642135" host="SKY-20190312RGH" type="Ninject.ActivationException" message="Error activating ICheckQualifyService&#xD;&#xA;No matching bindings are available, and the type is not self-bindable.&#xD;&#xA;Activation path:&#xD;&#xA;  2) Injection of dependency ICheckQualifyService into parameter checkQualifyService of constructor of type ApplyQualifyController&#xD;&#xA;  1) Request for ApplyQualifyController&#xD;&#xA;&#xD;&#xA;Suggestions:&#xD;&#xA;  1) Ensure that you have defined a binding for ICheckQualifyService.&#xD;&#xA;  2) If the binding was defined in a module, ensure that the module has been loaded into the kernel.&#xD;&#xA;  3) Ensure you have not accidentally created more than one kernel.&#xD;&#xA;  4) If you are using constructor arguments, ensure that the parameter name matches the constructors parameter name.&#xD;&#xA;  5) If you are using automatic module loading, ensure the search path and filters are correct.&#xD;&#xA;" source="Ninject" detail="System.InvalidOperationException: 尝试创建“PkpmGX.Controllers.ApplyQualifyController”类型的控制器时出错。请确保控制器具有无参数公共构造函数。 ---&gt; Ninject.ActivationException: Error activating ICheckQualifyService&#xD;&#xA;No matching bindings are available, and the type is not self-bindable.&#xD;&#xA;Activation path:&#xD;&#xA;  2) Injection of dependency ICheckQualifyService into parameter checkQualifyService of constructor of type ApplyQualifyController&#xD;&#xA;  1) Request for ApplyQualifyController&#xD;&#xA;&#xD;&#xA;Suggestions:&#xD;&#xA;  1) Ensure that you have defined a binding for ICheckQualifyService.&#xD;&#xA;  2) If the binding was defined in a module, ensure that the module has been loaded into the kernel.&#xD;&#xA;  3) Ensure you have not accidentally created more than one kernel.&#xD;&#xA;  4) If you are using constructor arguments, ensure that the parameter name matches the constructors parameter name.&#xD;&#xA;  5) If you are using automatic module loading, ensure the search path and filters are correct.&#xD;&#xA;&#xD;&#xA;   在 Ninject.KernelBase.Resolve(IRequest request, Boolean handleMissingBindings)&#xD;&#xA;   在 Ninject.KernelBase.Resolve(IRequest request)&#xD;&#xA;   在 Ninject.Planning.Targets.Target`1.ResolveWithin(IContext parent)&#xD;&#xA;   在 Ninject.Activation.Providers.StandardProvider.GetValue(IContext context, ITarget target)&#xD;&#xA;   在 Ninject.Activation.Providers.StandardProvider.&lt;&gt;c__DisplayClass15_0.&lt;Create&gt;b__0(ITarget target)&#xD;&#xA;   在 System.Linq.Enumerable.WhereSelectArrayIterator`2.MoveNext()&#xD;&#xA;   在 System.Linq.Buffer`1..ctor(IEnumerable`1 source)&#xD;&#xA;   在 System.Linq.Enumerable.ToArray[TSource](IEnumerable`1 source)&#xD;&#xA;   在 Ninject.Activation.Providers.StandardProvider.Create(IContext context)&#xD;&#xA;   在 Ninject.Activation.Context.ResolveInternal(Object scope)&#xD;&#xA;   在 Ninject.Activation.Context.Resolve()&#xD;&#xA;   在 Ninject.KernelBase.Resolve(IRequest request, Boolean handleMissingBindings)&#xD;&#xA;   在 Ninject.KernelBase.Resolve(IRequest request)&#xD;&#xA;   在 Ninject.Web.Mvc.NinjectDependencyResolver.GetService(Type serviceType)&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)&#xD;&#xA;   --- 内部异常堆栈跟踪的结尾 ---&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.DefaultControllerActivator.Create(RequestContext requestContext, Type controllerType)&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController&amp; controller, IControllerFactory&amp; factory)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)&#xD;&#xA;   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="tester007" time="2019-05-09T03:46:39.4250000Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate, br&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:zh-CN,zh;q=0.9&#xD;&#xA;HTTP_COOKIE:ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=eQURkp9PRqx_eUCpf3IAO0_ej2dvYEOTSPF7mU07IehEF_H1Hd2_DTUxk226yoak7z4BpupEwzsIm93jWtJC-SPGAosdkFGOzvRwSKpVqf3Y0IFq-r29-srNfIP2ThxwrgaRrMUq-43K6EqpXXXKFUBZBF4ZyzxdplPhsvAJrU5aSRzBEBGCHz-YYp5RBiL05us73Q_5rdvX0rgvAENX_xYvuIiCl6fbEurzYz6IdJDmJKaSJayRWuxRqpDs8I0UNO7wL2nSsGBGz83lq15pPKdtaMJPVI4L_vdx_WgbqopHThr-DCApdkoj5C1wyW_DEPHyTDpkiQkZixQ8OWLv_FGECZW-_4KB5P6CrT3FDTd5Ho2HfgvlmrAtWWcNqTbrQJjG0jkII-6IWvCNXMoEy6DqOwIOwD3z9-08Lq7Cd4T98bnGXA-Jsj0wVp4SFO4XnDPVKe63QVNwCaTzpa1IHVRTOpY1fJac-qAB6YoJmlSWvFSn0hc5wufIcreLlyZy&#xD;&#xA;HTTP_HOST:localhost:57189&#xD;&#xA;HTTP_REFERER:http://localhost:57189/&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36&#xD;&#xA;HTTP_UPGRADE_INSECURE_REQUESTS:1&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8&#xD;&#xA;Accept-Encoding: gzip, deflate, br&#xD;&#xA;Accept-Language: zh-CN,zh;q=0.9&#xD;&#xA;Cookie: ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=eQURkp9PRqx_eUCpf3IAO0_ej2dvYEOTSPF7mU07IehEF_H1Hd2_DTUxk226yoak7z4BpupEwzsIm93jWtJC-SPGAosdkFGOzvRwSKpVqf3Y0IFq-r29-srNfIP2ThxwrgaRrMUq-43K6EqpXXXKFUBZBF4ZyzxdplPhsvAJrU5aSRzBEBGCHz-YYp5RBiL05us73Q_5rdvX0rgvAENX_xYvuIiCl6fbEurzYz6IdJDmJKaSJayRWuxRqpDs8I0UNO7wL2nSsGBGz83lq15pPKdtaMJPVI4L_vdx_WgbqopHThr-DCApdkoj5C1wyW_DEPHyTDpkiQkZixQ8OWLv_FGECZW-_4KB5P6CrT3FDTd5Ho2HfgvlmrAtWWcNqTbrQJjG0jkII-6IWvCNXMoEy6DqOwIOwD3z9-08Lq7Cd4T98bnGXA-Jsj0wVp4SFO4XnDPVKe63QVNwCaTzpa1IHVRTOpY1fJac-qAB6YoJmlSWvFSn0hc5wufIcreLlyZy&#xD;&#xA;Host: localhost:57189&#xD;&#xA;Referer: http://localhost:57189/&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36&#xD;&#xA;Upgrade-Insecure-Requests: 1&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/2/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="ApplicationCookie" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="tester007" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="tester007" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="2" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/2" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/ApplyQualify" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\ApplyQualify" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="50501" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/ApplyQualify" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="57189" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/ApplyQualify" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate, br" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="zh-CN,zh;q=0.9" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=eQURkp9PRqx_eUCpf3IAO0_ej2dvYEOTSPF7mU07IehEF_H1Hd2_DTUxk226yoak7z4BpupEwzsIm93jWtJC-SPGAosdkFGOzvRwSKpVqf3Y0IFq-r29-srNfIP2ThxwrgaRrMUq-43K6EqpXXXKFUBZBF4ZyzxdplPhsvAJrU5aSRzBEBGCHz-YYp5RBiL05us73Q_5rdvX0rgvAENX_xYvuIiCl6fbEurzYz6IdJDmJKaSJayRWuxRqpDs8I0UNO7wL2nSsGBGz83lq15pPKdtaMJPVI4L_vdx_WgbqopHThr-DCApdkoj5C1wyW_DEPHyTDpkiQkZixQ8OWLv_FGECZW-_4KB5P6CrT3FDTd5Ho2HfgvlmrAtWWcNqTbrQJjG0jkII-6IWvCNXMoEy6DqOwIOwD3z9-08Lq7Cd4T98bnGXA-Jsj0wVp4SFO4XnDPVKe63QVNwCaTzpa1IHVRTOpY1fJac-qAB6YoJmlSWvFSn0hc5wufIcreLlyZy" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:57189" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:57189/" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36" />
+    </item>
+    <item name="HTTP_UPGRADE_INSECURE_REQUESTS">
+      <value string="1" />
+    </item>
+  </serverVariables>
+  <cookies>
+    <item name="ASP.NET_SessionId">
+      <value string="m32hhi0dtp0l1xxjjvxucqyn" />
+    </item>
+    <item name="UserId">
+      <value string="E6cRWY6BMu/yzFSDqWmO9w==" />
+    </item>
+    <item name=".AspNet.ApplicationCookie">
+      <value string="eQURkp9PRqx_eUCpf3IAO0_ej2dvYEOTSPF7mU07IehEF_H1Hd2_DTUxk226yoak7z4BpupEwzsIm93jWtJC-SPGAosdkFGOzvRwSKpVqf3Y0IFq-r29-srNfIP2ThxwrgaRrMUq-43K6EqpXXXKFUBZBF4ZyzxdplPhsvAJrU5aSRzBEBGCHz-YYp5RBiL05us73Q_5rdvX0rgvAENX_xYvuIiCl6fbEurzYz6IdJDmJKaSJayRWuxRqpDs8I0UNO7wL2nSsGBGz83lq15pPKdtaMJPVI4L_vdx_WgbqopHThr-DCApdkoj5C1wyW_DEPHyTDpkiQkZixQ8OWLv_FGECZW-_4KB5P6CrT3FDTd5Ho2HfgvlmrAtWWcNqTbrQJjG0jkII-6IWvCNXMoEy6DqOwIOwD3z9-08Lq7Cd4T98bnGXA-Jsj0wVp4SFO4XnDPVKe63QVNwCaTzpa1IHVRTOpY1fJac-qAB6YoJmlSWvFSn0hc5wufIcreLlyZy" />
+    </item>
+  </cookies>
+</error>

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "DetailsAttachFile";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div>
+    <table class="layui-table" id="detailsFile-table">
+        <colgroup>
+            <col width="80">
+            <col>
+            <col>
+            <col width="150">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Paths != null)
+                {
+                    var i = 1;
+                    foreach (var item in Model.Paths)
+                    {
+                        if (item == "" || item == null)
+                        {
+                            continue;
+                        }
+                        var className = "equipAttach" + i;
+                        <tr path="@item">
+                            <td>@i <input id="@className" type="hidden" value="@item" /></td>
+                            <td>@Model.Name</td>
+                            <td><button class="layui-btn detailsFile-table-btnDetails">查看</button> </td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    layui.use(["form", "element", "laydate", "layer", "upload", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            router = layui.router();
+
+
+        $('#detailsFile-table').on('click', '.detailsFile-table-btnDetails', function () {
+            var index = $(this).parent().parent()[0].cells[0].innerText;
+             var inde = "equipAttach" + index;
+             var path = $('#'+ inde).val();
+            layer.open({
+                type: 1,
+                area: ['600px', '700px'],
+                title: '@Model.Name',
+                content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/ApplyQualify/Image?itemValue=' + encodeURIComponent(path) + ' border=0 style="width: 600px;height:550px" >' + '</div>'
+            });
+        });
+    });
+
+</script>

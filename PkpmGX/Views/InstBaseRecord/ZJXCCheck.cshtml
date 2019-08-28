@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "ZJXCCheck";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-form">
+        <p style="text-align:center;font-size:22px">检测（试验）机构监督检查（网上）记录表</p>
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td colspan="2">受检单位：</td>
+                    <td colspan="3">
+                        <input class="layui-input" style="WIDTH: 90%" id="f_sjdw" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20" style="text-align:center">序号</td>
+                    <td width="20" style="text-align:center">项目</td>
+                    <td width="220" style="text-align:center">检查内容</td>
+                    <td width="220" style="text-align:center">检查方法</td>
+                    <td width="220" style="text-align:center">存在问题</td>
+                </tr>
+                <tr>
+                    <td rowspan="6">三</td>
+                    <td rowspan="6">桩<br />基<br />现<br />场<br />检<br />测</td>
+                    <td>检测报告上传</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>数据实时上传/数据无异常/有曲线</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        上传现场及检测人员照片
+                        （6张）
+                    </td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        原始记录无飘红
+                    </td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        检测方案会签栏有签字盖章
+                    </td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        上传仪器设备编号且在有效期
+                    </td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">备注</td>
+                    <td colspan="3"><input class="layui-input" style="WIDTH: 98%" id="jcrq" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查人员：</label>
+            <div class="layui-input-block">
+                <input name="desc" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查日期：</label>
+            <div class="layui-input-block">
+                <input name="desc" class="layui-input">
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <br />
+    </div>
+</div>
+
+
+<script>
+            layui.config({
+                base: '../../static/layuiadmin/lib/' //静态资源所在路径
+            }).extend({
+                index: 'lib/index',
+            });
+
+            layui.use("form", function () {
+                var $ = layui.$,
+                      form = layui.form;
+                form.render();
+
+            });
+</script>

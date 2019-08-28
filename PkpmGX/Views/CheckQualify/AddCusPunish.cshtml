@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "AddCusPunish";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处罚时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PunDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处罚名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PunName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处罚机构</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PunUnit" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处罚内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PunContent" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PunRem" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="CusPunButton">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    layui.use([  "laydate" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+        laydate.render({
+            elem: '#PunDate'
+        });
+
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#CusPunButton').click(function () {
+        var PunDate = $('#PunDate').val();
+        var PunName = $('#PunName').val();
+        var PunContent = $('#PunContent').val();
+        var PunRem = $('#PunRem').val();
+        var PunUnit = $('#PunUnit').val();
+        if (PunDate === '') {
+            parent.layer.msg('请填写处罚时间');
+            return false;
+        }
+        if (PunName == '') {
+            parent.layer.msg('请填写处罚名称');
+            return false;
+        }
+        if (PunContent == '') {
+            parent.layer.msg('请填写处罚内容');
+            return false;
+        }
+        if (PunUnit == '') {
+            parent.layer.msg('请填写处罚机构');
+            return false;
+        }
+
+        var str = '<tr><td data-Punish="PunDate">' + PunDate + '</td><td data-Punish="PunName">' + PunName + '</td><td  data-Punish="PunUnit">' + PunUnit + '</td><td data-Punish="PunContent">' + PunContent + '</td><td data-Punish="PunRem">' + PunRem + '</td><td><button class="layui-btn cusPunish-table-btnDel">删除</button> </td></tr>';
+        parent.$('#cusPunish-table > tbody:last-child').append(str);
+
+        parent.layer.close(index);
+    });
+</script>
+
+

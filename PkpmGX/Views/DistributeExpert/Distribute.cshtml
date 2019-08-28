@@ -1,0 +1,101 @@
+﻿@model PkpmGX.Models.DistributeExpertViewModels
+
+@{
+    ViewBag.Title = "Distribute";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="header_cq" style="height:10px">
+</div>
+<div class="layui-container">
+    <div class="layui-row" id="distribute-tableContainer">
+        <form class="layui-form" action="" lay-filter="distribute-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">专家<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <select id="DistributedExpert" name="DistributedExpert" xm-select-max="2" xm-select="DistributedExpert" lay-verify="required">
+                            <option value=""></option>
+                            @{
+                                foreach (var item in Model.Experts)
+                                {
+                                    <option value=@item.Key>@item.Value</option>
+                                }
+                            }
+                        </select>
+                        <input type="text" name="Id" id="Id" value=@Model.Id placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="PID" id="PID" value=@Model.PID placeholder="" autocomplete="off" class="layui-hide">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" lay-submit lay-filter="distribute-save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+        form.on('submit(distribute-save)', function (data) {
+            
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/DistributeExpert/Distribute",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('保存成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                parent.layer.closeAll();
+                                window.parent.location.reload();//刷新父页面
+                            },
+
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('保存失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+
+        });
+    });
+
+
+
+
+</script>
+

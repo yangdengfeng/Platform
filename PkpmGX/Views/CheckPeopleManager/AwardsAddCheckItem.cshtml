@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "AwardsAddCheckItem";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="customcompany-customedit-tableContainer">
+        <form class="layui-form" action="" lay-filter="customcompany-customedit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="AwardsDate" id="AwardsDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwardsContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">发证单位</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwardsUnit" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCheckItemAndParm">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+
+        laydate.render({
+            elem: '#AwardsDate',
+        });
+       
+    });
+    var index = parent.layer.getFrameIndex(window.name);
+    $('#saveCheckItemAndParm').click(function () {
+        var AwardsDate = $('#AwardsDate').val();
+        var AwardsContent = $('#AwardsContent').val();
+        var AwardsUnit = $('#AwardsUnit').val();
+      
+
+        if (AwardsDate == '') {
+            parent.layer.msg('请填写获奖时间');
+            return false;
+        }
+        if (AwardsContent == '') {
+            parent.layer.msg('请填写获奖名称');
+            return;
+        }
+        if (AwardsUnit == '') {
+            parent.layer.msg('请填写发证单位');
+            return;
+        }
+
+        var str = '<tr><td data-CheckPeopleAwards="AwaDate">' + AwardsDate + '</td><td data-CheckPeopleAwards="AwaContent">' + AwardsContent + '</td><td data-CheckPeopleAwards="AwaUnit">' + AwardsUnit + '</td><td>' + '<button class="layui-btn AwardsCheckItems-table-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#AwardsCheckItems-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+
+

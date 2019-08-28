@@ -1,0 +1,80 @@
+﻿@using PkpmGX.Models
+@model LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/Login_Layout.cshtml";
+}
+@*<div class="header"></div>*@
+
+<form id="formId" class="form form-horizontal" action="/Account/Login" method="post">
+    
+    <div class="header_cq">
+        <h1 class="logo">广西建设工程质量监管信息系统</h1>
+    </div>
+    <div class="middle">
+
+        <div class="login">
+            <input type="hidden" id="errorMsg" value="@Model.ErrorMsg" />
+            <div class="login_title"><em>登录</em><span class="en">Login</span></div>
+            <div class="login_box">
+                <div class="form_group">
+                    <label class="control_label ico_user"></label>
+                    <input type="text" placeholder="用户名" value="" class="form_control" name="Account" id="Account" />
+                </div>
+                <div class="form_group">
+                    <label class="control_label ico_password"></label>
+                    <input type="password" placeholder="密码" value="" class="form_control" name="Password" id="Password" />
+                </div>
+                <div class="form_group">
+                    <label class="control_label ico_safe"></label>
+                    <input type="text" placeholder="验证码" value="" class="form_control form_pad" name="ValidateCode" id="ValidateCode" />
+                    <span class="form_img">
+                        <img id="valiCode" style="cursor: pointer;" src="/Account/GetValidateCode" alt="验证码">
+                        @*<img src="images/GetValidateCode.jpg" width="60" />*@
+                    </span>
+                </div>
+                <div class="form_group">
+                    <button type="submit" class="submit">登&nbsp;&nbsp;录<span class="ico_go"></span></button>
+                </div>
+                <div class="form_space">
+                    <label><input type="checkbox" />使我保持登录状态</label>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <div class="footer_cq">技术支持单位：湖南建研信息技术股份有限公司</div>
+</form>
+
+<script type="text/javascript">
+    function doOnLoad() {
+
+        var errorMsg = $('#errorMsg').val();
+        if (errorMsg) {
+            layer.alert(errorMsg, { icon: 2 }); 
+        }
+
+        $("#valiCode").bind("click", function () {
+            this.src = "/Account/GetValidateCode?time=" + (new Date()).getTime();
+        });
+
+        $('#loginBtn').click(function (event) {
+            if ($('#Account').val() == '') {
+                layer.alert('请输入账号', { icon: 2 });
+                event.preventDefault();
+                return;
+            }
+            if ($('#Password').val() == '') {
+                layer.alert('请输入密码', { icon: 2 }); 
+                event.preventDefault();
+                return;
+            }
+            if ($('#ValidateCode').val() == '') {
+                layer.alert('请输入验证码', { icon: 2 }); 
+                event.preventDefault();
+                return;
+            }
+            $('#formId').submit();
+        });
+    }
+</script>

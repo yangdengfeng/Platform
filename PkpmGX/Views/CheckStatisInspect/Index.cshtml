@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridbox" style="width:100%;height:700px;"></div>
+        <div id="recinfoArea" style="width:100%;"></div>
+        <div id="pagingArea" style="width:100%;"></div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js"></script>
+<script type="text/javascript">
+    var dataGrid, seqGrid, myForm, dhxWins, myTabbar, itemWin, detailWin, seqNoDetailWin, seqNogridRender, exporter, tToolbar;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        var formStructure = [
+              { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+                 { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+                 { type: "input", name: "ProjectName", label: "工程名称" },
+                 { type: "combo", name: "CheckItem", label: "检测项目" },
+                 { type: "input", name: "ReportNum", label: "报告编号" },
+                         { type: "newcolumn" },
+                 { type: "input", name: "SampleNum", label: "样品编号" },
+                 { type: "input", name: "EntrustNum", label: "委托编号" },
+                 
+                 { type: "container", label: "地区选择", name: "Area" },
+
+                          { type: "newcolumn" },
+                 {
+                     type: "combo", name: "HasArc", label: "是否有曲线", options: [
+                          { text: "全部", selected: true },
+                          { text: "是", value: "1" },
+                         { text: "否", value: "0" },
+                     ]
+                 },
+                  {
+                      type: "combo", name: "IsChanged", label: "是否被修改", options: [
+                           { text: "全部", selected: true },
+                           { text: "是", value: "1" },
+                          { text: "否", value: "0" },
+                      ]
+                  },
+                   {
+                       type: "combo", name: "JDType", label: "监督抽测类型", options: [
+                            { text: "全部", selected: true },
+                            { text: "县级市监督抽测", value: "SJ" },
+                           { text: "各县监督抽测", value: "XJ" },
+                           { text: "总站监督抽测", value: "QJ" },
+                       ]
+                   },
+                        { type: "newcolumn" },
+                  {
+                      type: "combo", name: "DtType", label: "日期类别", options: [
+                           { text: "委托日期", value: "ENTRUSTDATE", selected: true },
+                          { text: "检测日期", value: "CheckDt" },
+                          { text: "批准日期", value: "APPROVEDATE" },
+                      ]
+                  },
+                   { type: "calendar", label: "开始日期", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.AddDays(-10).ToString("yyyy-MM-dd")' },
+
+                      { type: "calendar", label: "结束日期", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+                        { type: "newcolumn" },
+                       {
+                           type: "combo", name: "CheckStatus", label: "结论状态", options: [
+                               { text: "全部", value: "A", selected: true },
+                               { text: "合格", value: "Y" },
+                               { text: "不合格", value: "N" },
+                               { text: "不下结论", value: "X" },
+                               { text: "未知结论", value: "W" }
+                           ]
+                       },
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 150, offsetTop: 10 }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/CheckStatisInspect/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+            areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+
+        CheckItemCombo = myForm.getCombo("CheckItem");
+        CheckItemCombo.enableFilteringMode('between');
+        CheckItemCombo.load("/CheckStatisInspect/CheckItemCombo");
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/CheckStatisInspect/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        var myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/CheckStatisInspect/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Export") {
+                exporter.show();
+            }
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,工程名称,合格,机构名称,检测项目,报告编号,样品编号,委托日期,检测日期,数据状态");//设置列的头文本
+        mygrid.setInitWidths("50,400,150,150,150,150,150,150,150,150");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,layuijslink,ro,ro,ro,ro");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/CheckStatisInspect/Search?' + getQueryStr();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+
+        var exporter = new ExcelExporter(null, mygrid, 30, "/CheckStatisInspect/Export");
+        exporter.onGetQueryString = function () {
+            return getQueryStr();
+        };
+
+
+
+    }
+
+    function detailsReport(id) {
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + id, "检测报告查看");
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+
+</script>

@@ -1,0 +1,464 @@
+﻿@model Pkpm.Entity.Models.CheckPeoplePostType
+
+@{
+    ViewBag.Title = "PostType";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<link href="~/static/layui.css" rel="stylesheet" />
+<div id="div_postTypeList_container" style="border:solid 1px #7490bf;width:98%;padding:10px;background-color:#e3edff;z-index:100;text-align:center;">
+    <div id="div_postTypeList" style="width:100%;">
+    </div>
+    <div id="div_postTypeList_bottom" style="width:100%;text-align:center;">
+    </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+    userGrade = '@(Model.userGrade)';
+
+    var displaytype = '@(Model.displaytype)';
+    var posttypeinfo = [];
+    var posttypenameinfo = [];
+    var postTypeCheckboxCount = 0;
+    var select_postTypeTime_count = 0;
+    var rankOnePostTypeCheckboxCount = 0;
+    function doOnLoad() {
+        getPostType();
+    }
+
+    function attr(id) {
+        $("#div" + id).show();
+    }
+
+    function hide(id) {
+        var mvale = $("#setT" + id).val();
+        setPosttypeInfo(id, mvale);
+        $("#div" + id).hide();
+    }
+
+
+    function getPostType() {
+        window.dhx.ajax.post("/CheckPeopleManager/getPostType", function (response) {
+            var t = window.dhx.s2j(response.xmlDoc.responseText);
+            if (t != null && t.IsSucc) {
+
+            }
+            posttypeinfo = t;
+            listPostType({ displaytype: displaytype });
+            setPostTypeList();
+        });
+    }
+
+    function listPostType(config) {
+        postTypeCheckboxCount = 0;
+        var rsRankOne = [];
+        for (var i = 0; i < posttypeinfo.length; i++) {
+            if (posttypeinfo[i]["parentId"] == "0") {
+                rsRankOne.push({ "id": posttypeinfo[i]["Id"], "posttype": posttypeinfo[i]["postType"], "parentid": posttypeinfo[i]["parentId"], "code": posttypeinfo[i]["code"] });
+            }
+        }
+        var rsRankTwo = [];
+        var rsRankThree = [];
+        var t1 = "";
+        var t2 = "";
+        var t3 = "";
+        var rankOneStrAr = [];
+        var rankTwoStrAr = [];
+        var rankThreeStrAr = [];
+        var size = 5;
+        var count = 0;
+        var tableStr = "";
+        postTypeCheckboxCount = 0;
+        postTypeTimeCount = 0;
+        select_postTypeTime_count = 0;
+        for (var i = 0; i < rsRankOne.length; i++) {
+            rsRankTwo.length = 0;
+            for (var j = 0; j < posttypeinfo.length; j++) {
+                if (posttypeinfo[j]["parentId"] == rsRankOne[i]["id"]) {
+                    var postTypeTime = posttypeinfo[j]["postTypeTime"];
+                    var ar = postTypeTime.split("|");
+                    var str = "";
+                    if (ar.length == 1) {
+                        str = "<input id='select_postTypeTime_" + postTypeTimeCount + "' value='" + ar[0] + "' style='width:50px;'/>";
+                        if (userGrade == "00") {
+                            str += "<a href=\"#\" onclick =\"attr(" + posttypeinfo[j]["Id"] + ")\">增</a><div id='div" + posttypeinfo[j]["Id"] + "' name='div" + posttypeinfo[j]["Id"] + "' style='width:100%; display:none ;'><input type='text' id='setT" + posttypeinfo[j]["Id"] + "' name='setT" + posttypeinfo[j]["Id"] + "' /><a href='#'  onclick='hide(" + posttypeinfo[j]["Id"] + ")'>添加</a></div>";
+                        }
+                    }
+                    else {
+                        for (var p = 0; p < ar.length; p++) {
+                            str += "<option value='" + ar[p] + "'>" + ar[p] + "</option>";
+                        }
+                        if (str != "") {
+                            str = "<select id='select_postTypeTime_" + postTypeTimeCount + "' style='width:70px;'><option></option>" + str + "</select>";
+                            if (userGrade == "00") {
+                                str += "<a href=\"#\" onclick =\"attr(" + posttypeinfo[j]["Id"] + ")\">增</a><div id='div" + posttypeinfo[j]["Id"] + "' name='div" + posttypeinfo[j]["Id"] + "' style='width:100%; display:none ;'><input type='text' id='setT" + posttypeinfo[j]["Id"] + "' name='setT" + posttypeinfo[j]["Id"] + "' /><a href='#'  onclick='hide(" + posttypeinfo[j]["Id"] + ")'>添加</a></div>";
+                            }
+                        }
+                    }
+                    if (str != "") {
+                        str = "<span id='span_postTypeTime_" + postTypeTimeCount + "'>" + str + "</span>";
+                    }
+                    rsRankTwo.push({ "id": posttypeinfo[j]["Id"], "posttype": posttypeinfo[j]["postType"], "parentid": posttypeinfo[j]["parentId"], "code": posttypeinfo[j]["code"], "postTypeTimeSelectStr": str });
+                    postTypeTimeCount++
+                }
+            }
+            rankThreeStrAr.length = 0;
+            for (var k = 0; k < rsRankTwo.length; k++) {
+                rsRankThree.length = 0;
+                for (var j = 0; j < posttypeinfo.length; j++) {
+                    if (posttypeinfo[j]["parentId"] == rsRankTwo[k]["id"]) {
+                        rsRankThree.push({ "id": posttypeinfo[j]["Id"], "posttype": posttypeinfo[j]["postType"], "parentid": posttypeinfo[j]["parentId"], "code": posttypeinfo[j]["code"], "posttypetime": posttypeinfo[j]["postTypeTime"] });
+                    }
+                }
+                if (rsRankThree.length == 0) {
+                    rankThreeStrAr.push("");
+                    continue;
+                }
+                t1 = "";
+                for (var n = 0; n < rsRankThree.length; n++) {
+                    postTypeCheckboxCount++;
+                    t1 += '<tr class="myTrA" style="text-align:left;"><td>&nbsp;&nbsp;<input type=checkbox id="posttypecheckbox' + postTypeCheckboxCount + '" name="posttypeCheckBox" value="' + rsRankThree[n]["code"] + '|' + select_postTypeTime_count + '" onclick="$(this).parent().parent().toggleClass(\'myTrB\');"/></td><td style="font-size:9pt;"><!--' + (n + 1) + '、-->' + renderPostType(rsRankThree[n]["posttype"]) + '<br>公示序号：<input type="text" id="posttypetxt' + postTypeCheckboxCount + '" value="" style="width:50px"></td></tr>';
+                }
+                select_postTypeTime_count++;
+                rankThreeStrAr.push("<table>" + t1 + "</table>");
+            }
+            t1 = "";
+            t2 = "";
+            count = 0;
+            rankTwoStrAr.length = 0;
+            for (var k = 0; k < rsRankTwo.length; k++) {
+                t1 += '<td valign="top" style="width:20%;font-size:9pt;text-align:left;border-left:solid 1px #afbed8;border-top:solid 1px #afbed8;border-bottom:solid 1px #afbed8;border-right:solid 1px #afbed8;background-color:#c9d6ed;"><span class="mySpanA">(' + getChNum(k + 1) + ')' + rsRankTwo[k]["posttype"] + "&nbsp;&nbsp;" + rsRankTwo[k]["postTypeTimeSelectStr"] + '</span></td>';
+                t2 += '<td valign="top" style="width:20%;border-left:solid 1px #afbed8;border-bottom:solid 1px #afbed8;border-right:solid 1px #afbed8;">' + rankThreeStrAr[k] + '</td>';
+                count++;
+                if (count == size) {
+                    rankTwoStrAr.push("<tr>" + t1 + "</tr>" + "<tr>" + t2 + "</tr>" + "<tr><td colspan=" + size + " height=5></td></tr>");
+                    t1 = "";
+                    t2 = "";
+                    count = 0;
+                }
+            }
+            if (count > 0) {
+                for (k = 0; k < size - count; k++) {
+                    t1 += "<td style='width:20%;border-left:solid 1px #afbed8;border-top:solid 1px #afbed8;border-right:solid 1px #afbed8;'></td>";
+                    t2 += "<td style='border-left:solid 1px #afbed8;border-bottom:solid 1px #afbed8;border-right:solid 1px #afbed8;'></td>";
+                }
+                rankTwoStrAr.push("<tr>" + t1 + "</tr>" + "<tr>" + t2 + "</tr>");
+            }
+            t1 = "";
+            for (var n = 0; n < rankTwoStrAr.length; n++) {
+                t1 += "<table style='width:100%;' class='layui-table'>" + rankTwoStrAr[n] + "</table>";
+            }
+            if (config.displaytype.toString() == "1") {
+                rankOnePostTypeCheckboxCount++;
+                tableStr += '<table style="width:100%!important;"><tr><td style="height:25px;"><span class="mySpanA" style="font-weight:bold;"><input type=checkbox lay-skin="primary"  id="rankoneposttypecheckbox' + rankOnePostTypeCheckboxCount + '" name="rankonePosttypeCheckBox" value="' + rsRankOne[i]["code"] + '" onclick="$(this).parent().toggleClass(\'mySpanB\');selectSubData({objClicked:this});"/>' + getChNum(i + 1) + '、' + rsRankOne[i]["posttype"] + '</span></td></tr></table>' + t1 + "<hr/>";
+            }
+            else {
+                tableStr += '<table style="width:100%!important;" class="layui-table"><tr><td style="height:25px;"><span class="mySpanA" style="font-weight:bold;">' + getChNum(i + 1) + '、' + rsRankOne[i]["posttype"] + '</span></td></tr></table>' + t1 + "<hr/>";
+            }
+        }
+        document.getElementById("div_postTypeList").innerHTML = "<form name='form_posttype'><div style='width:100%;color:green;'>岗位资格类别表</div>" + tableStr + "</form>";
+        var strConfig = "";
+        if (config) {
+            for (var p in config) {
+                strConfig += p + ":'" + config[p] + "',";
+            }
+            strConfig = "{" + strConfig.substr(0, strConfig.length - 1) + "}";
+        }
+        $("#div_postTypeList_bottom").html('<img src="../../images/bc-bnt.png" style="cursor:pointer;padding:10px;" onclick="setPostType(' + strConfig + ');this.blur();return false;"/>');
+
+        if ($("#___look").val() == "1") {
+            makeUnedit("div_postTypeList_container");
+        }
+    }
+    function selectSubData(config) {
+        var rankTwoArNeedCheckedCode = [];
+        var v = config.objClicked.value;
+        var vAr = v.split("_");
+        for (var k = 0; k < posttypeinfo.length; k++) {
+            if (posttypeinfo[k].parentId == vAr[1]) {
+                var v1Ar = posttypeinfo[k].code.split("_");
+                for (var n = 0; n < posttypeinfo.length; n++) {
+                    if (posttypeinfo[n].parentId == v1Ar[1]) {
+                        rankTwoArNeedCheckedCode.push(posttypeinfo[n].code);
+                    }
+                }
+            }
+        }
+        if (rankTwoArNeedCheckedCode.length > 0) {
+            for (var k = 0; k < rankTwoArNeedCheckedCode.length; k++) {
+                for (var i = 1; i <= postTypeCheckboxCount; i++) {
+                    var v = document.getElementById("posttypecheckbox" + i).value;
+                    var vAr = v.split("|");
+                    if (vAr[0] == rankTwoArNeedCheckedCode[k]) {
+                        var checked = config.objClicked.checked;
+                        document.getElementById("posttypecheckbox" + i).checked = checked;
+                    }
+                }
+            }
+        }
+    }
+    function setPostType(config) {
+        var posttypecode = "";
+        var posttypecodeStr = "";
+        var strValue = "";
+        var tmpStr = "|";
+        for (var i = 1; i <= postTypeCheckboxCount; i++) {
+            if (document.getElementById("posttypecheckbox" + i).checked) {
+                var v = document.getElementById("posttypecheckbox" + i).value;
+                var pubcode = document.getElementById("posttypetxt" + i).value;//公示序号
+                var vAr = v.split("|");
+                var postTypeTime = document.getElementById("select_postTypeTime_" + vAr[1]).value;
+                var rs = getOneRecord(posttypeinfo, "code=" + vAr[0]);
+                code = rs["code"];
+                var posttype = rs["postType"];
+                strValue += code + "|";
+                if (config && config.displaytype && config.displaytype == "1") {
+                    posttypecode += renderPostType(posttype) + "|";
+                    posttypecodeStr += renderPostType(posttype) + "|";
+                }
+                else {
+                    var ttt = "";
+                    if (postTypeTime != "") {
+                        ttt = "[T]" + postTypeTime + "[/T]";
+                    }
+                    //公示序号
+                    if (pubcode != "") {
+                        ttt += "[X]" + pubcode + "[/X]";
+                    }
+                    posttypecode += renderPostType(posttype) + ttt + ";&lt;br&gt;";
+                    ttt = "";
+                    if (postTypeTime != "") {
+                        ttt = "(" + postTypeTime + ")";
+                    }
+                    //公示序号
+                    if (pubcode != "") {
+                        ttt += "(公示序号：" + pubcode + ")";
+                    }
+                    posttypecodeStr += renderPostType(posttype) + ttt + ";\n";
+                }
+                //}
+            }
+        }
+        if (strValue != "") {
+            strValue = strValue.substr(0, strValue.length - 1);
+        }
+        //console.log(posttypecode);//postType
+        //console.log(strValue);//postTypeCode
+        //console.log(posttypecodeStr);//显示
+        if (displaytype == "2") {
+            window.parent.postTypeClose(posttypecode, strValue, posttypecodeStr);
+        }
+        else if (displaytype == "1") {
+            window.parent.postTypeClose(strValue, posttypecodeStr);
+        }
+
+    }
+    function setPostTypeList(config) {
+        var s = '@(Model.postTypeCode)';
+        var postTypeName = '@(Model.PostType)';
+        if (s == "") return;
+        var postTypeNameAr = postTypeName.split(";&lt;br&gt;");
+        s = "|" + s + "|";
+        var k = 0;
+        for (var i = 1; i <= postTypeCheckboxCount; i++) {
+            //console.log(i);
+            var v = document.getElementById("posttypecheckbox" + i).value;
+            var vAr = v.split("|");
+            if (s.indexOf("|" + vAr[0] + "|") != -1) {
+                document.getElementById("posttypecheckbox" + i).checked = "checked";
+                if (vAr[0].substr(0, 1) == "0") {
+                    $("#posttypecheckbox" + i).parent().addClass('mySpanB');
+                }
+                else {
+                    $("#posttypecheckbox" + i).parent().parent().addClass('myTrB');
+                    $("#span_postTypeTime_" + i).css("display", "inline");
+                    var ttt = postTypeNameAr[k];
+                    //console.log(ttt);
+                    var pos1 = ttt.indexOf("[T]");
+                    var pos2 = ttt.indexOf("[/T]");
+                    var postTypeTime = "";
+                    var pubcode = "";//公示序号
+                    if (pos1 != -1) {
+                        pos1 = pos1 + "[T]".length;
+                        postTypeTime = ttt.substr(pos1, pos2 - pos1);
+                    }
+                    pos1 = ttt.indexOf("[X]");
+                    pos2 = ttt.indexOf("[/X]");
+                    if (pos1 != -1) {
+                        pos1 = pos1 + "[X]".length;
+                        pubcode = ttt.substr(pos1, pos2 - pos1);
+                    }
+                    if (pubcode != "") {
+                        document.getElementById("posttypetxt" + i).value = pubcode;
+                    }
+                    if (postTypeTime != "") {
+                        $("#select_postTypeTime_" + vAr[1]).val(postTypeTime);
+                    }
+                }
+                k++;
+            }
+        }
+    }
+    function resetPostType() {
+        if (!confirm("将清除原先选中的数据！您确定清除吗?")) {
+            return;
+        }
+        try {
+            document.form_posttype.reset();
+        } catch (err) { }
+        $("#t_bp_people___posttypecode").val("");
+        $("#div_posttype").html("");
+        $("#t_bp_people___posttype").val("");
+    }
+    function renderPostType(posttype) {
+        return posttype;
+        var tAr = posttype.split("_");
+        var s = "";
+        for (var i = 0; i < tAr.length; i++) {
+            var r = getOneRecord(posttypenameinfo, "id=" + tAr[i]);
+            if (r != null) {
+                var t = r["posttypename"];
+                s += "及" + t;
+            }
+        }
+        if (s.indexOf("及") != -1) {
+            s = s.substr(1);
+        }
+        return s;
+    }
+    function toggleSpanPostTypeTime(spanId) {
+        if ($("#" + spanId).css("display") == "none") {
+            $("#" + spanId).css("display", "inline");
+        }
+        else {
+            $("#" + spanId).css("display", "none");
+        }
+    }
+
+    function setPosttypeInfo(__id, mv) {
+        window.dhx.ajax.post("/CheckPeopleManager/setPosttypeInfo?id=" + __id + "&mv=" + mv, function (response) {
+            var t = window.dhx.s2j(response.xmlDoc.responseText);
+            if (t != null && t.IsSucc) {
+                dhtmlx.alert({ text: "添加成功!请刷新!", ok: "确定" });
+            }
+            else {
+                dhtmlx.alert({ text: "添加失败!请重试!", ok: "确定" });
+            }
+        });
+
+    }
+
+    getOneRecord = function (o, so) {
+        if (o == null) return null;
+        var cAr = [], vAr = [];
+        if (typeof so == 'object') {
+            for (var p in so) {
+                cAr.push(p);
+                vAr.push(so[p]);
+            }
+        }
+        else if (typeof so == 'string') {
+            var a = so.split("&");
+            for (var i = 0; i < a.length; i++) {
+                var b = a[i].split("=");
+                if (b[1] == "null") b[1] = null;
+                cAr.push(b[0]);
+                vAr.push(b[1]);
+            }
+        }
+        for (var i = 0, u = o.length; i < u; i++) {
+            var flag = true;
+            for (var k = 0, uu = cAr.length; k < uu; k++) {
+                var s = o[i][cAr[k]];
+                var b = vAr[k];
+                if (s == null) s = "";
+                if (b == null) b = "";
+                if (s.toLowerCase() != b.toLowerCase()) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag == true) {
+                return o[i];
+            }
+        }
+        return null;
+    };
+
+
+    function getChNum(i) {
+        var r = "";
+        switch (i) {
+            case 1:
+                r = "一";
+                break;
+            case 2:
+                r = "二";
+                break;
+            case 3:
+                r = "三";
+                break;
+            case 4:
+                r = "四";
+                break;
+            case 5:
+                r = "五";
+                break;
+            case 6:
+                r = "六";
+                break;
+            case 7:
+                r = "七";
+                break;
+            case 8:
+                r = "八";
+                break;
+            case 9:
+                r = "九";
+                break;
+            case 10:
+                r = "十";
+                break;
+            case 11:
+                r = "十一";
+                break;
+            case 12:
+                r = "十二";
+                break;
+            case 13:
+                r = "十三";
+                break;
+            case 14:
+                r = "十四";
+                break;
+            case 15:
+                r = "十五";
+                break;
+            case 16:
+                r = "十六";
+                break;
+            case 17:
+                r = "十七";
+                break;
+            case 18:
+                r = "十八";
+                break;
+            case 19:
+                r = "十九";
+                break;
+            case 20:
+                r = "二十";
+                break;
+        }
+        return r;
+    }
+
+    function doOnUnload() {
+
+    }
+
+</script>

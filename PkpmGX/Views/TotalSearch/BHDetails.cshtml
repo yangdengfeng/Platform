@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "BHDetails";
+
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<link href="~/Scripts/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/viewer.min.js"></script>
+<div class="layui-container">
+    <div class=" layui-form">
+        <form class=" layui-form">
+
+
+            <table class="layui-table" id="BHtable">
+                <tr><td colspan="3" ><b>工程名称:</b>@Model.BH.projectname</td></tr>
+                <tr><td colspan="3"><b>检测项目:</b>@Model.BH.itemname</td></tr>
+                <tr><td colspan="3"><b>检测单位:</b>@Model.BH.customname</td></tr>
+                <tr>
+                    <td style="text-align:center">闭合前照片</td>
+                    <td style="text-align:center">闭合中照片</td>
+                    <td style="text-align:center">闭合后照片</td>
+                </tr>
+
+                <tr>
+                    <td style="text-align:center">@Model.BH.time1</td>
+                    <td style="text-align:center">@Model.BH.time2</td>
+                    <td style="text-align:center">@Model.BH.time3</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center">
+                        <img data-original="@Model.BH.closurebefore" src="@Model.BH.closurebefore"  title="点击可看大图" width="400px">
+                    </td>
+                    <td style="text-align:center">
+                        <img data-original="@Model.BH.closed" src="@Model.BH.closed" title="点击可看大图" width="400px">
+                    </td>
+                    <td style="text-align:center">
+                        <img data-original="@Model.BH.closureafter" src="@Model.BH.closureafter" title="点击可看大图" width="400px">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="text-align:center">
+
+
+                        @{
+                            if (Model.BH.closurebeforenum != "未变更")
+                            {
+                                <span style="color:red"> @Model.BH.closurebeforenum</span>
+                                @:&nbsp; &nbsp; &nbsp;
+                                <a href="javascript:void(0);" onclick=ShowChange("0")>查看</a>
+                            }
+                            else
+                            {
+                                @Model.BH.closurebeforenum
+                            }
+                        }
+                    </td>
+                    <td style="text-align:center">
+
+                        @{
+                            if (Model.BH.closednum != "未变更")
+                            {
+                                <spen style="color:red"> @Model.BH.closednum</spen>
+                                @:&nbsp; &nbsp; &nbsp;
+                                <a href="javascript:void(0);" onclick=ShowChange(1)>查看</a>
+                            }
+                            else
+                            {
+                                @Model.BH.closednum
+                            }
+                        }
+                    </td>
+                    <td style="text-align:center">
+
+                        @{
+                            if (Model.BH.closureafternum != "未变更")
+                            {
+                                <spen style="color:red">
+                                    @Model.BH.closureafternum
+                                </spen>
+                                @:&nbsp; &nbsp; &nbsp;
+                                <a href="javascript:void(0);" onclick=ShowChange(2)>查看</a>
+                            }
+                            else
+                            {
+                                @Model.BH.closureafternum
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center">取样闭合处理人姓名及时间</td>
+                    <td style="text-align:center">@Model.BH.slclosedman</td>
+                    <td style="text-align:center">@Model.BH.slcloseddate</td">
+                </tr>
+                <tr>
+                    <td style="text-align:center">见证闭合处理人姓名及时间</td>
+                    <td style="text-align:center">@Model.BH.spnclosedman</td>
+                    <td style="text-align:center">@Model.BH.spncloseddate</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center">检测单位闭合处理时间</td>
+                    <td colspan="2" style="text-align:center">@Model.BH.customcloseddate</td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "element", "layer", "table", "view"],
+        function () {
+            var $ = layui.$,
+                element = layui.element,
+                form = layui.form,
+                layer = layui.layer,
+                view = layui.view,
+                table = layui.table,
+                router = layui.router();
+
+        });
+
+
+
+    $('#BHtable').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+
+    function ShowChange(status) {
+
+        var str = "&w" + disposePostStr(" sysprimarykey='" + "@Model.BH.sysprimarykey" + "' and status='" + status + "'");
+        console.log(str);
+        layer.open({
+            type: 2,
+            area: ['1000px', '550px'],
+            fixed: false,
+            maxmin: true,
+            title: "变更信息查看",
+            content: '/TotalSearch/BHChangeDetails?key=' + encodeURIComponent("@Model.BH.sysprimarykey")+"&status="+encodeURIComponent(status),
+        });
+    }
+
+
+
+    function disposePostStr(postStr) {
+        if (postStr == null)
+            postStr = "";
+        postStr = postStr.replace(/%/g, "[[FFFFF]]");
+        postStr = postStr.replace(/\(/g, "[[AAAAA]]");
+        postStr = postStr.replace(/\)/g, "[[BBBBB]]");
+        postStr = postStr.replace(/\*/g, "[[CCCCC]]");
+        postStr = postStr.replace(/</g, "[[DDDDD]]");
+        postStr = postStr.replace(/>/g, "[[EEEEE]]");
+        postStr = postStr.replace(/'/g, "[[GGGGG]]");
+        postStr = postStr.replace(/"/g, "[[HHHHH]]");
+        return encodeURIComponent(postStr);
+    }
+
+</script>

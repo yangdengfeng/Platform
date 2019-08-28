@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:100%;height:150px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:150px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, layoutAge, AgeForm, pieChart, AgeGrid, dhxWins, playCardWin, seleteWin, applyWin, applyForm,
+        playCardForm, unitChangeWin, unitChangeForm, changeWin, changeForm, myToolbar, myMenu, seleteForm, seleteGrid;
+
+    function doOnLoad() {
+
+        dhxWins = new dhtmlXWindows();
+
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 150, labelWidth: 120 },
+           { type: "hidden", name: "SearchRule", value: "AllSearch" },
+           { type: "hidden", name: "postTypeCode" },
+           { type: "combo", label: "企业名称", name: "CheckUnitName" },
+           { type: "input", label: "姓名", name: "Name" },
+           { type: "combo", label: "状态", name: "Status", options: [{ text: "全部", value: "", selected: true }] },
+           { type: "newcolumn" },
+           {
+               type: "block", width: "auto", list: [
+                 { type: "input", label: "年龄段", name: "AgeStart", inputWidth: 110, labelWidth: 100 },
+                  { type: "newcolumn" },
+                  { type: "input", label: "至", name: "AgeEnd", inputWidth: 110, labelWidth: 17 },
+               ]
+           },
+             { type: "input", label: "岗位资格类别", name: "PositionCategory" },
+            { type: "input", label: "岗位证书编号", name: "PostCertNum" },
+            { type: "newcolumn" },
+            { type: "input", label: "职称", name: "TechTitle", },// options: [{ text: "全部", value: "", selected: true }]
+            { type: "input", label: "身份证号", name: "IDNum" },
+            {
+               type: "block", width: "auto", list: [
+                   { type: "button", name: 'Search', value: "查询", offsetLeft: 120 }
+               ]
+            }
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/STCheckPeople/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/STCheckPeople/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "NewSTCheckPeople") {
+                window.parent.Hui_admin_tab_raw("/STCheckPeople/Create", "商砼检测人员新增");
+            }
+            else if (id == "DeletePeople") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定要进行删除操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckPeople/Delete", "Id=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckPeople/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的人员')
+                }
+
+            }
+            else if (id == "ReturnState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行状态返回操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckPeople/SetInstState", "selectedId=" + selectedId + "&state=0", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('状态返回成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckPeople/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要状态返回的人员')
+                }
+
+            }
+            else if (id == "SetState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckPeople/SetInstState", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckPeople/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的人员')
+                }
+            }
+        });
+
+
+       
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("勾选,序号,姓名,所属企业,身份证号,岗位证书编号,联系电话,状态,&nbsp,编辑,查看");//设置列的头文本
+        mygrid.setInitWidths("40,80,150,*,200,150,150,150,100,40,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,layuijslinks,edit,view");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("str,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 17, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/STCheckPeople/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+
+        var CheckUnitNameCombo = myForm.getCombo("CheckUnitName");
+        var statusCombo = myForm.getCombo("Status");
+
+        CheckUnitNameCombo.enableFilteringMode('between');
+
+        CheckUnitNameCombo.load("/STCheckPeople/InstSTCombo");
+
+        
+        @{
+            foreach (var item in Model.Status)
+            {
+                @:statusCombo.addOption('@item.KeyValue', '@item.Name');
+            }
+        }
+
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function format_a(name, value) {
+
+        //seleteGrid.load("/CheckPeopleManager/Grid6");
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='custom_clean();'>" + value + "</a></div>";
+    }
+
+    function format_b(name, value) {
+
+        //seleteGrid.load("/CheckPeopleManager/Grid6");
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='custom_func();'>" + value + "</a></div>";
+    }
+
+    function custom_func() {
+        if (dhxWins == null || dhxWins == undefined) {
+            dhxWins = new dhtmlXWindows();
+
+        }
+        seleteWin = dhxWins.createWindow("seleteWin", 150, 200, 1100, 600);
+        seleteWin.setModal(true);
+        seleteWin.setText("岗位资格类别表");
+
+        seleteForm = seleteWin.attachURL("/CheckPeopleManager/PostType?id=-1" + "&postTypeCode=" + myForm.getItemValue("postTypeCode") + "&displaytype=1");
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+    function applyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name + "申请修改",
+            content: '/STCheckPeople/ApplyChange?ID=' + id
+        });
+    }
+    function confirmApplyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "审核" + name + "的申请修改",
+            content: '/STCheckPeople/ConfirmApplyChange?ID=' + id
+        });
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/STCheckPeople/Edit/"+rowId, "商砼检测人员编辑");
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/STCheckPeople/Details/" + rowId, "商砼检测人员查看");
+    }
+</script>
+

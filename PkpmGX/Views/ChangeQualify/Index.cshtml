@@ -1,0 +1,299 @@
+﻿@model  PkpmGX.Models.CheckQualifyViewModels
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+<div id="form_container" style="width:100%;height:170px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+@*<div id="gridbox" style="position:fixed; top:170px; left: 0; right: 0; bottom: 43px"></div>*@
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+<div class="row mt-10">
+    <div id="gridbox" style="width:100%;overflow:auto"></div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+            { type: "combo", label: "检测机构名称", name: "CheckUnitName" },
+            { type: "newcolumn" },
+            {
+                type: "block", width: 340, list: [
+                    { type: "button", name: 'Search', value: "查询", offsetLeft: 150 }
+                ]
+            }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#gridbox').css('height', layoutHeight + 'px');
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/ChangeQualify/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/ChangeQualify/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Create") {
+                Create();
+            }
+            else if (id == "Delete") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定要进行删除操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/ChangeQualify/Delete", "id=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/ChangeQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的行')
+                }
+
+            }
+            else if (id == "SetState") {
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/ChangeQualify/SetInstState", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/ChangeQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的机构')
+                }
+            }
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        mygrid.setHeader("&nbsp,序号,单位名称,变更内容,变更前,变更后,记录时间,变更材料,承办人,申请人信息,状态,&nbsp,&nbsp,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,40,320,250,200,200,150,60,80,170,120,50,50,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,right,left,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,layuijslink,ro,ro,ro,view,edit,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+
+        var checkInstCombo = myForm.getCombo("CheckUnitName");
+        checkInstCombo.enableFilteringMode('between');
+        checkInstCombo.load("/ChangeQualify/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/ChangeQualify/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function showItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='selectItemDetail();'>" + value + "</a></div>";
+    }
+
+
+
+    function Create() {
+        window.parent.Hui_admin_tab_raw("/ChangeQualify/Create", "资质证书变更申请审核表");
+    }
+
+    //打印通知单
+    function Print(id) {
+        window.open("/ChangeQualify/Print?id=" + id, "打印通知单");
+    }
+
+    function Approval(id) {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "审批",
+            content: '/ChangeQualify/Approval?id=' + id
+        });
+    }
+
+
+    function LookPhoto(bgclpath) {
+        if (bgclpath == "") {
+            layer.msg('无扫描件或照片')
+        } else {
+            layer.open({
+                type: 1,
+                title: '扫描件查看',
+                closeBtn: 0,
+                offset: ['100px', '500px'],
+                area: ['500px'],
+                shadeClose: true,
+                content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ChangeQualify/Image?itemValue=" + bgclpath + "' border='0' style='width: 500px;height:500px'></div>"
+            });
+        }
+    }
+
+
+    function Reason(outstaticinfo) {
+        layer.alert(outstaticinfo);
+    }
+
+
+    function selectItemDetail() {
+
+        clearItemDetail();
+        itemWin = dhxWins.createWindow("itemWin", 20, 30, 580, 480);
+        itemWin.setModal(true);
+        itemWin.center();
+        itemWin.setText('检测资质类别');
+
+        itemForm = itemWin.attachForm();
+        itemForm.load('/ChangeQualify/UnitQualificaiton');
+
+        itemForm.attachEvent("onChange", function (cname, cvalue, isCheck) {
+            //your code here
+            //console.log(cvalue);
+            if (isCheck) {
+                selectedItem.push(cvalue);
+            } else {
+                selectedItem = jQuery.grep(selectedItem, function (value) {
+                    return value != cvalue;
+                });
+            }
+
+            myForm.setItemValue('QuantityCategory', selectedItem.join('、'));
+        });
+    }
+
+    function clearItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='clearItemDetail();'>" + value + "</a></div>";
+    }
+
+    function clearItemDetail() {
+        selectedItem = [];
+        myForm.setItemValue('QuantityCategory', '');
+    }
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ChangeQualify/Detail?id=" + rowId, "资质证书变更申请-查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ChangeQualify/Edit?id=" + rowId, "资质证书变更申请-修改");
+    }
+
+    function doOnUnload() {
+
+    }
+
+    
+
+
+
+</script>
+
+
+

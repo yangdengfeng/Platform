@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "PrintSetConfig";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">打印份数<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="Cbgfs"  value="@Model.printConfig" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" id="save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["layer" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            layer = layui.layer,
+
+            router = layui.router();
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#save').click(function (data) {
+
+        var Cbgfs = $('#Cbgfs').val();
+        var id = @Model.ID;
+
+        if (Cbgfs == '') {
+            parent.layer.msg('请填写打印份数');
+            return false;
+        }
+     
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/CheckQualify/PrintSetConfig?" + "Cbgfs=" + Cbgfs + "&CustomId="+id,
+
+            success: function (d) {
+                if (d.IsSucc) {
+                    layer.confirm('打印设置成功', {
+                        btn: ['确定']
+                    }, function (index) {
+                        layer.close(index);
+                        parent.layer.closeAll();
+                    })
+                }
+                else {
+                    layer.msg('打印设置失败，错误信息：' + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        })
+        return false;
+    });
+</script>
+

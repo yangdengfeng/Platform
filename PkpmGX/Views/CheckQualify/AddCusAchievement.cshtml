@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "AddCusAchievement";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">取得业绩时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AchievementTime" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">业绩描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AchievementContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AchievementRem" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCusAchieveBtn">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use([  "laydate" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+        laydate.render({
+            elem: '#AchievementTime'
+        });
+
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#saveCusAchieveBtn').click(function () {
+        var achTime = $('#AchievementTime').val();
+        var achContent = $('#AchievementContent').val();
+        var achreamrk = $('#AchievementRem').val();
+        if (achTime === '') {
+            parent.layer.msg('请填写取得业绩时间');
+            return false;
+        }
+        if (achContent == '') {
+            parent.layer.msg('请填写业绩描述');
+            return;
+        }
+
+        var str = '<tr><td data-achieve="AchievementTime">' + achTime + '</td><td data-achieve="AchievementContent">' + achContent + '</td><td  data-achieve="AchievementRem">' + achreamrk + '</td><td><button class="layui-btn cusAchievement-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#cusAchievement-table > tbody:last-child').append(str);
+
+        parent.layer.close(index);
+    });
+</script>

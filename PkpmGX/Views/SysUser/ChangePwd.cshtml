@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "ChangedPwd";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+ 
+<div class="container">
+    <div class="row cl">
+        <div id="form_container" style="width:100%;height:100%;"></div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var myForm;
+    function doOnLoad() {
+        var formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 110 },
+            { type: "password", label: "新密码", name: "ResetPwd", required: true },
+            { type: "password", label: "密码确认", name: "PwdConfirm", required: true },
+            { type: "hidden", name: "UserId", value: '@ViewBag.UserId' },
+             { type: "hidden", name: "UserCode", value: '@ViewBag.Code' },
+            { type: "button", name: 'PwdReset', value: "确定", offsetLeft: 80 }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            myForm.send("/SysUser/ChangedPwd", "post", function (loader, resetResponse) {
+                var t = window.dhx.s2j(resetResponse);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({
+                        text: "密码修改成功",
+                        ok: "确定"
+                    });
+                    myForm.removeItem('PwdReset');
+                } else {
+                    dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                }
+
+            });
+        });
+    }
+
+    function doOnUnload() {
+
+    }
+</script>

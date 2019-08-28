@@ -1,0 +1,348 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<script type="text/javascript" src="~/echart/echarts.common.min.js"></script>
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridstatis" style="width:100%;height:600px;overflow:auto"></div>
+    </div>
+</div>
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=2"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var gridQString, mygrid, myForm, myTabbar, gridTabber, dataGrid, dhxWins, itemWin, detailWin, mychart, tToolbar, statisGrid, gridRender, myToolbar, exporter, areaCombo;
+
+    function doOnLoad() {
+        gridRender = false;
+        dhxWins = new dhtmlXWindows();
+
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+            {
+                type: "block", name: "formBlock", width: 850, list: [
+                { type: "input", name: "ProjectName", label: "工程名称" },
+                { type: "calendar", label: "上传开始日期", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")' },
+
+                { type: "newcolumn" },
+                {
+                    type: "combo", name: "CheckInstID", label: "检测机构名称"
+                },
+                 { type: "calendar", label: "上传结束日期", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' }, 
+                { type: "newcolumn" }, 
+                { type: "calendar", label: "报告开始时间", name: "ReportStartDt", dateFormat: "%Y-%m-%d %H:%i:%s", enableTime: true, minutesInterval: 1 }, 
+                 { type: "calendar", label: "报告结束时间", name: "ReportEndDt", dateFormat: "%Y-%m-%d %H:%i:%s", enableTime: true, minutesInterval: 1 },
+                  { type: "newcolumn" }, 
+                ]
+            },
+            { type: "newcolumn" },
+             { type: "button", name: 'Search', value: "查询", offsetTop: 5 },
+         { type: "button", name: 'Reset', value: "重置" }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                gridRender = false;
+                myTabbar.tabs('gridboxChart').setActive();
+                gridQString = '/CheckStatisUnQuailfy/Statis?' + getQueryStr();
+                myTabbar.tabs("gridboxOne").progressOn();
+                loadGraph();
+            } else if (name == 'Reset') {
+                //inspectCombo.setComboText('');
+                //areaCombo.setComboText('');
+                //areaCombo.clearAll();
+                //areaCombo.load('/TotalSearch/AreaCombo');
+                checkUnitNameCombo.setComboText('');
+                checkUnitNameCombo.setComboValue(null);
+                //myForm.uncheckItem('IsCType');
+                myForm.setItemValue('CheckItem', '');
+                myForm.setItemValue('CheckItemCodes', '');
+                myForm.setItemValue('ProjectName', '');
+                //myForm.getCombo('DtType').setComboValue('EntrustDt');
+                //myForm.getCombo('IsChanged').setComboValue('-1');
+                //myForm.getCombo('HasArc').setComboValue('-1');
+                //myForm.getCombo('GroupType').setComboValue('Custom');
+                myForm.setItemValue('ReportEndDt', '');
+                myForm.setItemValue('ReportStartDt', '');
+                myForm.setItemValue('StartDt', '@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")');
+                myForm.setItemValue('EndDt', '@DateTime.Now.ToString("yyyy-MM-dd")');
+            }
+
+        });
+
+        var checkUnitNameCombo = myForm.getCombo("CheckInstID");
+        checkUnitNameCombo.enableFilteringMode('between');;
+        checkUnitNameCombo.load("/CheckStatisUnQuailfy/InstCombo");
+        setComboCustomFilter(checkUnitNameCombo);
+
+        //var inspectCombo = myForm.getCombo("SupervisoryName");
+        //inspectCombo.setOptionWidth(300);
+        //inspectCombo.enableFilteringMode('between');
+        //inspectCombo.load('/CheckStatisUnQuailfy/InspectCombo');
+
+        //areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        //areaCombo.load('/CheckStatisUnQuailfy/AreaCombo');
+        //areaCombo.attachEvent("onClose", function () {
+        //    areaCombo.setComboText(areaCombo.getChecked().join(','));
+        //});
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridstatis",
+            tabs: [
+                { id: "gridboxChart", text: "不合格报告统计图表", active: true },
+                { id: "gridboxOne", text: "不合格报告统计数据" }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        myTabbar.attachEvent("onTabClick", function (id, lastId) {
+            // your code here
+            if (id == 'gridboxChart') {
+                myTabbar.tabs(id).setActive();
+            } else {
+                if (gridRender) {
+                    myTabbar.tabs(id).setActive();
+                }
+                else {
+                    myTabbar.tabs(id).progressOn();
+                    loadGrid(id);
+                }
+            }
+        });
+
+        tToolbar = myTabbar.attachToolbar({
+            iconset: "awesome",
+            items: [
+
+               { id: "export", type: "button", text: "导出", img: "fa fa-file-excel-o" }
+            ]
+        });
+
+        tToolbar.attachEvent("onClick", function (id) {
+            if (id == "export") {
+                exporter.show();
+            }
+        });
+
+
+        myTabbar.tabs("gridboxChart").attachHTMLString('<div id="chart" style="height:100%;width:100%; overflow: auto;"></div>');
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea1'></div><div id='pagingArea1'></div>",
+            paging: true
+        });
+        statisGrid = myTabbar.tabs('gridboxOne').attachGrid();
+        statisGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        statisGrid.setHeader("序号,名称,数量,&nbsp");//the headers of columns
+        statisGrid.setInitWidths("40,*,100,400");          //the widths of columns
+        statisGrid.setColAlign("right,left,left,left");       //the alignment of columns
+        statisGrid.setColTypes("ro,ro,ro,jslink");                //the types of columns
+        statisGrid.setColSorting("int,str,int,str");          //the sorting types
+        statisGrid.init();      //finishes initialization and renders the grid on the page
+        statisGrid.enablePaging(true, 20, null, "pagingArea1", true, "recinfoArea1");
+        statisGrid.setPagingSkin("bricks");
+        customGrid(statisGrid);
+
+        exporter = new ExcelExporter(null, statisGrid, 30, "/CheckStatisUnQuailfy/Export");
+        exporter.onGetQueryString = function () {
+            return getQueryStr();
+        };
+
+        gridQString = '/CheckStatisUnQuailfy/Statis?' + getQueryStr();
+        myTabbar.tabs("gridboxChart").progressOn();
+        loadGraph();
+    }
+
+
+    function showStandardItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='selectItemCode();'>" + value + "</a></div>";
+    }
+
+
+
+    function getDhxWin() {
+        return dhxWins;
+    }
+
+    function loadGrid(id) {
+        statisGrid.clearAll();
+        statisGrid.load('/CheckStatisUnQuailfy/StatisGrid?' + getQueryStr(), function () {
+            gridRender = true;
+            myTabbar.tabs(id).progressOff();
+        });
+    }
+
+    function loadGraph() {
+        window.dhx.ajax.get(gridQString, function (r) {
+            var t = window.dhx.s2j(r.xmlDoc.responseText);
+            if (t != null && t.StatisChartItems != null) {
+
+                var allItemKeys = t.StatisChartItems.map(function (item) {
+                    return item.StatisKey;
+                });
+
+                mychart = echarts.init(document.getElementById('chart'));
+                // 指定图表的配置项和数据
+                var option = {
+                    color: ['#3398DB'],
+                    xAxis: {
+                        splitLine: {
+                            show: true
+                        },
+                        axisLabel: {
+                            formatter: '{value}',
+                            interval: 0,//横轴信息全部显示
+                            rotate: -30,//-30度角倾斜显示
+                        },
+                        data: t.StatisChartItems.map(function (item) {
+                            return item.StatisName;
+                        })
+                    },
+                    yAxis: {
+                        axisLabel: {
+                            formatter: '{value}'
+
+                        },
+                        boundaryGap: [0, '20%'],
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    grid: {
+                        y2: 100
+                    },
+                    tooltip: {
+                        show: true,
+                        formatter: function (params) {
+                            return params.name + '<br>数量：' + params.data;
+                        }
+                    },
+                    series: [{
+                        type: 'bar',
+                        showSymbol: false,
+                        hoverAnimation: false,
+                        data: t.StatisChartItems.map(function (item) {
+                            return item.DocCount;
+                        })
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                mychart.setOption(option);
+                mychart.off('click');
+                mychart.on('click', function (params) {
+                    var itemKey = allItemKeys[params.dataIndex];
+                    showItemKeyGrid(itemKey, params.name);
+                });
+            }
+            myTabbar.tabs("gridboxChart").progressOff();
+        });
+    }
+
+    function showItemKeyGrid(itemkey, itemName) {
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 950, 620);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText(itemName + "详情");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: itemName + "数据统计", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        dataGrid = gridTabber.tabs("gridDtails").attachGrid();
+        dataGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        dataGrid.setHeader("序号,地区,报告总数,不合格数量,不合格数量占比,生产厂家总数,不合格生产商家数量,不合格生产厂家占比,同比,环比,&nbsp");//the headers of columns
+        dataGrid.setInitWidths("40,100,80,80,100,100,120,120,60,60,60");          //the widths of columns
+        dataGrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        dataGrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,jslink");                //the types of columns
+        dataGrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        dataGrid.init();      //finishes initialization and renders the grid on the page
+        dataGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        dataGrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        dataGrid.setPagingSkin("bricks");
+        customGrid(dataGrid);
+        gridTabber.tabs("gridDtails").progressOn();
+        var GroupTypeValue = "Item";
+        var GroupTypeQueryStr = '&ItemName=' + itemkey;
+        if (GroupTypeValue === "Item") {
+            GroupTypeQueryStr = '&ItemName=' + itemkey;
+        }
+        else if (GroupTypeValue === "Custom") {
+            GroupTypeQueryStr = '&CustomId=' + itemkey;
+        }
+        else {
+            GroupTypeQueryStr = '&ProjectNameRaw=' + encodeURIComponent(itemkey);
+        }
+
+        var dataGridSearch = '/CheckStatisUnQuailfy/Search?' + getQueryStr() + GroupTypeQueryStr;
+        dataGrid.load(dataGridSearch, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+    function showUnquailfyAnalysis(itemkey, itemname) {
+        window.parent.Hui_admin_tab_raw("/CheckStatisUnQuailfy/UnquailfyAnalysis?itemkey=" + itemkey + "&" + getQueryStr(), itemname + "材料动态分析表");
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + rowId, "检测报告查看");
+    }
+
+    function showDetail(itemName) {
+        var dataGridSearch = '/CheckStatisUnQuailfy/Search?' + getQueryStr() + '&ItemName=' + itemName;
+        gridTabber.tabs("searchGrid").progressOn();
+        dataGrid.clearAll();
+        dataGrid.load(dataGridSearch, function () {
+            gridTabber.tabs("searchGrid").progressOff();
+        });
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        //data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+</script>
+
+

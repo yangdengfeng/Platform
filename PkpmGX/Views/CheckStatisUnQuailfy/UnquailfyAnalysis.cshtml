@@ -1,0 +1,142 @@
+﻿@model Pkpm.Entity.SysSearchModel
+@{
+    ViewBag.Title = "UnquailfyAnalysis";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row mt-20">
+        <div id="gridbox" style="width:100%; height:550px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=2"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+    var myTabbar, mygrid, dhxWins, newWin, editWin, newForm, exporter, editForm;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "不合格材料统计表", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        tToolbar = myTabbar.attachToolbar({
+            iconset: "awesome",
+            items: [
+               { id: "customItem", type: "button", text: "饼图", img: "fa fa-clone" },
+               { id: "customInst", type: "button", text: "线状图", img: "fa fa-clone" },
+               { id: "export", type: "button", text: "导出", img: "fa fa-file-excel-o" }
+            ]
+        });
+
+        tToolbar.attachEvent("onClick", function (id) {
+            if (id == "export") {
+                exporter.show();
+            }
+            else if (id == "customItem") {
+                customItem();
+            } else if (id == 'customInst') {
+                customInst();
+            }
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,地区,报告总数,不合格数量,不合格数量占比,生产厂家总数,不合格生产厂家数量,不合格生产厂家占比,同比,环比,操作");//the headers of columns
+        mygrid.setInitWidths("40,320,180,180,180,180,180,180,100,100,100");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,tree,ro,ro,ro,ro,ro,ro,ro,ro,jslink");                //the types of columns
+        mygrid.setColSorting("int,str,str,str,str,str,str,str,str,str,str");          //the sorting types
+        mygrid.init();
+        exporter = new ExcelExporter(null, mygrid, 30, "/CheckStatisUnQuailfy/Export" + getQueryStr());
+        exporter.onGetQueryString = function () {
+            return getQueryStr();
+        };
+        mygrid.load("/CheckStatisUnQuailfy/Search" + getQueryStr(), doOnGridLoaded);
+    }
+    
+    function showItemKeyGrid(itemkey) {
+        detailWin = dhxWins.createWindow("detailWin", 200, 200, 1000, 600);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText(itemkey + "地区详情");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: itemkey + "数据统计", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        dataGrid = gridTabber.tabs("gridDtails").attachGrid();
+        dataGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        dataGrid.setHeader("序号,检测机构名称,工程名称,检测项目,报告日期,报告编号,&nbsp");//the headers of columns
+        dataGrid.setInitWidths("40,250,150,*,80,100,25");          //the widths of columns
+        dataGrid.setColAlign("right,left,left,left,left,left,left");       //the alignment of columns
+        dataGrid.setColTypes("ro,ro,ro,ro,ro,jslink,view");                //the types of columns
+        dataGrid.setColSorting("server,server,server,server,server,server,server");          //the sorting types
+        dataGrid.init();      //finishes initialization and renders the grid on the page
+        dataGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        dataGrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        dataGrid.setPagingSkin("bricks");
+        customGrid(dataGrid);
+        gridTabber.tabs("gridDtails").progressOn();
+         
+        var dataGridSearch = '/CheckStatisUnQuailfy/SearchGrid' + getQueryStr() + "&Area=" + itemkey;
+        dataGrid.load(dataGridSearch, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = newWin = editWin = null;
+        }
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + rowId, "检测报告查看");
+    }
+
+
+    function getQueryStr() {
+        //var data = [];
+        //var formData = myForm.getFormData(true);
+        //for (var key in formData) {
+        //    data.push(key + "=" + encodeURIComponent(formData[key]));
+        //}
+        //data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+       var searchStr = "?itemkey=@Model.itemkey" + "&ProjectName=@Model.ProjectName" + "&StartDt=@Model.StartDt" + "&CheckInstID=@Model.CheckInstID" + "&EndDt=@Model.EndDt" + "&ReportStartDt=@Model.ReportStartDt" + "&ReportEndDt=@Model.ReportEndDt"
+        //return data.join('&');
+        return searchStr;
+    }
+</script>

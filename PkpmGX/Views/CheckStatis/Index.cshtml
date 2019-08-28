@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row cl ml-5">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="mt-10">
+        <div id="gridbox" style="position:fixed;width:100%; top:230px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+
+<style>
+    div.dhxsidebar_item div.dhxsidebar_bubble {
+        width: 50px !important;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var myForm, myTabbar, mygrid, mySiderbar, gridQString, dhxWins, NewCustomWin;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        dhxWins.attachViewportTo("gridbox");
+        var formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 150, labelWidth: 120 },
+             { type: "combo", label: "检测机构名称", name: "CheckInstID" },
+             { type: "input", label: "委托单位", name: "EntrustUnit" },
+            {
+                type: "combo", name: "DtType", label: "日期类别", options: [
+                    { text: "检测日期", value: "CheckDt", selected: true },
+                     { text: "委托日期", value: "EntrustDt" },
+                    { text: "报告日期", value: "ReportDt" },
+                    { text: "上传日期", value: "UploadDt" }
+                ]
+            },
+             {
+                 type: "combo", label: "典型时间", name: "SelectTime", options: [
+                     { value: "all", text: "" },
+                     { value: "day", text: "本天" },
+                     { value: "week", text: "本周" },
+                     { value: "month", text: "本月" },
+                     { value: "year", text: "本年" },
+                 ]
+             },
+             { type: "input", label: "检测结论", name: "checkConclusion" },
+             { type: "newcolumn" },
+             { type: "container", label: "地区选择", name: "Area" },
+             { type: "input", label: "建设单位", name: "ConstructUnit" },
+             { type: "calendar", label: "起始时间", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")' },
+            {
+                type: "combo", name: "CheckStatus", label: "结论状态", options: [
+                    { text: "全部", value: "A", selected: true },
+                    { text: "合格", value: "Y" },
+                    { text: "不合格", value: "N" },
+                    { text: "不下结论", value: "X" },
+                    { text: "被修改", value: "M" },
+                    { text: "无曲线", value: "Q" }
+                ]
+            },
+              {
+                  type: "combo", label: "分组条件", name: "Group", options: [
+                      { value: 0, text: "按项目分组" },
+                      { value: 1, text: "按工程分组" },
+                  ]
+              },
+              { type: "newcolumn" },
+             { type: "input", label: "工程名称", name: "ProjectName" },
+             { type: "input", label: "项目名称", name: "CheckItem" },
+             { type: "calendar", label: "终止时间", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+             {
+                 type: "combo", label: "数据状态", name: "DataState", options: [
+                       { text: "全部", value: "-1", selected: true },
+                      { text: "已收样", value: "0" },
+                      { text: "已复核", value: "1" },
+                      { text: "已检测", value: "2" },
+                      { text: "已校核", value: "3" },
+                      { text: "已审核", value: "4" },
+                      { text: "已批准", value: "5" },
+                      { text: "已打印", value: "6" },
+                      { text: "已归档", value: "7" },
+                      { text: "已发放", value: "8" },
+                      { text: "已作废", value: "9" },
+                 ]
+             },
+                 { type: "newcolumn" },
+             { type: "button", name: 'Search', value: "查询", offsetLeft: 40, offsetTop: 50 }
+
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/CheckStatis/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+            areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            mySiderbar.loadStruct("/CheckStatis/SiderBar?" + getQueryStr(), function () { });
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            gridQString = '/CheckStatis/Search?' + getQueryStr();
+            mygrid.load(gridQString, doOnGridLoaded);
+        });
+
+
+        var SelectTimeCombo = myForm.getCombo("SelectTime");
+
+
+        myForm.attachEvent("onChange", function (value, state) {
+            if (state == "all") {
+                myForm.setItemValue('StartDt', '');
+            }
+            if (state == "day") {
+                myForm.setItemValue('StartDt', '@ViewBag.Day');
+            }
+            if (state == "week") {
+                myForm.setItemValue('StartDt', '@ViewBag.Week');
+            }
+            if (state == "month") {
+                myForm.setItemValue('StartDt', '@ViewBag.Month');
+            }
+            if (state == "year") {
+                myForm.setItemValue('StartDt', '@ViewBag.Year');
+            }
+
+        });
+
+        var checkInstCombo = myForm.getCombo("CheckInstID");
+        checkInstCombo.enableFilteringMode('between');
+        checkInstCombo.load("/CheckStatis/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+            { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        mySiderbar = myTabbar.tabs("gridboxOne").attachSidebar({
+            icons_path: "../../Dhtmlx/codebase/imgs/",
+            single_cell: true,
+            width: 220,
+            template: "text"
+        });
+
+        mySiderbar.loadStruct("/CheckStatis/SiderBar?" + getQueryStr(), function () {
+
+
+
+        });
+
+        mySiderbar.attachEvent("onSelect", function (id) {
+            if (id != 'inbox') {
+                mygrid.clearAll();
+                mygrid.load('/CheckStatis/Search?' + getQueryStr() + "&SiderbarType=" + id, doOnGridLoaded);
+            }
+
+        });
+
+        mySiderbar.cells("inbox").setActive(true);
+        mygrid = mySiderbar.cells("inbox").attachGrid();
+
+        mySiderbar.cells("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        gridQString = '/CheckStatis/Search?' + getQueryStr();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");//14
+        mygrid.setHeader("序号,委托单位,建设单位,检测机构名称,工程名称,工程部位,检测项目,检测类别,委托日期,检测日期,报告日期,报告编号,检测结论,查看");//the headers of columns
+        mygrid.setInitWidths("40,100,100,*,100,100,100,80,100,100,100,150,100,40");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,layuijslink,ro,view");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+        //gridQString = '/CheckStatis/GetWarnEchartsData?' + getQueryStr(myForm);
+        //myTabbar.tabs("gridboxChart").progressOn();
+        //loadGraph();
+        //myTabbar.tabs("gridboxChart").progressOff();
+    }
+
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+    function doOnUnload() {
+
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + rowId, "检测报告查看");
+    }
+
+
+
+</script>
+
+

@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="SoftwareVers-Edit-tableContainer">
+        <form class="layui-form" action="" lay-filter="SoftwareVers-Edit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单位编号<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="userCode" value="@Model.usercode" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单位名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="name" value="@Model.name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">软件版本<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="FileVersion" value="@Model.FileVersion" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获取版本时间<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="@Model.FileVersionDate" id="FileVersionDate" placeholder="yyyy-MM-dd HH:mm">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">软件结束时间<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="@Model.EndDate" id="EndDate" placeholder="yyyy-MM-dd HH:mm">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" id="save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["laydate","layer"], function () {
+        var laydate = layui.laydate,
+            layer=layui.layer;
+           
+
+        laydate.render({
+            elem: '#FileVersionDate',
+            type: 'datetime',
+            format:'yyyy-MM-dd HH:mm'
+        });
+
+        laydate.render({
+            elem: '#EndDate',
+            type: 'datetime',
+            format: 'yyyy-MM-dd HH:mm'
+        });
+    });
+
+    $('#save').click(function (data) {
+       
+        var userCode = $('#userCode').val();
+        var name = $('#name').val();
+        var FileVersion = $('#FileVersion').val();
+        var FileVersionDate = $('#FileVersionDate').val();
+        var EndDate = $('#EndDate').val();
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/SysSoftwareVers/Edit?id=" + "@Model.id" + "&UserCode=" + userCode + "&UserName=" + name + "&FileVersion=" + FileVersion + "&FileVersionDate=" + FileVersionDate + "&EndDate=" + EndDate,
+            success: function (d) {
+                console.log(d.IsSucc);
+                if (d.IsSucc) {
+                    layer.msg('编辑成功', {
+                        btn: ['确定'],
+                        yes: function (index) {
+                            layer.close(index);
+                            window.parent.Hui_admin_close("/SysSoftwareVers/Edit/@Model.id");
+                        },
+                        icon: 1
+                    });
+                }
+                else {
+                    layer.msg('编辑失败，错误信息：' + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        })
+        return false;
+    });
+</script>

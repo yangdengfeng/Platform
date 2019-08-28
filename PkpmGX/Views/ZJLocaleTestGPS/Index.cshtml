@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row cl ml-5">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="mt-10">
+
+        <div id="gridbox" style="position:fixed;width:100%; top:42px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+
+    </div>
+</div>
+<style type="text/css">
+    body, html {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+
+    #allmap {
+        width: 100%;
+        height: 100%;
+    }
+
+    p {
+        margin-left: 5px;
+        font-size: 14px;
+    }
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gb91ysMwstDuIDV5qhRMpylKWmDnQh9x"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+<script type="text/javascript">
+    var myLayout, dhxWins, myTabbar, map;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        var formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+          { type: "combo", label: "地区", name: "AreaName" },
+          { type: "newcolumn" },
+          { type: "button", name: 'Search', value: "查询", offsetLeft: 20, offsetTop: 8 }
+        ];
+
+        var myForm = new dhtmlXForm("form_container", formStructure);
+        var areaCombo = myForm.getCombo("AreaName");
+        areaCombo.enableFilteringMode('between');;
+        areaCombo.load("/ZJLocaleTestGPS/AreaCombo");
+        setComboCustomFilter(areaCombo);
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                myGrid.load('/ZJLocaleTestGPS/Search', function () {
+                    myLayout.cells('b').progressOff();
+                    initMap();
+                });
+            }
+        });
+
+        myLayout = new dhtmlXLayoutObject({
+            parent: 'gridbox',  // parent container
+            pattern: "2U"           // layout's pattern
+        });
+
+        myLayout.cells('a').setText("定位");
+
+        myLayout.cells('a').attachHTMLString('<div id="allmap" style="width:auto;height:100%"></div>');
+
+        myLayout.cells('b').setWidth(500);
+        var myGrid = myLayout.cells('b').attachGrid();
+        //myLayout.cells('b').attachStatusBar({
+        //    text: "<div id='pagingArea1'></div>",
+        //    paging: true
+        //});
+        myGrid.setImagePath("../../Dhtmlx/codebase/imgs");
+        myGrid.setHeader("序号,工程名称,检测流水号,桩号,所在城市");
+        myGrid.setInitWidths("30,*,100,100,100");
+        myGrid.setColAlign("left,left,left,left,left");
+        myGrid.setColTypes("ro,ro,ro,ro,ro");
+        myGrid.setColSorting("int,str,str,str,str");
+        myGrid.init();
+        myLayout.cells('b').progressOn();
+
+
+        myGrid.attachEvent("onRowSelect", function (id, ind) {
+            var ids = id.split(',');
+            console.log(ids);
+            map.centerAndZoom(new BMap.Point(ids[1], ids[2]), 9);
+
+        });
+
+
+        myGrid.load('/ZJLocaleTestGPS/Search', function () {
+            myLayout.cells('b').progressOff();
+            initMap();
+        });
+        myLayout.cells('b').setText("工程列表");
+
+    }
+
+    function initMap() {
+        map = new BMap.Map("allmap");
+        deletePoint();
+        //var mapStyle = {
+        //    style: "midnight"  //设置地图风格为高端黑
+        //}
+        //map.setMapStyle(mapStyle);
+            map.centerAndZoom(new BMap.Point(109,23.72), 8);
+            map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
+            map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+            map.addControl(new BMap.MapTypeControl());
+        @foreach (var item in Model)
+            {
+                @:addCustomMap('@item.GpsLongitude', '@item.GpsLatitude', '@item.projectname', '@item.areaname', '@item.SerialNo', '@item.PileNo');
+
+            }
+    }
+
+
+    function addCustomMap(lng, lat, projectname, Area, SerialNo, pileNo) {
+        var point = new BMap.Point(lng, lat);
+        var myIcon = new BMap.Icon("http://114.116.171.247:5060/Kanban/images/dot.png", new BMap.Size(23, 25));
+        var marker2 = new BMap.Marker(point, { icon: myIcon });
+
+        var contentTemp = "<div style='width:420px;'><h4 style='margin:0 0 5px 0;padding:0.2em 0'>#title#</h4>" +
+                                  "<table border=0 ><tr><td width='100px'>检测流水号</td><td>#location# </td></tr><tr><td width='100px'>桩号</td><td>#location1# </td></tr></table>";
+
+        var values = {};
+        // values["click"] = 'window.parent.Hui_admin_tab_raw("/EnterPrise/ShortDetails?id=' + id + '", "企业概览信息查看")';
+        values["title"] = projectname;
+        values["location"] = SerialNo;
+        values["location1"] = pileNo;
+
+
+        var infoWindow_default = new BMap.InfoWindow(window.dhx4.template(contentTemp, values));
+        marker2.addEventListener("click", function (e) { this.openInfoWindow(infoWindow_default); });
+
+        map.addOverlay(marker2);
+    }
+
+    function addClickHandler(content, marker) {
+        marker.addEventListener("click", function (e) {
+            openInfo(content, e)
+        }
+    );
+    }
+
+    function openInfo(content, e) {
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow, point); //开启信息窗口
+    }
+    function deletePoint() {
+        var allOverlay = map.getOverlays();
+        for (var i = 0; i < allOverlay.length - 1; i++) {
+
+            map.removeOverlay(allOverlay[i]);
+
+        }
+    }
+
+    function doOnUnload() {
+
+    }
+    function doOnGridLoaded() {
+        //myTabbar.tabs("gridboxOne").progressOff();
+    }
+</script>
+<script type="text/javascript">
+    // 百度地图API功能
+
+
+</script>
+

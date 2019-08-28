@@ -1,0 +1,75 @@
+﻿@model PkpmGX.Models.STPeopleDetailsViewModel
+@{
+    ViewBag.Title = "PeopleDetails";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+ 
+<div id="form_container" style="width:100%;height:130px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:0px;left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, itemWin, selectedItem;
+    dhxWins = new dhtmlXWindows();
+    dhxWins.attachViewportTo("gridbox");
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("勾选,序号,姓名,所属企业,身份证号,岗位证书编号,联系电话,状态,&nbsp,编辑,查看");//设置列的头文本
+        mygrid.setInitWidths("40,80,150,*,200,150,150,150,100,40,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,layuijslinks,edit,view");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("str,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 10, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        mygrid.setColumnHidden(0, true);
+        //mygrid.setColumnHidden(3, true);
+        mygrid.setColumnHidden(7, true);
+        mygrid.setColumnHidden(8, true);
+        mygrid.setColumnHidden(9, true);
+
+        gridQString = '/STCheckPeople/Search?CheckUnitName=@Model.CustomId&IsAdmin=@Model.IsAdmin&IsCheck=@Model.IsCheck&IsTitle=@Model.IsTitle';
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+
+        return false;
+    }
+
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        parent.window.parent.Hui_admin_tab_raw("/STCheckPeople/Details?id=" + rowId, "商砼人员查看");
+         
+    }
+</script>
+

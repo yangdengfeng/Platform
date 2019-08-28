@@ -1,0 +1,59 @@
+﻿@model Pkpm.Entity.t_bp_PeoChange
+@{
+    ViewBag.Title = "EditChange";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-editCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-editCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ChaDate" value="@(Model.ChaDate.HasValue? Model.ChaDate.Value.ToString("yyyy-MM-dd"):"")" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ChaContent" lay-verify="required" value="@Model.ChaContent" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="EditCusChangeBtn">编辑</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use([ "form" ,"laydate" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            form = layui.form,
+            router = layui.router();
+        laydate.render({
+            elem: '#ChaDate'
+        });
+
+        var index = parent.layer.getFrameIndex(window.name);
+        $('#EditCusChangeBtn').click(function () {
+            var id = parent.EditIndex;
+           
+            parent.$('#' + id + ' td.ChaDate').text($('#ChaDate').val());
+            parent.$('#' + id + ' td.ChaContent').text($('#ChaContent').val());
+            parent.layer.close(index);
+            return false;
+        })
+
+    });
+
+
+</script>

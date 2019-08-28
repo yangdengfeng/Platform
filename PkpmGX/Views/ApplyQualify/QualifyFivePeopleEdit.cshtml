@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewBag.Title = "QualifyFivePeopleEdit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="ApplyQualify-QualifyFivePeopleEdit-Container">
+        <form class="layui-form" action="" lay-filter="ApplyQualify-QualifyFivePeopleEdit-form">
+            <div class="layui-card">
+                <div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="zgzshpath"  id="zgzshpath" value="@Model.file[0].Path" id="educationpath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="sgzshpath" id="sgzshpath"  value="@Model.file[1].Path" id="zcgccszhpath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="zcpath" id="zcpath"  value="@Model.file[2].Path" id="PostPath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="xlpath" id="xlpath"  value="@Model.file[3].Path" id="titlepath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="id" id="id"  value="@Model.id" id="titlepath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="pid" id="pid"  value="@Model.pid" id="titlepath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="unitcode" id="unitcode"  value="@Model.unitcode" id="titlepath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="Staitc" id="Staitc"  value="@Model.Staitc" id="titlepath" placeholder="" autocomplete="off" class="layui-hide">
+                            <div class="layui-form-label">检测类别</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jclb" value="@Model.jclb" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测类容</div>
+                            <div class="layui-input-block">
+                                <select name="jclr" lay-search="">
+                                    <option value="基地基础工程检测">基地基础工程检测</option>
+                                    <option value="主体结构工程现场检测">主体结构工程现场检测</option>
+                                    <option value="建筑幕墙工程检测">建筑幕墙工程检测</option>
+                                    <option value="钢结构工程检测">钢结构工程检测</option>
+                                    <option value="见证取样检测">见证取样检测</option>
+                                    <option value="室内环境质量检测">室内环境质量检测</option>
+                                    <option value="建筑节能">建筑节能</option>
+                                    <option value="建筑附属设备安装工程检测">建筑附属设备安装工程检测</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">姓名</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="@Model.name" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">注册资格证书号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zgzsh" value="@Model.zgzsh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">上岗资格证书号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sgzsh" value="@Model.sgzsh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">注册单位名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zcdwmc" value="@Model.zcdwmc" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">职称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zc" value="@Model.zc" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">专业</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zy" value="@Model.zy" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">学历</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="xl" value="@Model.xl" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测年限</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jcnx" value="@Model.jcnx" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">注册证书有效期限</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="detectnumstartdate" id="detectnumstartdate" value="@(Model.detectnumstartdate) - @(Model.detectnumenddate)" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-form-label">备注</div>
+                                <div class="layui-input-block">
+                                    <input type="text" name="bz" value="@Model.bz" placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space15">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.file)
+                                        {
+                                            <tr id="@item.Number">
+                                                <td>@item.FileName</td>
+                                                <td class="state">@item.FileState</td>
+                                                <td><a href="javascript:void(0);" onclick=fileGrid_Edit("@item.FileName","@item.Number")>查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md5">
+                            <button class="layui-btn" lay-submit lay-filter="ApplyQualify-QualifyFivePeopleEdit-save">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+    layui.use(["form", "element", "laydate", "layer", "upload", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            router = layui.router();
+
+        laydate.render({
+            elem: '#detectnumstartdate'
+         , range: true
+        });
+
+        form.on('submit(ApplyQualify-QualifyFivePeopleEdit-save)', function (data) {
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: dataField,
+                url: "/ApplyQualify/QualifyFivePeopleEdit",
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('人员编辑成功', {
+                            time:0,
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/ApplyQualify/QualifyFivePeopleEdit/" + "@Model.id");
+                            },
+                            icon: 1
+                        });
+                    } else {
+                        layer.msg('人员编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+
+            })
+            return false;
+
+
+        })
+    })
+
+
+    function fileGrid_Edit(FileName, Number) {
+        console.log(Number);
+        console.log(FileName);
+        var fileUrl = "";
+        if (Number == 0) {
+            fileUrl = $('#zgzshpath').val();
+        } else if (Number == 1) {
+            fileUrl = $('#sgzshpath').val();
+        } else if (Number == 2) {
+            fileUrl = $('#zcpath').val();
+        } else if (Number == 3) {
+            fileUrl = $('#xlpath').val();
+        }
+        console.log(fileUrl);
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            title: FileName,
+            content: "/CheckPeopleManager/EditFile?filePath=" + encodeURIComponent(fileUrl) + "&id=" + Number + "&name=" + FileName.split("编辑")[0],
+
+            cancel: function (index, layero) {
+                console.log($('#filePath').val());
+                if ($('#filePath').val()) {
+                    if (Number == 0) {
+                        console.log(Number == 0);
+                        $('#zgzshpath').val($('#filePath').val());
+                        console.log($('#zgzshpath').val());
+                    } else if (Number == 1) {
+                        $('#sgzshpath').val($('#filePath').val());
+                    } else if (Number == 2) {
+                        $('#zcpath').val($('#filePath').val());
+                    } else if (Number == 3) {
+                        $('#xlpath').val($('#filePath').val());
+                    }
+                }
+            }
+        });
+    }
+</script>

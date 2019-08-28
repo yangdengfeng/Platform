@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+@*<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe63c;</i> 系统管理
+    <span class="c-gray en">&gt;</span> 缓存管理
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>*@
+<div class="container-fluid">
+
+    <div class="row">
+        <div id="gridbox" style="width:100%;height:500px;"></div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var mygrid, myTabbar;
+
+    function doOnLoad() {
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "缓存", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,缓存名称,操作");//the headers of columns
+        mygrid.setInitWidths("60,*,80");          //the widths of columns
+        mygrid.setColAlign("left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,jslink");                //the types of columns
+        mygrid.setColSorting("int,str,str");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.setEditable(false);
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load("/SysCache/Search", function () {
+            myTabbar.tabs("gridboxOne").progressOff();
+        });
+    }
+
+    function ClearCache(id) {
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要清空此缓存？",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/SysCache/Delete", "id=" + id, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("此缓存成功！");
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    });
+                }
+            }
+        });
+    }
+
+
+    function doOnUnload() {
+
+    }
+</script>
+

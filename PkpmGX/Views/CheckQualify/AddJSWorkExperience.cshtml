@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "AddJSWorkExperience";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-AddWorkExperience-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-AddWorkExperience-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">由何年何月 至 何年何月</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="WorkExperienceTime" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">在何单位、从事何工作、任何职、受过何种奖励或处分</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="WorkExperienceContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveWorkExperienceBtn">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use([  "laydate" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#saveWorkExperienceBtn').click(function () {
+        var workTime = $('#WorkExperienceTime').val();
+        var workContent = $('#WorkExperienceContent').val();
+        if (workTime === '') {
+            parent.layer.msg('请填写工作时间（由何年何月 至 何年何月）');
+            return false;
+        }
+        if (workContent == '') {
+            parent.layer.msg('请填写工作情况（在何单位、从事何工作、任何职、受过何种奖励或处分）');
+            return;
+        }
+
+        var str = '<tr><td data-jswork="WorkExperienceTime">' + workTime + '</td><td data-jswork="WorkExperienceContent">' + workContent + '</td><td><button class="layui-btn jsWorkExperience-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#jsWorkExperience-table > tbody:last-child').append(str);
+
+        parent.layer.close(index);
+    });
+</script>

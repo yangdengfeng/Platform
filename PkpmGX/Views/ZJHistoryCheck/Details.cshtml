@@ -1,0 +1,415 @@
+﻿@model PkpmGX.Models.ZJHistoryCheckDetailsModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/Static/layuiadmin/layui/css/dtree.css" rel="stylesheet" />
+<link href="~/Static/layuiadmin/layui/font/dtreefont.css" rel="stylesheet" />
+<link href="~/Scripts/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/viewer.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gb91ysMwstDuIDV5qhRMpylKWmDnQh9x"></script>
+<div class="layui-container">
+    <div class="layui-form" id="ZJSceneCheck-Details-Container">
+        <form class="layui-form" action="" lay-filter="ZJSceneCheck-Details-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <table class="layui-table">
+                        <tbody>
+                            <tr>
+                                <td width="10%">工程名称</td>
+                                <td width="90%" colspan="3">@Model.programme.projectname</td>
+                            </tr>
+                            <tr>
+                                <td align="right">检测单位</td>
+                                <td align="left" id="customname">@Model.programme.customname</td>
+                                <td align="right">上报时间</td>
+                                <td align="left" id="uploadtime">@Model.programme.addtime</td>
+                            </tr>
+                            <tr>
+                                <td width="10%" align="right">检测流水号</td>
+                                <td width="40%" align="left" id="checknum">@Model.programme.checknum</td>
+                                <td width="10%" align="right">桩号</td>
+                                <td width="40%" align="left" id="pileno">@Model.programme.pilenum</td>
+                            </tr>
+                            <tr>
+                                <td align="right" id="filetitle">方案名称</td>
+                                <td align="left" id="fileinfo">
+                                    @{
+                                        if (!string.IsNullOrEmpty(Model.programme.filename) && !string.IsNullOrEmpty(Model.programme.filepath))
+                                        {
+                                            var filePath = "http://175.6.228.209:8090/file" + Model.programme.filepath;
+
+                                            <a style="cursor:pointer" title="点击下载" href="@filePath" target="_blank">@Model.programme.filename </a>
+                                        }
+                                        else
+                                        {
+                                            <font color="red">未上报检测方案!</font>
+                                        }
+                                    }
+                                </td>
+                                <td align="right" id="hqfiletitle">会签表</td>
+                                <td align="left" id="hqfileinfo">
+                                    @{
+                                        if (!string.IsNullOrEmpty(Model.programme.hqfilename) && !string.IsNullOrEmpty(Model.programme.hqfilepath))
+                                        {
+
+                                            var hqImgSrc = "http://175.6.228.209:8090/file" + Model.programme.hqfilepath;
+
+                                            <a style="cursor:pointer" title="点击下载" href="@hqImgSrc" target="_blank">@Model.programme.hqfilename </a>
+                                        }
+                                        else
+                                        {
+                                            <font color="red">未上报会签表!</font>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-tab" lay-filter="demo">
+                    <ul class="layui-tab-title">
+                        <li lay-id="qsqx">Q-S曲线</li>
+                        <li>s-lgt曲线</li>
+                        <li>s-lgQ曲线</li>
+                        <li>汇总表</li>
+                        <li>原始记录表</li>
+                        <li>加载记录表</li>
+                        <li>卸载记录表</li>
+                        <li>修改记录表</li>
+                        <li>仪器参数</li>
+                        @*<li>测试日志</li>*@
+                        <li class="layui-this">地理位置</li>
+                        <li>照片信息</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item">
+                            @{
+                                var base64 = Convert.ToBase64String(Model.QsImageBytes);
+                                var QsimgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                            }
+
+                            <img src="@QsimgSrc" />
+                        </div>
+                        <div class="layui-tab-item">
+                            @{
+                                var Slgtbase64 = Convert.ToBase64String(Model.SlgtImageBytes);
+                                var SlgtsimgSrc = String.Format("data:image/gif;base64,{0}", Slgtbase64);
+                            }
+
+                            <img src="@SlgtsimgSrc" />
+                        </div>
+                        <div class="layui-tab-item">
+                            @{
+                                var SlgQbase64 = Convert.ToBase64String(Model.SlgQImageBytes);
+                                var SlgQQsimgSrc = String.Format("data:image/gif;base64,{0}", SlgQbase64);
+                            }
+
+                            <img src="@SlgQQsimgSrc" />
+                        </div>
+                        <div class="layui-tab-item">
+                            <table class="layui-table">
+                                <tr>
+                                    <th rowspan="2">序号</th>
+                                    <th rowspan="2">荷载(KN)</th>
+                                    <th colspan="2" style="text-align:center">历时</th>
+                                    <th colspan="2" style="text-align:center">沉降</th>
+                                </tr>
+                                <tr>
+                                    <td>本级</td>
+                                    <td>累计</td>
+                                    <td>本级</td>
+                                    <td>累计</td>
+                                </tr>
+                                @Html.Raw(Model.hzb);
+                            </table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <table class="layui-table">
+                                <tr>
+                                    <th>荷载级别	</th>
+                                    <th>理论荷载(kN)	</th>
+                                    <th>实测荷载(kN)	</th>
+                                    <th>实测油压(MPa)	</th>
+                                    <th>记录时间(Y/M/D hh:mm:ss)</th>
+                                    <th>实际间隔(min)</th>
+                                    <th>上传时间(Y/M/D hh:mm:ss)</th>
+                                    <th>位移通道1↓（mm）</th>
+                                    <th>位移通道2↓（mm）</th>
+                                    <th>位移通道3↓（mm）</th>
+                                    <th>位移通道4↓（mm）</th>
+                                    <th>平均位移（mm）</th>
+                                    <th>原始ID（mm）</th>
+                                </tr>
+                                @Html.Raw(Model.ysjlb)
+                            </table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <table class="layui-table">
+                                <tr>
+                                    <th>500</th>
+                                    <th>750</th>
+                                    <th>1000</th>
+                                    <th>1250</th>
+                                    <th>1500</th>
+                                    <th>时间(min)\荷载(kN)</th>
+                                </tr>
+                                @Html.Raw(Model.jzjlb)
+                            </table>
+                        </div>
+                        <div class="layui-tab-item">
+                            <table class="layui-table">
+                                <tr>
+                                    <th>1000</th>
+                                    <th>1250</th>
+                                    <th>时间(min)\荷载(kN)</th>
+                                </tr>
+                                @Html.Raw(Model.xzjlb)
+                            </table>
+                        </div>
+                        <div class="layui-tab-item">
+
+                        </div>
+                        <div class="layui-tab-item">
+                            <div style="height: 600px;overflow: auto; ">
+                                <ul id="yqcsTree" class="dtree" data-id="0"></ul>
+                            </div>
+
+                        </div>
+                        @*<div class="layui-tab-item">
+                                <div style="height: 600px;overflow: auto; ">
+                                    <ul id="csrzTree" class="dtree" data-id="0"></ul>
+                                </div>
+                            </div>*@
+                        <div class="layui-tab-item layui-show">
+                            <div id="Map" style="height:100%;width:100%; overflow: auto;">
+                                <div id="allmap" style="width: 100%; height: 800px;"> </div>
+                            </div>
+                        </div>
+                        <div class="layui-tab-item">
+                            @{
+                                var image1 = string.Empty;
+                                var image2 = string.Empty;
+                                var image3 = string.Empty;
+                                var image4 = string.Empty;
+                                var image5 = string.Empty;
+                                var image6 = string.Empty;
+
+                                if (Model.PhotoInfos.Count > 6)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[1].photopath;
+                                    image3 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[2].photopath;
+                                    image4 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[3].photopath;
+                                    image5 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[4].photopath;
+                                    image6 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[5].photopath;
+                                }
+                                else if (Model.PhotoInfos.Count > 5)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[1].photopath;
+                                    image3 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[2].photopath;
+                                    image4 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[3].photopath;
+                                    image5 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[4].photopath;
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+
+                                }
+                                else if (Model.PhotoInfos.Count > 4)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[1].photopath;
+                                    image3 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[2].photopath;
+                                    image4 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[3].photopath;
+                                    image5 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                }
+                                else if (Model.PhotoInfos.Count > 3)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[1].photopath;
+                                    image3 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[2].photopath;
+                                    image4 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image5 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+
+                                }
+                                else if (Model.PhotoInfos.Count > 2)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[1].photopath;
+                                    image3 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image4 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image5 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                }
+                                else if (Model.PhotoInfos.Count > 1)
+                                {
+                                    image1 = "http://175.6.228.209:8090/photo" + Model.PhotoInfos[0].photopath;
+                                    image2 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image3 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image4 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image5 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                }
+                                else
+                                {
+                                    image1 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image2 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image3 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image4 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image5 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                    image6 = "http://www.gxjcxx.cn/ReportInfo_cq/Sence/imgphoto/280x210.png";
+                                }
+                            }
+                            <table class="layui-table" id="imagestable">
+                                <tr>
+                                    <td width="20%" rowspan="2"><img data-original="@image1" src="@image1" /> </td>
+                                    <td width="30%" align="left" id="photostr1">
+                                        图片说明1：<br />
+                                        &nbsp;已安装的千斤顶（包含桩头）和位移合影1张
+                                    </td>
+                                    <td width="20%" rowspan="2"> <img data-original="@image2" src="@image2" /></td>
+                                    <td width="30%" align="left" id="photostr2">
+                                        图片说明2：<br />
+                                        &nbsp;反力装置全景2张（对角①方向1张）
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="up1">无修改记录</td>
+                                    <td id="up2">无修改记录</td>
+                                </tr>
+                                <tr>
+                                    <td width="20%" rowspan="2"><img data-original="@image3" src="@image3" /></td>
+                                    <td align="left" id="photostr3">
+                                        图片说明3：<br />
+                                        &nbsp;反力装置全景2张（对角②方向1张）
+                                    </td>
+                                    <td width="20%" rowspan="2"> <img data-original="@image4" src="@image4" /></td>
+                                    <td align="left" id="photostr4">
+                                        图片说明4：<br />
+                                        &nbsp;基准梁基准桩1张
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="up3">无修改记录</td>
+                                    <td id="up4">无修改记录</td>
+                                </tr>
+                                <tr>
+                                    <td width="20%" rowspan="2"> <img data-original="@image5" src="@image5" /></td>
+                                    <td align="left" id="photostr5">
+                                        图片说明5：<br />
+                                        &nbsp;最后一级加载时荷载与位移值1张
+                                    </td>
+                                    <td width="20%" rowspan="2"> <img data-original="@image6" src="@image6" /></td>
+                                    <td align="left" id="photostr6">
+                                        图片说明6：<br />
+                                        &nbsp;检测人员主副检照片
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td id="up5">无修改记录</td>
+                                    <td id="up6">无修改记录</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        eleTree: 'dtree'
+        });
+
+    layui.use(["form", "element", "dtree", "layer"], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            element = layui.element,
+            dtree = layui.dtree,
+            router = layui.router();
+
+        element.tabChange('demo', 'qsqx'); //切换到：当前数据
+
+        @*dtree.render({
+            elem: "#yqcsTree",
+            data: @Html.Raw(Model.SourceParam),
+            dataFormat: "list",  //配置data的风格为list
+            checkbar: false //开启复选框
+        });*@
+
+        @{
+            if (!string.IsNullOrEmpty(Model.SourceParam))
+            {
+                 @:dtreeRender('yqcsTree',@Html.Raw(Model.SourceParam));
+            }
+        }
+
+        @*@{
+            if(!string.IsNullOrEmpty(Model.TestLog))
+            {
+                @:dtreeRender('csrzTree',@Html.Raw(Model.TestLog));
+            }
+        }*@
+
+
+
+    })
+
+    $('#imagestable').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+
+    function dtreeRender(selector, text) {
+        layui.use(["element", "dtree"], function () {
+            var $ = layui.$,
+                element = layui.element,
+                dtree = layui.dtree,
+                router = layui.router();
+
+            dtree.render({
+                elem: "#" + selector,
+                data: text,
+                dataFormat: "list",  //配置data的风格为list
+                checkbar: false //开启复选框
+            });
+        })
+    }
+
+    function getLocation() {
+        var plong = "@(Model.GpsInfo.GpsLongitude)";
+        var plat = "@(Model.GpsInfo.GpsLatitude)";
+        if (plong != "" && plat != "") {
+            var maplong = plong;//accSub(plong, 0.0072);
+            var maplat = plat;//accAdd(plat, 0.004);
+            var map = new BMap.Map("allmap");
+            map.centerAndZoom(new BMap.Point(maplong, maplat), 13);
+            map.enableScrollWheelZoom(true);
+            map.addControl(new BMap.NavigationControl());
+            map.addControl(new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT }));
+            map.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP] }));
+            var ppoint = new BMap.Point(plong, plat);
+            var picon = new BMap.Icon('../images/gc.png', new BMap.Size(40, 50));
+            var pmarker = new BMap.Marker(ppoint, { icon: picon });
+            map.addOverlay(pmarker);
+        }
+    }
+
+    @{
+        if(Model.GpsInfo.IsVaild && Model.GpsInfo.GpsLatitude.HasValue&& Model.GpsInfo.GpsLongitude.HasValue)
+        {
+             @:$('#Map').append(getLocation());
+            }
+    }
+</script>
+

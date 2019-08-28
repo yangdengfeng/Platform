@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "AddCusAward";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwaDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwaName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖机构</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwaUnit" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获奖内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwaContent" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AwaRem" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="CusawardsButton">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+ 
+
+<script>
+    layui.use([  "laydate" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+        laydate.render({
+            elem: '#AwaDate'
+        });
+
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#CusawardsButton').click(function () {
+        var AwaDate = $('#AwaDate').val();
+        var AwaName = $('#AwaName').val();
+        var AwaContent = $('#AwaContent').val();
+        var AwaRem = $('#AwaRem').val();
+        var AwaUnit = $('#AwaUnit').val();
+        if (AwaDate === '') {
+            parent.layer.msg('请填写获奖时间');
+            return false;
+        }
+        if (AwaName == '') {
+            parent.layer.msg('请填写获奖名称');
+            return false;
+        }
+        if (AwaContent == '') {
+            parent.layer.msg('请填写获奖内容');
+            return false;
+        }
+        if (AwaUnit == '') {
+            parent.layer.msg('请填写获奖机构');
+            return false;
+        }
+
+        var str = '<tr><td  data-Awards="AwaDate">' + AwaDate + '</td><td data-Awards="AwaName">' + AwaName + '</td><td  data-Awards="AwaUnit">' + AwaUnit + '</td><td data-Awards="AwaContent">' + AwaContent + '</td><td data-Awards="AwaRem">' + AwaRem + '</td><td><button class="layui-btn cusAward-table-btnDel">删除</button> </td></tr>';
+        parent.$('#cusAward-table > tbody:last-child').append(str);
+
+        parent.layer.close(index);
+    });
+</script>
+
+

@@ -1,0 +1,450 @@
+﻿@model Pkpm.Entity.Models.CheckEquipDetailsModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<link href="~/Static/layuiadmin/layui/css/dtree.css" rel="stylesheet" />
+<link href="~/Static/layuiadmin/layui/font/dtreefont.css" rel="stylesheet" />
+<div class="layui-container">
+    <div class="layui-row" id="QrCodeData-dateils-tableContaniner">
+        <form class="layui-form" action="" lay-filter="CheckEquip-details-form">
+            @*<div class="layui-card">*@
+            @*<div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">*@
+            <div class="layui-card">
+                <div class="layui-card-header">检测机构</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <div class="layui-form-label">检测机构名称</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="Customid" placeholder="" autocomplete="off" class="layui-input" readonly="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">设备基本信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备名称<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="EquName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备型号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equtype" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">测量范围</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="testrange" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备规格<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equspec" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备编号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equnum" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">不确定度</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="uncertainty" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">准确度等级</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="degree" placeholder="" autocomplete="off" class="layui-input">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">仪器资质范围</div>
+                <ul id="dTree" class="dtree" data-id="0"></ul>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">检定/校准信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准机构</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkunit" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备检定/校准证书号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkcerfnum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准有效日期</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkdate" id="checkdate" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">其它信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="150">
+                                    <col>
+                                    <col width="150">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>设备鉴定证书</td><td>@Model.IsCheckcerfNumPath</td><td><a href="javascript:void(0);" onclick="fileGrid_Details(0)">查看</a></td></tr>
+                                    @*<tr><td>设备校准证书</td><td>@Model.IsRepaircerfNumPath</td><td><a href="javascript:void(0);" onclick="fileGrid_Details(1)">查看</a></td></tr>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        eleTree: 'dtree'
+    });
+    layui.use(["form", "element", "dtree", "layer", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            dtree = layui.dtree,
+            router = layui.router();
+
+
+        var DemoTree = dtree.render({
+            elem: '#dTree',
+            url: "/CheckEquip/BuildDTressData?equipId=@Model.Equip.id&IsEdit=false",
+            type: "all",
+            initLevel: 1,
+            checkbar: true,
+            skin: "layui",  // layui主题风格
+            checkbarType: "no-all",
+        });
+
+        form.val("CheckEquip-details-form", {
+            "Customid": "@(Model.Equip.customid)",
+            "equclass": "@Model.Equip.equclass",
+            "degree": "@Model.Equip.degree",
+            "testrange": "@Model.Equip.testrange",
+            "EquName": "@Model.Equip.EquName",
+            "equnum": "@Model.Equip.equnum",
+            "uncertainty": "@Model.Equip.uncertainty",
+            "equspec": "@Model.Equip.equspec",
+            "equtype": "@Model.Equip.equtype",
+            "checkunit": "@Model.Equip.checkunit",
+            "checkcerfnum": "@Model.Equip.checkcerfnum",
+            "repairunit": "@Model.Equip.repairunit",
+            "repaircerfnum": "@Model.Equip.repaircerfnum",
+            "checkdate": "@(Model.Equip.checkstartdate.HasValue?Model.Equip.checkstartdate.Value.ToString("yyyy-MM-dd"):"") - @(Model.Equip.checkenddate.HasValue?Model.Equip.checkenddate.Value.ToString("yyyy-MM-dd"):"")",
+            "repairstartdate": "@(Model.Equip.repairstartdate.HasValue?Model.Equip.repairstartdate.Value.ToString("yyyy-MM-dd"):"") - @(Model.Equip.repairenddate.HasValue ? Model.Equip.repairenddate.Value.ToString("yyyy-MM-dd") : "")",
+            "selfcheckitem": "@Model.Equip.selfcheckitem",
+            "selfcheckstandardname": "@Model.Equip.selfcheckstandardname",
+            "selfchecknum": "@Model.Equip.selfchecknum",
+            "selfrepairitem": "@Model.Equip.selfrepairnum",
+            "selfrepairstandardname": "@Model.Equip.selfrepairstandardname",
+            "selfrepairnum": "@Model.Equip.selfrepairnum",
+            "isautoacs": "@(Model.Equip.isautoacs==null?"":Model.Equip.isautoacs=="0"?"是":"否")",
+            "autoacsprovider": "@Model.Equip.autoacsprovider",
+            "explain": "@Model.Equip.explain",
+            "isautoacs":"@Model.Equip.isautoacs",
+           
+        });
+    });
+</script>
+
+<script>
+    function fileGrid_Details(file) {
+        var windowText = "";
+        var fileUrl = "";
+        if (file == 0) {
+            fileUrl = "@Model.Equip.checkcerfnumpath";
+            windowText = "设备检定证书附件查看";
+        }
+        if (file == 1) {
+            fileUrl = "@Model.Equip.repaircerfnumpath";
+            windowText = "设备校准证书附件查看";
+        }
+        var paths = fileUrl.split('|');
+
+        console.log(paths);
+        if (!fileUrl) {
+            layer.msg("未上传图片")
+        }
+        else if (paths.length == 1) {
+            if (paths[0]) {
+                var path = paths[0];
+                layer.tab({
+                    area: ['600px', '600px'],
+                    tab: [{
+                        title: windowText,
+                        content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/CheckEquip/Image?itemValue=' + encodeURIComponent(path) + ' border=0 style="width: 600px;height:550px" >' + '</div>'
+                    }]
+                });
+            }
+        }
+        else {
+            layer.tab({
+                area: ['600px', '600px'],
+                tab: [{
+                    title: windowText,
+                    content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/CheckEquip/Image?itemValue=' + encodeURIComponent(paths[0]) + ' border=0 style="width: 600px;height:550px" >' + '</div>'
+                }, {
+                    title: windowText,
+                    content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/CheckEquip/Image?itemValue=' + encodeURIComponent(paths[1]) + ' border=0 style="width: 600px;height:550px" >' + '</div>'
+                }]
+            });
+        }
+    }
+
+
+</script>
+
+
+
+@*<nav class="breadcrumb">
+        <i class="Hui-iconfont">&#xe63c;</i> 检测资质监督
+        <span class="c-gray en">&gt;</span> 检测设备查看
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="Hui-iconfont">&#xe68f;</i>
+        </a>
+    </nav>
+    <div class="container">
+        <div class="row cl">
+            <div id="form_container" style="width:100%;height:100%;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+            var myForm, fileGrid, lookWin, lookForm, dhxWins;
+
+            function doOnLoad() {
+                var formStructure = [
+                   { type: "settings", position: "label-left", labelAlign: "right" },
+                   { type: "label", label: "基本信息", className: "formPanel" },
+                   {
+                       type: "fieldset", name: " basicInfo", label: "检测机构", width: "auto", list: [
+                           { type: "hidden", name: "id", value: '@(Model.id.ToString())' },
+                           { type: "hidden", name: "checkcerfnumpath", value: '@(Model.checkcerfnumpath)' },
+                           { type: "hidden", name: "repaircerfnumpath", value: '@(Model.repaircerfnumpath)' },
+                           { type: "input", label: "检测机构名称", name: "Customid", value: '@(Model.customid)', inputWidth: 870, labelWidth: 110, required: true }
+                       ]
+                   },
+                   {
+                       type: "fieldset", name: "basicInfo", label: "设备基本信息", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 210, labelWidth: 110 },
+                           { type: "input", label: "仪器类别", name: "equclass", value: '@(Model.equclass)', required: true, validate: "NotEmpty" },
+                           { type: "input", label: "设备名称", name: "EquName", value: '@(Model.EquName)', required: true, validate: "NotEmpty" },
+                           { type: "input", label: "设备规格", name: "equspec", value: '@(Model.equspec)', required: true, validate: "NotEmpty" },
+                           { type: "newcolumn" },
+                           { type: "input", label: "准确度等级", name: "degree", value: '@(Model.degree)' },
+                           { type: "input", label: "设备编号", name: "equnum", value: '@(Model.equnum)', required: true, validate: "NotEmpty" },
+                           { type: "input", label: "设备型号", name: "equtype", value: '@(Model.equtype)', required: true, validate: "NotEmpty" },
+                           { type: "newcolumn" },
+                           { type: "input", label: "测量范围", name: "testrange", value: '@(Model.testrange)' },
+                           { type: "input", label: "不确定度", name: "uncertainty", value: '@(Model.uncertainty)' },
+                       ]
+                   },
+                   {
+                       type: "fieldset", name: "projectAndParameters", label: "检测项目及参数", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 1000, labelWidth: 120 },
+                           { type: "container", name: "form_Tabbar", label: "", inputHeight: 500 }
+                       ]
+                   },
+                   {
+                       type: "fieldset", name: "calibrationInfo", label: "检定/校准信息", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 210, labelWidth: 110 },
+                           { type: "input", label: "检定机构", name: "checkunit", value: '@(Model.checkunit)' },
+                           { type: "input", label: "校准机构", name: "repairunit", value: '@(Model.repairunit)' },
+                           { type: "newcolumn" },
+                           { type: "input", label: "设备检定证书号", name: "checkcerfnum", value: '@(Model.checkcerfnum)' },
+                           { type: "input", label: "设备校准证书号", name: "repaircerfnum", value: '@(Model.repaircerfnum)' },
+                           { type: "newcolumn" },
+                           {
+                               type: "block", width: "auto", position: "label-left", labelAlign: "right", list: [
+                                   { type: "calendar", label: "检定有效日期", name: "checkstartdate", value: '@(Model.checkstartdate.HasValue?Model.checkstartdate.Value.ToString("yyyy-MM-dd"):string.Empty)', dateFormat: "%Y-%m-%d", inputWidth: 100, labelWidth: 100 },
+                                   { type: "newcolumn" },
+                                   { type: "calendar", label: "至", name: "checkenddate", value: '@(Model.checkenddate.HasValue ? Model.checkenddate.Value.ToString("yyyy-MM-dd") : string.Empty)', dateFormat: "%Y-%m-%d", inputWidth: 100, labelWidth: 15 }
+                               ]
+                           },
+                           {
+                               type: "block", width: "auto", position: "label-left", labelAlign: "right", list: [
+                                  { type: "calendar", label: "校准有效日期", name: "repairstartdate", value: '@(Model.repairstartdate.HasValue?Model.repairstartdate.Value.ToString("yyyy-MM-dd"):string.Empty)', dateFormat: "%Y-%m-%d", inputWidth: 100, labelWidth: 100 },
+                                  { type: "newcolumn" },
+                                  { type: "calendar", label: "至", name: "repairenddate", value: '@(Model.repairenddate.HasValue ? Model.repairenddate.Value.ToString("yyyy-MM-dd") : string.Empty)', dateFormat: "%Y-%m-%d", inputWidth: 100, labelWidth: 15 }
+                               ]
+                           }
+                       ]
+                   },
+                   {
+                       type: "fieldset", name: " selfInspectionInfo", label: "自检/校信息", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 210, labelWidth: 110 },
+                           { type: "input", label: "自检项目", name: "selfcheckitem", value: '@(Model.selfcheckitem)' },
+                           { type: "input", label: "自校项目", name: "selfrepairitem", value: '@(Model.selfrepairitem)' },
+                           { type: "newcolumn" },
+                           { type: "input", label: "自检范围名称", name: "selfcheckstandardname", value: '@(Model.selfcheckstandardname)' },
+                           { type: "input", label: "自校规范名称及编号", name: "selfrepairstandardname", value: '@(Model.selfrepairstandardname)' },
+                           { type: "newcolumn" },
+                           { type: "input", label: "自检编号", name: "selfchecknum", value: '@(Model.selfchecknum)' },
+                           { type: "input", label: "自校编号", name: "selfrepairnum", value: '@(Model.selfrepairnum)' }
+                       ]
+                   },
+                   { type: "label", label: "其它信息", className: "formPanel" },
+                   {
+                       type: "fieldset", name: "note", label: "备注", width: "auto", list: [
+                           { type: "editor", label: "", name: "explain", value: '@(Model.explain)', inputWidth: 1000, labelWidth: 110, inputHeight: 100 }
+                       ]
+                   },
+                   {
+                       type: "fieldset", name: "otherInfo", label: "其它信息", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right" },
+                           { type: "input", label: "是否自动采集", name: "isautoacs", value: '@(Model.isautoacs)', inputWidth: 180, labelWidth: 110 },
+                           { type: "newcolumn" },
+                           { type: "editor", label: "自动采集供应商", name: "autoacsprovider", value: '@(Model.autoacsprovider)', inputWidth: 570, labelWidth: 130, inputHeight: 100 }
+                       ]
+                   },
+                   {
+                       type: "fieldset", hidden: true, name: " auditInfo", label: "审核信息", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right" },
+                           { type: "input", label: "审核状态", name: "approvalstatus", value: '@(Model.approvalstatus)', inputWidth: 180, labelWidth: 110 },
+                           { type: "newcolumn" },
+                           { type: "editor", label: "审核意见", name: "approveadvice", value: '@(Model.approveadvice)', inputWidth: 570, labelWidth: 130, inputHeight: 100 }
+                       ]
+                   },
+                   { type: "label", label: "附件信息", className: "formPanel" },
+                   {
+                       type: "fieldset", name: " uploadFile", label: "附件上传", width: "auto", list: [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 1000, labelWidth: 110 },
+                           { type: "container", name: "fileGrid", label: "", inputHeight: 70 },
+                       ]
+                   }
+                ];
+
+
+                myForm = new dhtmlXForm("form_container", formStructure);
+
+                myTabbar = new dhtmlXTabBar({
+                    parent: myForm.getContainer("form_Tabbar"),
+                    tabs: [
+                          { id: "myGrid", text: "检测项目及参数", active: true }
+                    ]
+                });
+
+                myGrid = myTabbar.tabs("myGrid").attachGrid();
+                myGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+                myGrid.setHeader("序号,检测项目,检测参数");//the headers of columns
+                myGrid.setInitWidths("50,100,*");          //the widths of columns
+                myGrid.setColAlign("left,left,left,");       //the alignment of columns
+                myGrid.setColTypes("ro,ro,ro");                //the types of columns
+                myGrid.setColSorting("int,str,str");          //the sorting types
+                myGrid.enableMultiline(true);
+                myGrid.enableAutoWidth(true);
+                myGrid.enableAutoHeight(true, 400);
+                myGrid.init();      //finishes initialization and renders the grid on the page
+                myGrid.load("/CheckEquip/ProjectGrid?id=" + '@Model.id');
+
+                fileGrid = new dhtmlXGridObject(myForm.getContainer("fileGrid"));
+                fileGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+                fileGrid.setHeader("名称,状态,操作");//the headers of columns
+                fileGrid.setInitWidths("200,*,80");          //the widths of columns
+                fileGrid.setColAlign("left,left,left");       //the alignment of columns
+                fileGrid.setColTypes("ro,ro,jslink");                //the types of columns
+                fileGrid.setColSorting("str,str,str");          //the sorting types
+                fileGrid.enableMultiline(true);
+                fileGrid.enableAutoWidth(true);
+                fileGrid.enableAutoHeight(true, 400);
+                fileGrid.init();      //finishes initialization and renders the grid on the page
+                fileGrid.load("/CheckEquip/FileGrid?id=" + '@Model.id');
+
+            }
+
+
+            function fileGrid_look(file) {
+                var windowText = "";
+                if (file == 0) {
+                    fileUrl = "checkcerfnumpath";
+                    windowText = "设备检定证书附件查看";
+                }
+                if (file == 1) {
+                    fileUrl = "repaircerfnumpath";
+                    windowText = "设备校准证书附件查看";
+                }
+                if (dhxWins == null || dhxWins == undefined) {
+                    dhxWins = new dhtmlXWindows();
+                }
+
+                lookWin = dhxWins.createWindow("lookWin", 400, 1000, 700, 700);
+                lookWin.setModal(true);
+                lookWin.setText(windowText);
+                dhxWins.window("lookWin").keepInViewport(true);
+
+                myCarousel = lookWin.attachCarousel();
+
+                loadattach();
+
+            }
+
+            function loadattach() {
+                var uploadedphoto = myForm.getItemValue(fileUrl);
+                var photoarr = uploadedphoto.split('|');
+
+                for (i = 0; i < photoarr.length; i++) {
+                    if (photoarr[i] && photoarr[i].length > 0) {
+                        myCarousel.addCell(photoarr[i]);
+
+                        myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + photoarr[i] + "' border='0' style='width: 100%;'></div>");
+                    }
+                }
+            }
+
+            function doOnUnload() {
+                if (dhxWins != null && dhxWins.unload != null) {
+                    dhxWins.unload();
+                    dhxWins = lookWin = null;
+                }
+            }
+    </script>*@

@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "AddCheckItemAndParm";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="customcompany-customedit-tableContainer">
+        <form class="layui-form" action="" lay-filter="customcompany-customedit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">检测项目</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="checkItem" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">检测参数</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="checkParm" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCheckItemAndParm">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    $('#saveCheckItemAndParm').click(function () {
+        var val = $('#checkItem').val();
+        var checkParmVal = $('#checkParm').val();
+        if (val === '') {
+            parent.layer.msg('请填写检测项目');
+            return false;
+        }
+        if (checkParmVal == '') {
+            parent.layer.msg('请填写检测参数');
+            return;
+        }
+        var str = '<tr><td>' + val + '</td><td>' + checkParmVal + '</td><td>' + '<button class="layui-btn checkItems-table-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#checkItems-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+

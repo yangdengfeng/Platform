@@ -1,0 +1,98 @@
+﻿@model PkpmGX.Models.ApplyQualifyOneViewModel
+
+@{
+    ViewBag.Title = "DetailQualifyOne";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="header_cq" style="height:10px">
+</div>
+<div class="layui-container">
+    <div class="layui-row" id="ApplyQualify-EditOne-tableContainer">
+        <form class="layui-form" action="" lay-filter="ApplyQualify-EditOne-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">检测单位名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="UnitName" lay-verify="required" disabled placeholder="" autocomplete="off" class="layui-input">
+                        <input type="text" name="UnitCode" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="Id" placeholder="" autocomplete="off" class="layui-hide">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单位所在区域<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <select name="Area" disabled lay-verify="required">
+                            <option value=""></option>
+                            @{
+                                foreach (var item in Model.Region)
+                                {
+                                    <option value="@item.regionname">@item.regionname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">法定代表人<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Name" disabled lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">身份证号码<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Selfnum" disabled lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">填报时间<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="AddTime" name="AddTime" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+        form.val("ApplyQualify-EditOne-form", {
+            "Id": "@Model.Id",
+            "UnitName": "@Model.UnitName",
+            "UnitCode": "@Model.UnitCode",
+            "Name": "@Model.Name",
+            "Area": "@Model.Area",
+            "Selfnum": "@Model.Selfnum",
+            "AddTime": "@Model.AddTime"
+        });
+
+
+       
+    });
+
+
+
+
+</script>
+

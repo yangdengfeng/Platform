@@ -1,0 +1,161 @@
+﻿ 
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="Bookmark" href="/favicon.ico">
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="lib/html5shiv.js"></script>
+    <script type="text/javascript" src="lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="~/Dhtmlx/codebase/fonts/font_awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/Dhtmlx/codebase/dhx_home.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/home.css" />
+    @*<link rel="stylesheet" type="text/css" href="~/static/layui.css" />*@
+    <!--[if IE 6]>
+    <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>重庆质量监管系统</title> 
+    <script type="text/javascript">
+        var myAcc, myTabbar ;
+        function doOnLoad() {
+             
+
+            var sidebarHeigth = document.getElementById("sidebar").clientHeight;
+            var menulist = document.getElementById("menulist");
+            menulist.style.height = (sidebarHeigth - 100) + "px"
+            myAcc = new dhtmlXAccordion({
+                parent: "menulist",
+                icons_path: "../../images/icons/"
+            });
+
+            window.dhx.ajax.get("/admin/SiderBar", function (r) {
+                var menus = window.dhx.s2j(r.xmlDoc.responseText);
+                if (menus != null) {
+                    $.each(menus.SiderBarGroups, function (i, val) {
+                        myAcc.removeItem(val.Name);
+                        myAcc.addItem(val.Name, val.Name, false, null, val.Icon);
+                        var accTree = myAcc.cells(val.Name).attachTree();
+                        accTree.setImagePath("../../Dhtmlx/skins/material/imgs/dhxtree_material/");
+                        $.each(val.SiderBarItems, function (i, val) { 
+                            accTree.insertNewChild(0, val.Url, val.Name);
+                        });
+
+                    });
+                }
+
+                myAcc.forEachItem(function (cell) {
+                    // cell => myAcc.cells(id)
+                    var sideTree = cell.getAttachedObject();
+                    sideTree.attachEvent("onClick", function (id) {
+                        if (myTabbar.getAllTabs().indexOf(id) >= 0) {
+                            myTabbar.tabs(id).setActive();
+                        } else {
+                            //var name = navObj[itemId].accItems[id].text;
+                            var name = sideTree.getItemText(id);
+                            myTabbar.addTab(id, name, null, null, false, true);
+                            tabStatus[id] = true;
+                            myTabbar.tabs(id).setActive();
+                            myTabbar.tabs(id).progressOn();
+                            myTabbar.tabs(id).attachURL('/' + id);
+
+                        }
+                    });
+                });
+
+            });
+
+            tabStatus = {};
+
+            myTabbar = new dhtmlXTabBar({
+                parent: "tabbar",
+                close_button: true
+            });
+            myTabbar.enableAutoReSize();
+            myTabbar.setArrowsMode("auto");
+            myTabbar.addTab("Welcome", "首页 ", null, null, false, false);
+            tabStatus["Welcome"] = true;
+            @if(ViewBag.UserRole.Code== "QYY" || ViewBag.UserRole.Code == "JYY")
+            {
+                @:myTabbar.tabs("Welcome").attachURL("/" + "QrCodeHome");
+            }
+            else
+            {
+                @:myTabbar.tabs("Welcome").attachURL("/" + "Welcome");
+            }
+            myTabbar.tabs("Welcome").setActive();
+            myTabbar.attachEvent("onContentLoaded", function (id) {
+                // your code here
+                myTabbar.tabs(id).progressOff()
+            });
+
+            $('#logout').click(function () {
+                window.dhx.ajax.post("/Account/LogOff", function (r) {
+
+                    myTabbar.clearAll();
+                    location.replace(location.href);
+
+                });
+            });
+
+            $('#passwordChange').click(function () {
+                Hui_admin_tab_raw('/SysUser/ChangePwd', '修改密码');
+            });
+
+        }
+
+     function Hui_admin_tab_raw(id, name) {
+        myTabbar.addTab(id, name, null, null, false, true);
+        tabStatus[id] = true;
+        myTabbar.tabs(id).setActive();
+        myTabbar.tabs(id).attachURL(id);
+    }
+
+      function Hui_admin_close(id) {
+        myTabbar.tabs(id).close();
+    }
+
+    </script>
+    <meta name="keywords" content="Pkpm湖南建研公司平台">
+    <meta name="description" content="Pkpm湖南建研公司的介绍">
+</head>
+<body onload="doOnLoad();">
+    @RenderBody()
+    @Scripts.Render("~/bundles/Dhtmlx")
+    <div class="header">
+        <div class="logo"></div>
+        <div class="info">
+            <div class="items">
+                 
+                <span class="hello">@( ViewBag.UserName) , 您好 ! </span>
+                <span class="down">&nbsp;</span>
+                <span class="avatar"><img src="~/images/user.png" /></span>
+                <span class="vertical">&nbsp;</span>
+                <span id="passwordChange" data-id="@ViewBag.UserId" class="passwordchange">&nbsp;</span>
+                <span class="help" onclick="window.location.href='doc/help.docx '"></span> 
+                <span id="logout" class="logout">&nbsp;</span>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div id="sidebar" class="sidebar">
+            <div class="title">功能导航</div>
+            <div class="menu">
+                <div id="menulist"></div>
+            </div>
+        </div>
+        <div class="content">
+            <div id="tabbar"></div>
+            <div id="html_1" style="display: none;">首页</div>
+            <div id="html_2" style="display: none;">报告统计页面</div>
+        </div>
+    </div>
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+</body>
+</html>

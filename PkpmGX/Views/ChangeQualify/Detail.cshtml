@@ -1,0 +1,210 @@
+﻿@model PkpmGX.Models.ChangeQualifyUIModel
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="header_cq" style="height:10px">
+</div>
+<div class="layui-container">
+    <div class="layui-row" id="ChangeQulify-Edit-tableContainer">
+        <form class="layui-form" action="" lay-filter="ChangeQulify-Edit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">检测单位名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="unitname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        <input type="text" name="id" placeholder="" autocomplete="off" class="layui-hide">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单位所在区域<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <select id="area" name="area" lay-verify="required">
+                            <option value=""></option>
+                            @{
+                                foreach (var item in Model.Region)
+                                {
+                                    <option value="@item.regionname">@item.regionname</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更内容<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bgnr" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更前<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bgq" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更后<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bgh" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">申报人姓名<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="SQname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系电话（手机）<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="SQTel" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更材料<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="uploadBGCL">扫描件</button>
+                        <button type="button" class="layui-btn" id="detailBGCL">查看</button>
+                        <input type="hidden" name="bgclpath" id="bgclpath" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">企业原有资质</label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="uploadYZZ">扫描件</button>
+                        <button type="button" class="layui-btn" id="detailYZZ">查看</button>
+                        <input type="hidden" name="YZZPath" id="YZZPath" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">填报时间<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="time" name="time" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            upload = layui.upload,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+        form.val("ChangeQulify-Edit-form", {
+            "id": "@Model.id",
+            "unitname": "@Model.unitname",
+            "area": "@Model.area",
+            "bgnr": "@Model.bgnr",
+            "bgq": "@Model.bgq",
+            "bgh": "@Model.bgh",
+            "SQname": "@Model.SQname",
+            "SQTel": "@Model.SQTel",
+            "bgclpath": "@Model.bgclpath",
+            "YZZPath": "@Model.YZZPath",
+            "time": "@Model.time"
+        });
+
+        
+
+        upload.render({
+            elem: "#uploadBGCL"
+            , url: "/ChangeQualify/attachUpload"
+            , done: function (res) {
+                //console.log(res);
+                //如果上传失败
+                if (res.state > 0) {
+                    $("#bgclpath").val(res.name);
+                    return layer.msg('扫描件或照片上传成功');
+                } else {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+                
+            }
+        });
+
+        $("#detailBGCL").on("click", function () {
+            var imagePath = $("#bgclpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ChangeQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+
+
+        upload.render({
+            elem: "#uploadYZZ"
+            , url: "/ChangeQualify/attachUpload"
+            , done: function (res) {
+                //console.log(res);
+                //如果上传失败
+                if (res.state > 0) {
+                    $("#YZZPath").val(res.name);
+                    return layer.msg('扫描件或照片上传成功');
+                } else {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+
+            }
+        });
+
+        $("#detailYZZ").on("click", function () {
+            var imagePath = $("#YZZPath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ChangeQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+    });
+
+
+
+
+</script>
+

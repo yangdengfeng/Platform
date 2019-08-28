@@ -1,0 +1,39 @@
+﻿@model PkpmGX.Models.STCarriervehicleModel
+
+@{
+    ViewBag.Title = "Carriervehicle";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+ 
+
+<div class="layui-container">
+    <div class="layui-row" id="STQualify-PumpSystem-Container">
+        <form class="layui-form" action="" lay-filter="STQualify-PumpSystem-form">
+            <div class="layui-card-body">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>装载容易m<span>3</span></th>
+                            <th>数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            foreach (var item in Model.Carriervehicles)
+                            {
+                                <tr><td>@item.spec</td><td>@item.num  </td> </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -1,0 +1,31 @@
+/* CSS Document */
+*{font-size:9pt;border:0;margin:0;padding:0;}
+body{font-family:"Microsoft YaHei"; margin:0 auto;min-width:980px;background:url(/images/bg.jpg) no-repeat center top;}
+ul{display:block;margin:0;padding:0;list-style:none;}
+li{display:block;margin:0;padding:0;list-style: none;}
+img{border:0;}
+dl,dt,dd{margin:0;padding:0;display:block;}
+a,a:focus{text-decoration:none;color:#000;outline:none;blr:expression(this.onFocus=this.blur());}
+a:hover{color:#00a4ac;text-decoration:none;}
+table{border-collapse:collapse;border-spacing: 0;}
+cite{font-style:normal;}
+h2{font-weight:normal;}
+
+.home{margin:0 auto;width:100%;position: absolute;text-align:center;}
+.home h2{ margin-top:3%;}
+.login_box{position:relative;width:460px; padding-bottom:230px;margin-left:auto;margin-right: auto;margin-top:2%; height:500px;overflow:hidden;background:url(/images/login_box.png) no-repeat;border-radius:5px;}
+.login_title{ font-family:"Microsoft YaHei";font-size:26px;color:#01489e; margin:60px 0 40px 0;}
+.login_bg{padding:0 30px;}
+.login_bg .message{color:#fff;font-size:12px;padding-left:30px;}
+.login_bg li{margin-top:20px;line-height:45px;height:45px; font-size:26px; color:#01489e;}
+.login_bg li.message{height:30px;line-height:30px;}
+.login_bg li.text{background:#fff;border-radius:3px;}
+.login_bg li.text .tit{float:left;width:95px;text-align:center;color:#01489e;font-family:"Microsoft YaHei"; font-size:18px;}
+.login_bg li.text .sibt{ border-bottom:1px solid #aaaaaa;color:#666666;float:left;line-height:45px;height:45px; width:170px;}
+.login_bg li.text .user{padding-left:18px;width:250px;}
+.login_bg li.text .Rememb{ font-size:16px; float:left; margin-left:20px;}
+.login_bg li.text .forget a{ font-size:16px; float:right; margin-right:40px; color:#01489e;}
+.login_bg li.btnnak .login{position:absolute;background:url(/images/bnt.png) no-repeat;left:12%;width:341px;height:42px;float:left;color:#fff;font-family:"Microsoft YaHei";font-size:24px;}
+
+#mlogin{position:absolute;background:url(/images/bnt.png) no-repeat;left:12%;width:341px;height:42px;float:left;color:#fff;font-family:"Microsoft YaHei";font-size:24px;}
+

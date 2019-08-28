@@ -1,0 +1,236 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div id="form_container" style="width:980px;height:100%;"></div>
+<div id="gridbox" style="position:fixed; top:60px; left: 0; right: 0; bottom: 3px"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, dhxWins, newWin, editWin, menuWin, actionWin, newForm, editForm, menuForm, actionForm, myTree,actionTree;
+
+    function doOnLoad() {
+
+        dhxWins = new dhtmlXWindows();
+        dhxWins.attachViewportTo("gridbox");
+
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 120, labelWidth: 120 },
+           { type: "input", label: "角色名称", name: "RoleName" },
+            { type: "newcolumn" },
+           { type: "input", label: "角色代码", name: "RoleCode" },
+             { type: "newcolumn" },
+            { type: "button", name: 'RoleSearch', value: "查询", offsetLeft: 20 },
+            { type: "newcolumn" },
+            { type: "button", name: 'RoleAdd', value: "新增", offsetLeft: 20 }
+
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'RoleAdd') {
+                newWin = dhxWins.createWindow("w1", 20, 30, 280, 380);
+                newWin.setModal(true);
+                newWin.center();
+                newWin.setText("新建角色");
+
+                newForm = newWin.attachForm();
+                var newFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 80 },
+                     { type: "input", label: "角色名称", name: "RoleName", required: true },
+                     { type: "input", label: "角色描述", name: "RoleDesc", rows: 2 },
+                     { type: "input", label: "角色代码", name: "RoleCode" },
+                     { type: "button", name: 'RoleNew', value: "确定", offsetLeft: 80 }
+                ];
+                newForm.load(newFormStructrue);
+
+                newForm.attachEvent("onButtonClick", function (name) {
+                    if (name == "RoleNew") {
+                        newForm.send("/SysRole/Create", "post", function (roleCreateResponse) {
+                            var t = window.dhx.s2j(roleCreateResponse.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("角色创建成功！");
+                                newWin.close();
+                                mygrid.clearAll();
+                                mygrid.load("/SysRole/Grid");
+                            } else {
+                                dhtmlx.alert(response);
+                            }
+
+                        });
+                    }
+                });
+            }
+
+            if (name == "RoleSearch") {
+                myForm.send("/SysRole/Search", "get", function (loader, response) {
+                    mygrid.clearAll();
+                    mygrid.parse(response);
+                });
+            }
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        //mygrid = new dhtmlXGridObject('gridbox');
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,角色名称,角色描述,角色代码,操作,&nbsp,&nbsp;");//the headers of columns
+        mygrid.setInitWidths("80,100,*,120,100,50,50");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,layuijslinks,edit,del");                //the types of columns
+        mygrid.setColSorting("int,str,str,str,str,str,str");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+
+        mygrid.load("/SysRole/Grid");
+    }
+
+    function roleAction(roleId) {
+
+        actionWin = dhxWins.createWindow("actionW", 20, 30, 380, 680);
+        actionWin.setModal(true);
+        actionWin.center();
+        actionWin.setText("模块设置");
+
+        actionForm = actionWin.attachForm();
+        var formStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Action", label: "按钮", inputHeight: 550, inputWidth: 250 },
+             { type: "button", name: 'ActionAdd', value: "确定", offsetLeft: 80 }
+        ];
+
+        actionForm.load(formStructrue);
+
+        actionTree = new dhtmlXTreeView(actionForm.getContainer("Action"));
+        actionTree.enableCheckboxes(true);
+        actionTree.loadStruct("/SysRole/MenuAction/" + roleId);
+
+        actionForm.attachEvent("onButtonClick", function (name) {
+            var actionIds = actionTree.getAllChecked().join(',');;
+            window.dhx.ajax.post("/SysRole/AddAction", "id=" + roleId + "&actionIds=" + actionIds, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.message("角色按钮设置成功！");
+                    actionWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+        });
+    }
+
+    function roleModule(roleId)
+    {
+        menuWin = dhxWins.createWindow("menuW", 20, 30, 380, 680);
+        menuWin.setModal(true);
+        menuWin.center();
+        menuWin.setText("模块设置");
+
+        menuForm = menuWin.attachForm();
+        var menuFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Menu", label: "模块", inputHeight: 550 , inputWidth: 250},
+             { type: "button", name: 'MenuAdd', value: "确定", offsetLeft: 80 }
+        ];
+        menuForm.load(menuFormStructrue);
+        myTree = new dhtmlXTreeView(menuForm.getContainer("Menu"));
+        myTree.enableCheckboxes(true);
+        myTree.loadStruct("/SysRole/Menu/" + roleId);
+
+        menuForm.attachEvent("onButtonClick", function (name) {
+            var menuIds = myTree.getAllChecked().join(',');;
+            window.dhx.ajax.post("/SysRole/AddMenu", "id=" + roleId + "&menuIds=" + menuIds, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.message("角色模块设置成功！");
+                    menuWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+        });
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.dhx.ajax.get("/SysRole/Edit?Id=" + rowId, function (r) {
+            var role = window.dhx.s2j(r.xmlDoc.responseText); // convert response to json object
+            if (role != null) {
+                editWin = dhxWins.createWindow("w2", 20, 30, 280, 380);
+                editWin.setModal(true);
+                editWin.center();
+                editWin.setText("角色编辑");
+
+                editForm = editWin.attachForm();
+                var editFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 80 },
+                     { type: "input", label: "角色名称", name: "RoleName", value: role.Name, required: true },
+                     { type: "input", label: "角色描述", name: "RoleDesc", value: role.Description, rows: 2 },
+                     { type: "input", label: "角色代码", name: "RoleCode", value: role.Code },
+                      { type: "hidden", name: "RoleId", value: role.Id },
+                     { type: "button", name: 'RoleEdit', value: "确定", offsetLeft: 80 }
+                ];
+                editForm.load(editFormStructrue);
+
+                editForm.attachEvent("onButtonClick", function (name) {
+                    if (name == "RoleEdit") {
+                        editForm.send("/SysRole/Edit", "post", function (loader,roleEditResponse) {
+                            var t = window.dhx.s2j(roleEditResponse);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("角色修改成功！");
+                                editWin.close();
+                                mygrid.clearAll();
+                                mygrid.load("/SysRole/Grid");
+                            } else {
+                              //  dhtmlx.alert(t.ErroMsg);
+                            }
+
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function excellDel_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要删除此角色？",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/SysRole/Delete", "id=" + rowId, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("角色删除成功！");
+                            mygrid.clearAll();
+                            mygrid.load("/SysRole/Grid");
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    })
+                }
+            }
+        });
+
+    }
+
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = newWin = editWin = menuWin = actionWin = null;
+        }
+    }
+</script>
+

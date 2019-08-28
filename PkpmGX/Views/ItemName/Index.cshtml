@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div id="layoutObj" class="row" style="width:100%;height:680px;">
+    </div>
+</div>
+<script type="text/javascript">
+    var dhxWins, myLayout, myMenu, myToolbar, mygrid, myTree, selectedItemCode, standardToolbar, newForm;
+    var newTypeWin, newItemWin;
+
+    function doOnLoad() {
+        selectedItemCode = '';
+        dhxWins = new dhtmlXWindows();
+
+        myLayout = new dhtmlXLayoutObject({
+            parent: "layoutObj",
+            pattern: "2U"  // <-- pattern
+        });
+        mygrid = myLayout.cells("b").attachGrid();
+        myLayout.cells("b").setText('检测项目参数');
+        standardToolbar = myLayout.cells('b').attachToolbar();
+        standardToolbar.setIconset("awesome");
+        standardToolbar.loadStruct("/ItemName/Toolbar");
+        standardToolbar.attachEvent("onClick", function (id) {
+            if (id == 'NewItemName') {
+
+            } else if (id == 'NewItemParm') {
+                newParm();
+            }
+        });
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,类型代码,项目代码,项目名称,项目类型,&nbsp;,&nbsp;");//the headers of columns
+        mygrid.setInitWidths("50,100,100,*,100,50,50");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,edit,del");                //the types of columns
+        mygrid.setColSorting("int,str,str,str,str,str,str");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+
+        myLayout.cells("a").setText('检测项目类别');
+        myLayout.cells("a").setWidth(500);
+        myMenu = myLayout.cells("a").attachMenu();
+        myMenu.loadStruct('/ItemName/Menu');
+        myMenu.attachEvent("onClick", function (id, zoneId, cas) {
+            if (id == 'newType') {
+                newType();
+            }
+        });
+        myTree = myLayout.cells("a").attachTreeView();
+
+        myTree.enableMultiselect(false);
+        myTree.attachEvent("onSelect", function (id, mode) {
+            if (mode) {
+                mygrid.clearAll();
+                selectedItemCode = id;
+                mygrid.load("/ItemName/ParmDetails?id=" + selectedItemCode);
+            }
+        });
+        myTree.attachEvent("onXLS", function () {
+            myLayout.cells('a').progressOff();
+        });
+
+        myLayout.cells('a').progressOn();
+        myTree.clearAll();
+        myTree.loadStruct("/ItemName/NameCate", function () {
+            var topItems = myTree.getSubItems();
+            if (topItems != null && topItems.length > 0) {
+                myTree.selectItem(topItems[0]);
+            }
+        });
+    }
+
+    function newType() {
+
+        newTypeWin = dhxWins.createWindow("newTypeWin", 20, 30, 340, 200);
+        newTypeWin.setModal(true);
+        newTypeWin.center();
+        newTypeWin.setText("新建检测类别");
+
+        newForm = newTypeWin.attachForm();
+        var newFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "input", label: "检测类别代码", name: "CheckItemCode", required: true },
+             { type: "input", label: "检测类别名称", name: "CheckItemName", required: true },
+             { type: "button", name: 'TypeAdd', value: "确定", offsetLeft: 80 }
+        ];
+        newForm.load(newFormStructrue);
+
+        newForm.attachEvent("onButtonClick", function (name) {
+            if (name == "TypeAdd") {
+                newForm.send("/ItemName/NewCheckType", "post", function (menuResponse) {
+                    var t = window.dhx.s2j(menuResponse.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.message("检测类别创建成功！");
+                        newTypeWin.close();
+                        mygrid.clearAll();
+                        mygrid.load("/ItemName/ParmDetails?id=" + selectedItemCode);
+                    } else {
+                        dhtmlx.alert(t.ErroMsg);
+                    }
+                });
+            }
+        });
+    }
+
+    function newParm() {
+        if (!selectedItemCode) {
+            dhtmlx.alert("请先选择一个检测项目！");
+            return;
+        }
+        newParmWin = dhxWins.createWindow("newParmWin", 20, 30, 350, 250);
+        newParmWin.setModal(true);
+        newParmWin.center();
+        newParmWin.setText("新建检测项目参数");
+
+        newForm = newParmWin.attachForm();
+        var newFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 140 },
+             { type: "input", label: "检测项目参数名称", name: "ItemName", required: true },
+             { type: "input", label: "检测项目参数编码", name: "itemcode", required: true, },
+             { type: "input", label: "检测项目类型", name: "itemtype", required: true },
+             { type: "hidden", name: "typecode", value: selectedItemCode },
+             { type: "input", name: "name", label: "检测项目", value: myTree.getItemText(selectedItemCode), readonly: true },
+             { type: "button", name: 'ParmAdd', value: "确定", offsetLeft: 80 }
+        ];
+        newForm.load(newFormStructrue);
+
+        newForm.attachEvent("onButtonClick", function (name) {
+            if (name == "ParmAdd") {
+                newForm.send("/ItemName/NewCheckItem", "post", function (menuResponse) {
+                    var t = window.dhx.s2j(menuResponse.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.message("检测项目参数创建成功！");
+                        newParmWin.close();
+                        mygrid.clearAll();
+                        mygrid.load("/ItemName/ParmDetails?id=" + selectedItemCode);
+
+                    } else {
+                        dhtmlx.alert(t.ErroMsg);
+                    }
+                });
+            }
+        });
+    }
+
+    function excellDel_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要进行删除操作？",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/ItemName/Delete", "id=" + rowId, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("删除成功！");
+                            mygrid.clearAll();
+                            mygrid.load("/ItemName/ParmDetails?id=" + selectedItemCode);
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    })
+                }
+            }
+        });
+
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.dhx.ajax.get("/ItemName/Edit?Id=" + rowId, function (r) {
+            var itemName = window.dhx.s2j(r.xmlDoc.responseText); 
+            if (itemName != null) {
+                editWin = dhxWins.createWindow("ItemName", 20, 20, 500, 250);
+                editWin.setModal(true);
+                editWin.center();
+                editWin.setText("检测项目参数编辑");
+                editForm = editWin.attachForm();
+                var editFormStructrue = [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 300, labelWidth: 120 },
+                           { type: "input", label: "检测项目名称", name: "ItemName", value: itemName.ItemName, required: true },
+                           { type: "input", label: "检测项目代码", name: "Itemcode", value: itemName.itemcode, required: true},
+                           { type: "input", label: "项目类型", name: "Itemtype", value: itemName.itemtype, required: true },
+                           { type: "hidden", name: "Id", value: itemName.Id },
+                             { type: "button", name: 'CreditLevelEdit', value: "确定", offsetLeft: 230 }
+                ];
+
+                editForm.load(editFormStructrue);
+
+                editForm.attachEvent("onButtonClick", function (name) {
+                    if (name == "CreditLevelEdit") {
+                        editForm.send("/ItemName/Edit", "post", function (loader, response) {
+                            var t = window.dhx.s2j(response);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("检测参数修改成功！");
+                                editWin.close();
+                                mygrid.clearAll();
+                                mygrid.load("/ItemName/ParmDetails?id=" + selectedItemCode);
+                            } else {
+                                dhtmlx.alert(t.ErroMsg);
+                            }
+
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+</script>

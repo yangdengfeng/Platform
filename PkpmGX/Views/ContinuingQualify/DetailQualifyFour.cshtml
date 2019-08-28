@@ -1,0 +1,231 @@
+﻿@model PkpmGX.Models.DetailQualifyThreeVeiwModel
+@{
+    ViewBag.Title = "DetailQualifyFour";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="ApplyQualify-DetailQualifyFour-Container">
+        <form class="layui-form" action="" lay-filter="ApplyQualify-DetailQualifyFour-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 法定代表人基本情况 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">姓名</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="@Model.name" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">性别</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sex" value="@Model.sex" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">出生年月</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="time" value="@(Model.time.HasValue?Model.time.Value.ToString("yyyy-MM-dd"):string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职务</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zw" value="@Model.zw" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="zc" value="@Model.zc" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">学历</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="xl" value="@Model.xl" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">办公电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="bgdh" value="@Model.bgdh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">移动电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yddh" value="@Model.yddh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测工作年限</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jcgzlx" value="@Model.jcgzlx" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">何时/何校/何专业毕业</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="hshxhzy" value="@Model.hshxhzy" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">岗位证书编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="postNum" value="@Model.postNum" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">工作简历</div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        工作简历
+                    </label>
+                    <div class="layui-col-md10">
+                        <table class="layui-table" id="DetailQualifyFour-table">
+                            <colgroup>
+                                <col width="150">
+                                <col>
+                                <col width="100">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>由何年何月 至 何年何月</th>
+                                    <th>在何单位、从事何工作、任何职、受过何种奖励或处分</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in Model.Gzjl)
+                                    {
+                                        var i = 1;
+                                        <tr>
+                                            <td>@item.Date</td>
+                                            <td>@item.Type</td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space30">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.Fj)
+                                        {
+                                            <tr>
+                                                <td>@item.name</td>
+                                                <td>@item.state</td>
+                                                <td><a href="javascript:void(0);" onclick=MemberInformation("@item.name","@item.state","@item.path")>查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#DetailQualifyFour-table').on('click', '.DetailQualifyFour-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+
+    layui.use(["form", "element", "layer", "table", "view"],
+    function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            view = layui.view,
+            table = layui.table,
+            router = layui.router();
+
+    });
+
+    form.val("ApplyQualify-DetailQualifyFour-form", {
+        "name": "@Model.name",
+        "sex": "@Model.sex",
+        "time": "@Model.time",
+        "zw": "@Model.zw",
+        "zc": "@Model.zc",
+        "xl": "@Model.xl",
+        "bgdh": "@Model.bgdh",
+        "yddh": "@Model.yddh",
+        "jcgzlx": "@Model.jcgzlx",
+        "hshxhzy": "@Model.hshxhzy",
+        "postNum":"@Model.postNum",
+    });
+
+    function MemberInformation(name,state, path) {
+        var windowText = "";
+        var fileUrl = "";
+        if (name == "职称附件") {
+            fileUrl = "@Model.zcpath";
+            windowText = "职称附件查看"
+        }
+        if (name == "学历附件") {
+            fileUrl = "@Model.xlpath";
+            windowText = "学历附件查看"
+        }
+        if (name == "照片附件") {
+            fileUrl = "@Model.photopath";
+            windowText = "照片附件查看"
+        }
+        if (name == "岗位证书附件")
+        {
+            fileUrl = "@Model.postNumpath";
+            windowText = "岗位证书附件查看"
+        }
+        var paths = fileUrl.split('|');
+        if (!fileUrl) {
+            layer.msg("未上传图片附件");
+        }
+        else {
+            layer.open({
+                type: 2,
+                area: ['800px', '800px'],
+                title: windowText,
+                content: "/ApplyQualify/DetailsAttachFile?filePath=" + encodeURIComponent(fileUrl) + "&name=" + windowText.split("查看")[0],
+            });
+        }
+    }
+</script>
+
+

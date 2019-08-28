@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "CreateCustom";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckQualify-CreteCustom-Container">
+        <form class="layui-form" action="" lay-filter="CheckQualify-CreteCustom-form">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <label>组织机构代码<span style="color:red">*</span></label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" lay-verify="required" name="Id" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label>企业名称<span style="color:red">*</span></label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" lay-verify="required" name="Name" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div style="margin:0 auto;width:200px;">
+                            <button class="layui-btn" lay-submit lay-filter="STQualify-CreteCustom-save" style="left:auto">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["form", "layer"], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer;
+
+
+
+        form.on('submit(STQualify-CreteCustom-save)', function (data) {
+            var datafield = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/STCheckQualify/Create",
+                data: datafield,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('企业新增成功', {
+                            btn: ['确定'],
+                            time:100000,
+                            yes: function (index) {
+                                parent.mygrid.clearAll();
+                                gridQString = '/STCheckQualify/Search?' + parent.getQueryStr();
+                                parent.mygrid.load(gridQString, parent.doOnGridLoaded());
+                                parent.layer.closeAll();
+                            },
+                            icon: 1
+                        });
+                    } else {
+                        layer.msg('企业新增失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            console.log(data.field);
+
+            return false;
+        })
+    });
+</script>
+

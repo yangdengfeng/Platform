@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "gjIndex";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridbox" style="width:100%;overflow:auto"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var myForm, myTabbar, mygrid, gridQString, dhxWins, applyWin;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+       var formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 120, labelWidth: 120 },
+           { type: "combo", label: "单位名称", name: "CheckUnitName" },
+            { type: "newcolumn" },
+           { type: "input", label: "工程名称", name: "CheckProject" },
+            { type: "newcolumn" },
+            { type: "button", name: 'Search', value: "查询", offsetLeft: 20 }
+
+       ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#gridbox').css('height', layoutHeight + 'px');
+        myForm.attachEvent("onButtonClick", function (name) {
+            gridQString = '/ZNHTY/Searchgj?' + getQueryStr();
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString, doOnGridLoaded);
+        });
+
+        var checkInstCombo = myForm.getCombo("CheckUnitName");
+
+        checkInstCombo.enableFilteringMode('between');
+        checkInstCombo.load("/ZNHTY/InstCombo");
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        gridQString = '/ZNHTY/Searchgj?' + getQueryStr();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,工程名称,检测流水号,构件编号,构件名称,构件测区数量,弹击角度,浇筑面,泵送方式,测强曲线编码,碳化模式,检测日期,回弹仪编号,现场照片,&nbsp");//the headers of columns
+        mygrid.setInitWidths("40,200,*,120,100,100,100,100,100,100,100,60,100,80,80,40");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,jslink,view");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ZNHTY/gjcqDetails?gjid=" + rowId , "回弹仪测点数据查看");
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function showimg(checknum, gjno) {
+        applyWin = dhxWins.createWindow("menuW", 20, 30, 600, 600);
+        applyWin.setModal(true);
+        applyWin.center();
+        //dhxWins.attachViewportTo("gridbox");
+        applyWin.setText('现场图片查看');
+
+        var myCarousel = applyWin.attachCarousel({
+            // config here
+        });
+        window.dhx.ajax.post("/ZNHTY/GetHTYImages", "checknum=" + checknum + "&gjno=" + gjno, function (response) {
+            var images = window.dhx.s2j(response.xmlDoc.responseText);
+            if (images != null) {
+                for (i = 0; i < images.length; i++) {
+                    if (images[i]) {
+                        var id = images[i].Id;
+                        myCarousel.addCell(id);
+                        myCarousel.cells(id).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<a href='/ZNHTY/BuildImage?ImagePath=" + images[i].Path + "' title='点击查看原图' target='_blank'><img src='/ZNHTY/BuildImage?ImagePath=" + images[i].Path + "' border='0' style='width: 100%;'></a></div>");
+                    }
+                }
+
+            }
+
+        })
+    }
+</script>
+

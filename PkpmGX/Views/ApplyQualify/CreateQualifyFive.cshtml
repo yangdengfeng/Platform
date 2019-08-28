@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "CreateQualifyFive";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="mt-5">
+        <div id="gridbox" style="position:fixed;width:100%; height:800px; top:1px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var myTabbar, mygrid, gridQString, myToolbar, myForm, exporter;
+
+    function doOnLoad() {
+        gridQString = '/NoDataUpload/GetReportNumberTotal';
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "导入具备注册工程师资格人员", active: true }
+            ]
+        });
+
+        myToolBar = myTabbar.tabs("gridboxOne").attachToolbar();
+        myToolBar.setIconset("awesome");
+        myToolBar.loadStruct("/ApplyQualify/FiveToolBar");
+
+        myToolBar.attachEvent("onClick", function (id) {
+            if (id = 'Create') {
+                var selectedId=mygrid.getCheckedRows(0);
+                if(selectedId.length>0){
+                    var index=layer.confirm('你确定要进行导入操作？',{ btn: ['确定', '取消'] },function(){
+                        window.dhx.ajax.post("/ApplyQualify/CreateSeave", "selectedId=" + selectedId+"&pid="+'@ViewBag.id' , function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                console.log(t);
+                                layer.confirm('导入成功', { btn: ['确定'] }, function () {
+                                    parent.layer.closeAll();
+                                    parent.mygrid.clearAll();
+                                    parent.mygrid.load('/ApplyQualify/EditQualifyFiveSearch?pid=' + '@ViewBag.id', function () {
+                                        myTabbar.tabs("gridboxOne").progressOff();
+                                    });
+                                });
+                                @*window.parent.parent.Hui_admin_close("/ApplyQualify/CreateQualifyFive?id="+@ViewBag.id);*@
+                                @*window.parent.Hui_admin_close("/ApplyQualify/EditQualifyFive?id="+@ViewBag.id);*@
+                               // window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyFive?id=" + @ViewBag.id, "具备注册工程师资格人员情况");
+
+                            } else {
+                                layer.alert(t.ErroMsg);
+                            }
+
+                        })
+                    })
+                }
+                else{
+                    layer.alert('请勾选要导入的人员');
+                }
+            }
+        });
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+        text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("勾选,序号,姓名,所属机构名称,身份证号,岗位证书编号,职务,职称,在职状况,状态,&nbsp");//the headers of columns
+        mygrid.setInitWidths("50,50,100,*,160,100,200,100,80,80,40");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,view");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server");
+        mygrid.init();   //finishes initialization and renders the grid on the page
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+
+        mygrid.load('/ApplyQualify/CreateQualifyFiveSearch?pid='+'@ViewBag.id', function () {
+            myTabbar.tabs("gridboxOne").progressOff();
+        });
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/CheckPeopleManager/Details/" + rowId, "检测人员查看");
+    }
+
+
+
+</script>
+
+

@@ -1,0 +1,168 @@
+﻿<error errorId="93bde2b2-f154-4622-9e73-398090a7b9f3" host="SKY-20190312RGH" type="System.Web.HttpException" message="未找到路径“/AddQualify”的控制器或该控制器未实现 IController。" source="System.Web.Mvc" detail="System.Web.HttpException (0x80004005): 未找到路径“/AddQualify”的控制器或该控制器未实现 IController。&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController&amp; controller, IControllerFactory&amp; factory)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)&#xD;&#xA;   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="PKPMAdmin" time="2019-05-24T04:29:32.5400000Z" statusCode="404">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_ACCEPT:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#xD;&#xA;HTTP_COOKIE:ASP.NET_SessionId=e3nyr5l5zqr5pyetexe3vi2a; .AspNet.ApplicationCookie=U47WlU4qspQRokYIxr1kwyiAzyzOl7Her_PuOL67eL3vkK8eI_qbwHZc6FIBoGSvIFgLLSpcfKA7xAeH9w9qdYVhoGlIv_6FJp47mxGFbUbTlmGYaTZ0n5by7Jz9AYKgF04fBnPrlQebcra3fB_mKs2cgrPLrhsslEEIvMTb6B9uiKG-OfEkz9dzTKd_w5-kcF5bCCVuCAnGj6O-pF7QaOokFxWJbIBHXC-xXUuBZLfMqcZrDEO5DzK8c3NIdONr6XwIEmdES_SLr7O5fiiSriT_h97UnrOS3yEGhKAD5r2CjRaBBs839iFlSav4ZOT1J_2bX7AuPr-Tf6TSxfitJRgHbYTHc0yWpwHSLt6txKn44RzkQ-X242H7RGTIDu8gKly79YMhG7xgfnHWvxBXygHb-NwOOV1e1t7Qo4qb97XDevDlzL4gf733J-RPUDn3C38FNyaa1wNP8OajGjqgInxsxDWE2QSD8Y4ynrX2ALrROu1Y_B0I6xXfvsyvYWiX-bt08BuY8x4tnTIPlo9l_A&#xD;&#xA;HTTP_HOST:localhost:57189&#xD;&#xA;HTTP_REFERER:http://localhost:57189/Admin/Index&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0&#xD;&#xA;HTTP_UPGRADE_INSECURE_REQUESTS:1&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&#xD;&#xA;Accept-Encoding: gzip, deflate&#xD;&#xA;Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#xD;&#xA;Cookie: ASP.NET_SessionId=e3nyr5l5zqr5pyetexe3vi2a; .AspNet.ApplicationCookie=U47WlU4qspQRokYIxr1kwyiAzyzOl7Her_PuOL67eL3vkK8eI_qbwHZc6FIBoGSvIFgLLSpcfKA7xAeH9w9qdYVhoGlIv_6FJp47mxGFbUbTlmGYaTZ0n5by7Jz9AYKgF04fBnPrlQebcra3fB_mKs2cgrPLrhsslEEIvMTb6B9uiKG-OfEkz9dzTKd_w5-kcF5bCCVuCAnGj6O-pF7QaOokFxWJbIBHXC-xXUuBZLfMqcZrDEO5DzK8c3NIdONr6XwIEmdES_SLr7O5fiiSriT_h97UnrOS3yEGhKAD5r2CjRaBBs839iFlSav4ZOT1J_2bX7AuPr-Tf6TSxfitJRgHbYTHc0yWpwHSLt6txKn44RzkQ-X242H7RGTIDu8gKly79YMhG7xgfnHWvxBXygHb-NwOOV1e1t7Qo4qb97XDevDlzL4gf733J-RPUDn3C38FNyaa1wNP8OajGjqgInxsxDWE2QSD8Y4ynrX2ALrROu1Y_B0I6xXfvsyvYWiX-bt08BuY8x4tnTIPlo9l_A&#xD;&#xA;Host: localhost:57189&#xD;&#xA;Referer: http://localhost:57189/Admin/Index&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0&#xD;&#xA;Upgrade-Insecure-Requests: 1&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/3/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="ApplicationCookie" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="PKPMAdmin" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="PKPMAdmin" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="3" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/3" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/AddQualify" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\AddQualify" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="127.0.0.1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="53621" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/AddQualify" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="57189" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/AddQualify" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="ASP.NET_SessionId=e3nyr5l5zqr5pyetexe3vi2a; .AspNet.ApplicationCookie=U47WlU4qspQRokYIxr1kwyiAzyzOl7Her_PuOL67eL3vkK8eI_qbwHZc6FIBoGSvIFgLLSpcfKA7xAeH9w9qdYVhoGlIv_6FJp47mxGFbUbTlmGYaTZ0n5by7Jz9AYKgF04fBnPrlQebcra3fB_mKs2cgrPLrhsslEEIvMTb6B9uiKG-OfEkz9dzTKd_w5-kcF5bCCVuCAnGj6O-pF7QaOokFxWJbIBHXC-xXUuBZLfMqcZrDEO5DzK8c3NIdONr6XwIEmdES_SLr7O5fiiSriT_h97UnrOS3yEGhKAD5r2CjRaBBs839iFlSav4ZOT1J_2bX7AuPr-Tf6TSxfitJRgHbYTHc0yWpwHSLt6txKn44RzkQ-X242H7RGTIDu8gKly79YMhG7xgfnHWvxBXygHb-NwOOV1e1t7Qo4qb97XDevDlzL4gf733J-RPUDn3C38FNyaa1wNP8OajGjqgInxsxDWE2QSD8Y4ynrX2ALrROu1Y_B0I6xXfvsyvYWiX-bt08BuY8x4tnTIPlo9l_A" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:57189" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:57189/Admin/Index" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0" />
+    </item>
+    <item name="HTTP_UPGRADE_INSECURE_REQUESTS">
+      <value string="1" />
+    </item>
+  </serverVariables>
+  <cookies>
+    <item name="ASP.NET_SessionId">
+      <value string="e3nyr5l5zqr5pyetexe3vi2a" />
+    </item>
+    <item name=".AspNet.ApplicationCookie">
+      <value string="U47WlU4qspQRokYIxr1kwyiAzyzOl7Her_PuOL67eL3vkK8eI_qbwHZc6FIBoGSvIFgLLSpcfKA7xAeH9w9qdYVhoGlIv_6FJp47mxGFbUbTlmGYaTZ0n5by7Jz9AYKgF04fBnPrlQebcra3fB_mKs2cgrPLrhsslEEIvMTb6B9uiKG-OfEkz9dzTKd_w5-kcF5bCCVuCAnGj6O-pF7QaOokFxWJbIBHXC-xXUuBZLfMqcZrDEO5DzK8c3NIdONr6XwIEmdES_SLr7O5fiiSriT_h97UnrOS3yEGhKAD5r2CjRaBBs839iFlSav4ZOT1J_2bX7AuPr-Tf6TSxfitJRgHbYTHc0yWpwHSLt6txKn44RzkQ-X242H7RGTIDu8gKly79YMhG7xgfnHWvxBXygHb-NwOOV1e1t7Qo4qb97XDevDlzL4gf733J-RPUDn3C38FNyaa1wNP8OajGjqgInxsxDWE2QSD8Y4ynrX2ALrROu1Y_B0I6xXfvsyvYWiX-bt08BuY8x4tnTIPlo9l_A" />
+    </item>
+  </cookies>
+</error>

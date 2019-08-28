@@ -1,0 +1,134 @@
+﻿@model Pkpm.Entity.Models.CheckEquipEditAttachFileModel
+@{
+    ViewBag.Title = "EditAttachFile";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div>
+    <button class="layui-btn" id="addFile">新增</button>
+    <table class="layui-table" id="detailsOrDeleteFile-table">
+        <colgroup>
+            <col width="80">
+            <col>
+            <col>
+            <col width="150">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>名称</th>
+                <th>操作</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model.Paths != null)
+                {
+                    var i = 1;
+                    foreach (var item in Model.Paths)
+                    {
+                        var className = "equipAttach" + i;
+                    <tr path ="@item">
+                        <td>@i <input id="@className"  type="hidden" value="@item" /></td>
+                        <td>@Model.Name</td>
+                        <td><button class="layui-btn detailsOrDeleteFile-table-btnDetails">查看</button> </td>
+                        <td><button class="layui-btn detailsOrDeleteFile-table-btnDel">删除</button>  </td>
+                    </tr>
+                            i++;
+                        }
+                    }
+                }
+
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    var EndPath = '@Model.FilePath';
+    layui.use(["form", "element", "laydate", "layer", "upload", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            router = layui.router();
+
+
+
+
+        var uploadInst = upload.render({
+            elem: '#addFile', //绑定元素
+            url: '/CheckEquip/attachUpload/', //上传接口
+            accept: 'images',
+            acceptMime: 'image/*',
+            done: function (res) {
+                if (res.state) {
+                    console.log(EndPath);
+                    EndPath += res.name+'|';
+                    var $tr = $("#detailsOrDeleteFile-table tr:last");
+                    var maxIndex = 0;
+                    $.each(EndPath.split('|'), function (index, value) {
+                        maxIndex++;
+                    })
+                    var tableth = '<tr><td>' + maxIndex + '<input id="equipAttach' + maxIndex + '"type="hidden" value="' + res.name + '" /></td><td>@Model.Name</td><td><button class="layui-btn detailsOrDeleteFile-table-btnDetails">查看</button> </td><td><button class="layui-btn detailsOrDeleteFile-table-btnDel">删除</button>  </td></tr>';
+                    $tr.after(tableth);
+                    parent.$('#filePath').val(EndPath);
+                }
+            },
+            error: function () {
+                layer.msg("上传文件失败，请重试");
+            }
+        });
+
+
+        $('#detailsOrDeleteFile-table').on('click', '.detailsOrDeleteFile-table-btnDetails', function () {
+            var index = $(this).parent().parent()[0].cells[0].innerText;
+             index = index;
+             var pahts = EndPath.split('|');
+             var inde = "equipAttach" + index;
+             var path = $('#'+ inde).val();
+             console.log(inde);
+            //var path = pahts[index];
+            layer.open({
+                type: 1,
+                area: ['500px', '600px'],
+                title: '@Model.Name',
+                content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/CheckEquip/Image?itemValue=' + encodeURIComponent(path) + ' border=0 style="width: 400px;height:350px" >' + '</div>'
+            });
+        });
+    });
+
+    $('#detailsOrDeleteFile-table').on('click', '.detailsOrDeleteFile-table-btnDel', function () {
+        var index = $(this).parent().parent()[0].cells[0].innerText;
+        var path = $(this).parent().parent().attr("path");
+       
+        var aaa = "";//中间变量，存储删除路径之后还剩下的路径
+        var filePath = EndPath;
+        var filepaths = filePath.split(path);
+        $.each(filepaths, function (index, value) {
+            if (value) {
+                console.log(value);
+                if (value.indexOf('|') != -1) {
+                    var values = value.split('|');
+                    $.each(values, function (ind, val) {
+                        if (val) {
+                            aaa += val + '|';
+                        }
+                    })
+                } else {
+                    EndPath += value;
+                }
+            }
+        })
+        EndPath = aaa ;
+        console.log(EndPath);
+
+        parent.$('#filePath').val(EndPath);
+        $(this).parent().parent().remove();
+
+    });
+</script>

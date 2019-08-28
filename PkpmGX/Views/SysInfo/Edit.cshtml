@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="SysInfo-Edit-tableContainer">
+        <form class="layui-form" action="" lay-filter="SysInfo-Edit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">信息名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="informationName" value="@Model.PkpmJCRU.name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">信息内容<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <textarea placeholder=""  id="content" class="layui-textarea">@Model.PkpmJCRU.content</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">信息类别<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <select name="type" id="type" lay-verify">
+                            <option value=""></option>
+                            @{ 
+                                foreach (var item in Model.Type)
+                                {
+                                    if (item.Name == Model.PkpmJCRU.type)
+                                    {
+                                        <option value="@item.Name" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" id="save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["layer","layedit" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            layer = layui.layer,
+             layedit=layui.layedit
+            router = layui.router();
+
+        layedit.build('textarea');
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#save').click(function (data) {
+
+        var informationName = $('#informationName').val();      
+        var content = $('#content').val();
+        var Type =$('#type').val();
+        console.log(content);
+        var SubmitId=@Model.PkpmJCRU.ID;
+        if (informationName == '') {
+            parent.layer.msg('请填写信息名称');
+            return false;
+        }
+        if (content == '') {
+            parent.layer.msg('请填写信息内容');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/SysInfo/Edit?informationName=" + informationName + "&Content=" + content + "&Id="+@Model.PkpmJCRU.ID+ "&Type="+Type,
+            success: function (d) {
+                console.log(d.IsSucc);
+                if (d.IsSucc) {
+                    layer.msg('编辑成功', {
+                        btn: ['确定'],
+                        yes: function (index) {
+                            layer.close(index);
+                            window.parent.Hui_admin_close("/SysInfo/Edit/" +"@Model.PkpmJCRU.ID.ToString()");
+                        },
+                        icon: 1
+                    });
+                }
+                else {
+                    layer.msg('编辑失败，错误信息：' + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        })
+        return false;
+    });
+</script>
+

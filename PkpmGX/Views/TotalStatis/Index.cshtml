@@ -1,0 +1,250 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridbox" style="width:100%;height:750px;"></div>
+        <div id="recinfoArea" style="width:100%;"></div>
+        <div id="pagingArea" style="width:100%;"></div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js"></script>
+<script type="text/javascript">
+    var dataGrid, seqGrid, myForm, dhxWins, myTabbar, itemWin, detailWin, seqNoDetailWin, seqNogridRender, exporter, tToolbar;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        var formStructure = [
+              { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+                 { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+                  {
+                      type: "combo", name: "DtType", label: "统计时间", options: [
+                           { text: "委托日期", value: "ENTRUSTDATE", selected: true },
+                          { text: "检测日期", value: "CHECKDATE" },
+                          { text: "批准日期", value: "APPROVEDATE" },
+                      ]
+                  },
+                   { type: "calendar", label: "开始日期", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+                     { type: "newcolumn" },
+                {
+                    type: "combo", name: "Type", label: "统计类别", options: [
+                         { text: "天", value: "day", selected: true },
+                        { text: "周", value: "week" },
+                        { text: "月", value: "month" },
+                        { text: "季度", value: "quarter" },
+                        { text: "年", value: "year" },
+                    ]
+                },
+                      { type: "calendar", label: "结束日期", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 20, offsetTop: 0 }
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onChange", function (value, state) {
+            if (state == "day") {
+                myForm.setItemValue('StartDt', '@Model.Day');
+            }
+            if (state == "week") {
+                myForm.setItemValue('StartDt', '@Model.Week');
+            }
+            if (state == "month") {
+                myForm.setItemValue('StartDt', '@Model.Month');
+            }
+            if (state == "quarter") {
+                myForm.setItemValue('StartDt', '@Model.Quarter');
+            }
+            if (state == "year") {
+                myForm.setItemValue('StartDt', '@Model.Year');
+            }
+
+        });
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/TotalStatis/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        var myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/TotalStatis/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Export") {
+                exporter.show();
+            }
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,报告总数,不合格数,被修改,无曲线");//设置列的头文本
+        mygrid.setInitWidths("50,*,150,150,150,150");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,jslink,jslink,jslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/TotalStatis/Search?' + getQueryStr();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+
+        var exporter = new ExcelExporter(null, mygrid, 30, "/TotalStatis/Export");
+        exporter.onGetQueryString = function () {
+            return getQueryStr();
+        };
+    }
+
+
+    function modifyKeyGrid(itemkey, itemName) {
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 900, 600);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText(itemName + "被修改详情");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails1", text: itemName + "数据统计", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails1").attachStatusBar({
+            text: "<div id='recinfoArea1'></div><div id='pagingArea1'></div>",
+            paging: true
+        });
+
+        modifyGrid = gridTabber.tabs("gridDtails1").attachGrid();
+        modifyGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        modifyGrid.setHeader("序号,检测机构名称,工程名称,检测项目,报告日期,报告编号,&nbsp");//the headers of columns
+        modifyGrid.setInitWidths("40,250,150,*,80,150,25");          //the widths of columns
+        modifyGrid.setColAlign("right,left,left,left,left,left,left");       //the alignment of columns
+        modifyGrid.setColTypes("ro,ro,ro,ro,ro,jslink,view");                //the types of columns
+        modifyGrid.setColSorting("server,server,server,server,server,server,server");          //the sorting types
+        modifyGrid.init();      //finishes initialization and renders the grid on the page
+        modifyGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        modifyGrid.enablePaging(true, 30, null, "pagingArea1", true, "recinfoArea1");
+        modifyGrid.setPagingSkin("bricks");
+        customGrid(modifyGrid);
+        var dataGridSeach = '/TotalStatis/GridSearch?' + getQueryStr() + "&CheckInstID=" + itemkey + "&SearchType=modify";
+
+        modifyGrid.load(dataGridSeach, function () {
+            gridTabber.tabs("gridDtails1").progressOff();
+        });
+
+    }
+
+    function unqualiKeyGrid(itemkey, itemName) {
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 900, 600);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText(itemName + "不合格详情");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: itemName + "数据统计", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea2'></div><div id='pagingArea2'></div>",
+            paging: true
+        });
+
+        unqualifyGrid = gridTabber.tabs("gridDtails").attachGrid();
+        unqualifyGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        unqualifyGrid.setHeader("序号,检测机构名称,工程名称,检测项目,报告日期,报告编号,&nbsp");//the headers of columns
+        unqualifyGrid.setInitWidths("40,250,150,*,80,150,25");          //the widths of columns
+        unqualifyGrid.setColAlign("right,left,left,left,left,left,left");       //the alignment of columns
+        unqualifyGrid.setColTypes("ro,ro,ro,ro,ro,jslink,view");                //the types of columns
+        unqualifyGrid.setColSorting("server,server,server,server,server,server,server");          //the sorting types
+        unqualifyGrid.init();      //finishes initialization and renders the grid on the page
+        unqualifyGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        unqualifyGrid.enablePaging(true, 30, null, "pagingArea2", true, "recinfoArea2");
+        unqualifyGrid.setPagingSkin("bricks");
+        customGrid(unqualifyGrid);
+        var dataGridSeach = '/TotalStatis/GridSearch?' + getQueryStr() + "&CheckInstID=" + itemkey + "&SearchType=unquali";
+
+        unqualifyGrid.load(dataGridSeach, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+    function AcsKeyGrid(itemkey, itemName) {
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 900, 600);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText(itemName + "无曲线详情");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: itemName + "数据统计", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea3'></div><div id='pagingArea3'></div>",
+            paging: true
+        });
+
+        unqualifyGrid = gridTabber.tabs("gridDtails").attachGrid();
+        unqualifyGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        unqualifyGrid.setHeader("序号,检测机构名称,工程名称,检测项目,报告日期,报告编号,&nbsp");//the headers of columns
+        unqualifyGrid.setInitWidths("40,250,150,*,80,150,25");          //the widths of columns
+        unqualifyGrid.setColAlign("right,left,left,left,left,left,left");       //the alignment of columns
+        unqualifyGrid.setColTypes("ro,ro,ro,ro,ro,ro,view");                //the types of columns
+        unqualifyGrid.setColSorting("server,server,server,server,server,server,server");          //the sorting types
+        unqualifyGrid.init();      //finishes initialization and renders the grid on the page
+        unqualifyGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        unqualifyGrid.enablePaging(true, 30, null, "pagingArea3", true, "recinfoArea3");
+        unqualifyGrid.setPagingSkin("bricks");
+        customGrid(unqualifyGrid);
+        var dataGridSeach = '/TotalStatis/GridSearch?' + getQueryStr() + "&CheckInstID=" + itemkey + "&SearchType=acs";
+
+        unqualifyGrid.load(dataGridSeach, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + rowId, "检测报告查看");
+    }
+
+</script>
+

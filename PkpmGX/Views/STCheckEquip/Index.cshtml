@@ -1,0 +1,267 @@
+﻿@model PkpmGX.Models.STCheckEquipViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:100%;height:130px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:130px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar,itemWin, selectedItem;
+    dhxWins = new dhtmlXWindows();
+    dhxWins.attachViewportTo("gridbox");
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+           { type: "combo", label: "企业名称", name: "CheckUnitName" },
+           { type: "input", label: "设备名称", name: "EquName" },
+           { type: "newcolumn" },
+           { type: "input", label: "设备型号", name: "EquType" },
+           { type: "combo", label: "状态", name: "Status" },
+           { type: "block", width: 340, list: [{ type: "button", name: 'Search', value: "查询", offsetLeft: 150 }]},
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/STCheckEquip/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });        
+        myTabbar.enableAutoReSize();
+
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/STCheckEquip/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "NewSTCheckEquip") {
+                NewSTCheckEquip();
+            }
+            else if (id == "DeleteEquip") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定要进行删除操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckEquip/Delete", "Id=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的机构')
+                }
+
+            }
+            else if (id == "ReturnState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行状态返回操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckEquip/SetInstState", "selectedId=" + selectedId + "&state=0", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('状态返回成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要状态返回的机构')
+                }
+
+            }
+            else if (id == "SetState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/STCheckEquip/SetInstState", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/STCheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的机构')
+                }
+            }
+        });
+
+
+
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("勾选,序号,仪器设备名称/型号/规格,所属企业,有效期,状态,&nbsp,编辑,查看");//设置列的头文本
+        mygrid.setInitWidths("40,40,*,300,200,80,100,40,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,layuijslinks,edit,view");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("str,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 19, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/STCheckEquip/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+        var CheckUnitNameCombo = myForm.getCombo("CheckUnitName");
+        var statusCombo = myForm.getCombo("Status");
+
+        CheckUnitNameCombo.enableFilteringMode('between');
+
+        CheckUnitNameCombo.load("/STCheckEquip/InstSTCombo");
+
+        
+        @{
+            foreach (var item in Model.Status)
+            {
+                @:statusCombo.addOption('@item.KeyValue', '@item.Name');
+            }
+        }
+
+
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        layer.open({
+            type: 2,
+            area: ['700px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "商砼实验设备查看",
+            content: '/STCheckEquip/Details?ID=' + rowId
+        });
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        layer.open({
+            type: 2,
+            area: ['700px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "商砼实验设备编辑",
+            content: '/STCheckEquip/Edit?ID=' + rowId
+        });
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function NewSTCheckEquip() {
+        layer.open({
+            type: 2,
+            area: ['700px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "商砼实验设备新增",
+            content: '/STCheckEquip/Create?'
+        });
+    }
+
+    function applyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name + "申请修改",
+            content: '/STCheckEquip/ApplyChange?ID=' + id
+        });
+    }
+
+
+    function confirmApplyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "审核" + name + "的申请修改",
+            content: '/STCheckEquip/GetSuperJob?ID=' + id
+        });
+    }
+</script>

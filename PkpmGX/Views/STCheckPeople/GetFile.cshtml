@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "GetFile";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <table class="layui-table">
+        @{
+            foreach (var item in Model.File)
+            {
+                <tr>
+                    <img src="/STCheckPeople/Image?itemValue=@item.Key" width="600px" height="600px" />
+                </tr>
+            }
+        }
+    </table>
+</div>
+

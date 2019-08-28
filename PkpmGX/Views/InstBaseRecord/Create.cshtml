@@ -1,0 +1,234 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <form class="layui-form" lay-filter="InstBaseRecord-jbxx-form" action="">
+        <p style="text-align:center;font-size:22px">检测机构网上基本信息检查记录表</p>
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td colspan="2">受检单位：</td>
+                    <td colspan="2">
+                        <select class="layui-input" name="CustomId" lay-search lay-filter="lay-filter-CustomId">
+                            <option value=""></option>
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">机构地址：</td>
+                    <td colspan="2">
+                        <input class="layui-input" name="CustomAddress" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20" style="text-align:center">序<br />号</td>
+                    <td width="20" style="text-align:center">项<br />目</td>
+                    <td width="120" style="text-align:center">检查内容</td>
+                    <td width="300" style="text-align:center">检查方法</td>
+                    <td width="220" style="text-align:center">存在问题</td>
+                </tr>
+                <tr>
+                    <td rowspan="14">一、</td>
+                    <td rowspan="14">机<br />构<br />基<br />本<br />信<br />息</td>
+                    <td>住建厅批准的资质证书扫描件</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zzzs_y">有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzzs_w">无&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/
+                        <input type="checkbox" lay-skin="primary" name="zzzs_gq">过期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzzs_wgq">未过期
+                    </td>
+                    <td><input class="layui-input" name="zzzs_wt" /></td>
+                </tr>
+                <tr>
+                    <td>计量认证证书扫描件</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="jlzs_y">有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="jlzs_w">无&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="jlzs_gq">过期&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="jlzs_wgq">未过期
+                    </td>
+                    <td><input class="layui-input" name="jlzs_wt" /></td>
+                </tr>
+                <tr>
+                    <td rowspan="3">单位资质信息</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zzxx_jzqy">见证取样&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_djjc">地基基础&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_ztjg">主体结构&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_gjg">钢结构
+                    </td>
+                    <td rowspan="3"><input class="layui-input" name="zzxx_wt" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zzxx_snhj">室内环境&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_jzmq">建筑幕墙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_jzjn">建筑节能&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_szdl">市政道路
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zzxx_szql">市政桥梁&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_jzwfssb">建筑物附属设备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_qzsb">起重设备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zzxx_qt">其它
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">对应资质注册师证书</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zcyts">注册岩土师&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zcyts_mz">满足&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zcyts_bmz">不满足
+                    </td>
+                    <td rowspan="3"><input class="layui-input" name="zzzcszs_wt" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="zcjgs">注册结构师&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zcjgs_mz">满足 &nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zcjgs_bmz">不满足
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="qzsbjys">注册起重设备检验师&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="qzsbjys_mz">满足&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="qzsbjys_bmz">不满足
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">机构负责人/质量负责人/技术负责人信息</td>
+                    <td>
+                        1)机构负责人具有5年以上从事工程质量检测工作经历或具有中级以上技术职称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zjysjszc_mz">满足&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="zjysjszc_bmz">不满足
+                    </td>
+                    <td rowspan="2"><input class="layui-input" name="jsfzr-wt" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        2)技术负责人具有5年以上从事工程质量检测技术管理工作经历并具有工程技术类中级以上职称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="gcjszjyscz_mz">满足&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="gcjszjyscz_bmz">不满足
+                    </td>
+                </tr>
+                <tr>
+                    <td>检测人员上岗信息</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="sgxx_mz">填写满足要求&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="sgxx_bmz">填写不满足要求
+                    </td>
+                    <td><input class="layui-input" name="sgxx_wt" /></td>
+                </tr>
+                <tr>
+                    <td>社保人员明细表扫描件</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="sbrymxbsmj_y">有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="sbrymxbsmj_w">无&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="sbrymxbsmj_q">缺
+                    </td>
+                    <td><input class="layui-input" name="sbrymxbsmj_wt" /></td>
+                </tr>
+                <tr>
+                    <td>仪器设备名称及检定/校准信息</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="jzxx_mz">填写满足要求&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="jzxx_bmz">填写不满足要求
+                    </td>
+                    <td><input class="layui-input" id="jzxx_wt" /></td>
+                </tr>
+                <tr>
+                    <td>多场所检测(同管辖区域)</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="dcs_s">是 ，共<input style="WIDTH: 5%" name="dcs_ge" />个&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="dcs_f">否
+                    </td>
+                    <td><input class="layui-input" name="dcs_wt" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查人员：</label>
+            <div class="layui-input-block">
+                <input name="jcry" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查日期：</label>
+            <div class="layui-input-block">
+                <input name="jcrq" id="checkTime" class="layui-input" placeholder="检查时间" />
+            </div>
+        </div>
+
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <div style="text-align:center">
+                        <button class="layui-btn" lay-submit lay-filter="InstBaseRecord-jbxx-save">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+<script>
+    layui.config({
+        base: '../../static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+    });
+
+    layui.use(["form","laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+              form = layui.form;
+        form.render();
+
+        laydate.render({
+            elem: "#checkTime"
+        })
+        form.on('submit(InstBaseRecord-jbxx-save)', function (data) {
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/InstBaseRecord/JbxxCreate",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('检测机构网上基本信息检查记录表新增成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/InstBaseRecord/JbxxCreate/");
+                            },
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('检测机构网上基本信息检查记录表新增失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewBag.Title = "JCLCheck";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-form">
+        <p style="text-align:center;font-size:22px">检测（试验）机构监督检查（网上）记录表</p>
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td colspan="2">受检单位：</td>
+                    <td colspan="3">
+                        <input class="layui-input" style="WIDTH: 90%" id="f_sjdw" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="20" style="text-align:center">序号</td>
+                    <td width="20" style="text-align:center">项目</td>
+                    <td colspan="2" width="220" style="text-align:center">检查内容</td>
+                    <td width="220" style="text-align:center">检查方法</td>
+                    <td width="220" style="text-align:center">存在问题</td>
+                </tr>
+                <tr>
+                    <td rowspan="10">二、</td>
+                    <td rowspan="10">建<br />材<br />类<br />检<br />测</td>
+                    <td colspan="2">取样及见证上传的信息符合要求</td>
+                    <td>
+                    <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="checkbox" lay-skin="primary" name="2">否
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">检测样品二维码信息正确、样品满足检测要求</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td rowspan="3">自动采集检测项目</td>
+                    <td>不缺项</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>有曲线</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>记录更改符合程序</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+
+                <tr>
+                    <td>A类</td>
+                    <td rowspan="3">报告完整、编号连续、结论准确</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>B类</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td>C类</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">按规定安装视频监控、资料保存期满足要求</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">不合格台账</td>
+                    <td>
+                        <input type="checkbox" lay-skin="primary" name="1">是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" lay-skin="primary" name="2">否
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td><input class="layui-input" style="WIDTH: 90%" id="jcrq" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">备注</td>
+                    <td colspan="4"><input class="layui-input" style="WIDTH: 98%" id="jcrq" /></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查人员：</label>
+            <div class="layui-input-block">
+                <input name="desc" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">检查日期：</label>
+            <div class="layui-input-block">
+                <input name="desc" class="layui-input">
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <br />
+    </div>
+</div>
+
+
+        <script>
+            layui.config({
+                base: '../../static/layuiadmin/lib/' //静态资源所在路径
+            }).extend({
+                index: 'lib/index',
+            });
+
+            layui.use("form", function () {
+                var $ = layui.$,
+                      form = layui.form;
+                form.render();
+
+            });
+        </script>

@@ -1,0 +1,279 @@
+﻿@model Pkpm.Web.Models.PrintPostViewModel
+@{
+    ViewBag.Title = "EditReportModel";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+
+    <script type="text/javascript" src="../printcard/js/printcard.js"></script>
+
+    <style>
+        body {
+            font-size: 9pt;
+        }
+
+        ul {
+            padding: 0px;
+            margin: 0px;
+            height: 23px;
+        }
+
+            ul li {
+                display: inline;
+                padding: 0px;
+                margin: 0px;
+            }
+    </style>
+
+    <DIV style="LEFT: 0px; POSITION: absolute; TOP: 0px">
+        <OBJECT ID="dlgHelper" CLASSID="clsid:3050f819-98b5-11cf-bb82-00aa00bdce0b" WIDTH="0px" HEIGHT="0px"></OBJECT>
+        <script src="../Scripts/FontFacesMenu.js" language="javascript" type="text/javascript"></script>
+    </DIV>
+    <OBJECT id=DCellWeb1 style="margin:0px;border:0px;LEFT: 0px; WIDTH: 100%; TOP: 0px; HEIGHT: 60%" classid="clsid:3F166327-8030-4881-8BD2-EA25350E574A" VIEWASTEXT>
+        <PARAM NAME="_Version" VALUE="65536">
+        <PARAM NAME="_ExtentX" VALUE="17251">
+        <PARAM NAME="_ExtentY" VALUE="10901">
+        <PARAM NAME="_StockProps" VALUE="0">
+    </OBJECT>
+    <br>
+
+    <ul>
+        <li><img src="../printcard/images/charulie.gif" alt="插入列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCurrentCol(),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/charuhang.gif" alt="插入行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertRow(DCellWeb1.GetCurrentRow(),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/zhuijialie.gif" alt="追加列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/zhuijiahang.gif" alt="追加行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertRow(DCellWeb1.GetRows(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/shanchulie.gif" alt="删除列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.DeleteCol(DCellWeb1.GetCurrentCol(),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/shanchuhang.gif" alt="删除行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.DeleteRow(DCellWeb1.GetCurrentRow(),1,DCellWeb1.GetCurSheet());" /></li>
+        <li><img src="../printcard/images/zhuhedanyuange.gif" alt="组合单元格" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="mergeCells();" /></li>
+        <li><img src="../printcard/images/quxiaozhuhedanyuange.gif" alt="取消单元格组合" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="unMergeCells();" /></li>
+        <li>
+            <SELECT ID="blessingWords_FontFamily_DL" name="blessingWords_FontFamily_DL" onChange="SetFontFace(this[this.selectedIndex].innerText,this[this.selectedIndex].value);this.selectedIndex=0;" style="width:140px;" onmouseenter="fontFacesMenuEnter(this,'dlgHelper');//updateFontList();">
+                <OPTION VALUE=""><- 设置字体 -></OPTION>
+            </SELECT>
+        </li>
+        <li>
+            <select onchange="setFontSize(this.value);">
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+            </select>
+        </li>
+        <li><img src="../printcard/images/bold.gif" width="23px" alt="加粗" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(2);" /></li>
+        <li><img src="../printcard/images/italic.gif" width="23px" alt="斜体" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(4);" /></li>
+        <li><img src="../printcard/images/underline.gif" width="23px" alt="下划线" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(8);" /></li>
+        <!--<li><img src="../printcard/images/backgroundcolor.gif" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());"/>li>-->
+        <!--<li><img src="../printcard/images/fontcolor.gif" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());"/></li>-->
+        <li><img src="../printcard/images/zhidongzhehang.gif" alt="自动换行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setTextStyle();" /></li>
+        <li><img src="../printcard/images/alignleft.gif" alt="左对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(1);" /></li>
+        <li><img src="../printcard/images/aligncenter.gif" alt="居中对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(4);" /></li>
+        <li><img src="../printcard/images/alignright.gif" alt="右对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(2);" /></li>
+        <li><img src="../printcard/images/verticaltop.gif" alt="顶端对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(8);" /></li>
+        <li><img src="../printcard/images/vertialmiddle.gif" alt="垂直居中对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(32);" /></li>
+        <li><img src="../printcard/images/verticalbottom.gif" alt="底端对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(16);" /></li>
+        <li><img src="../printcard/images/zhidongshuofang.gif" alt="自动缩放" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAutoZoom();" /></li>
+        <li><img src="../printcard/images/geshishua.gif" alt="格式刷" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="formatPainter();" /></li>
+        <li><img src="../printcard/images/cellproperty.gif" alt="单元格格式" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.CellPropertyDlg();" /></li>
+        <li><img src="../printcard/images/print.gif" alt="打印" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="printSheet();" /></li>
+        <li><input type=button value="页面设置" onclick="DCellWeb1.PrintPageSetup();" /></li>
+        <li>
+            <input type=button value="保存模板" onclick="saveModel();" />
+            <span id="span_saving_msg" style="color:red;"></span>
+        </li>
+    </ul>
+    字段列表
+    <div id="div_columnlist" style="width:100%;height:32%;background-color:pink;">
+        <div style="float:left;">
+            第一页:<br>
+            <span style="cursor:pointer;" onclick="setV('[#postnum#]');">证书编号</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#fzn#]');">发证年</span>
+            <span style="cursor:pointer;" onclick="setV('[#fzy#]');">发证月</span>
+            <span style="cursor:pointer;" onclick="setV('[#fzr#]');">发证日</span>
+            <br>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#name#]');">姓名</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#sex#]');">性别</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#csn#]');">出生年</span>
+            <span style="cursor:pointer;" onclick="setV('[#csy#]');">出生月</span>
+            <span style="cursor:pointer;" onclick="setV('[#csr#]');">出生日</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#selfnum#]');">身份证号</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#gzdw#]');">工作单位</span>
+        </div>
+        <div style="float:left;padding-left:10px;">
+            第二页:<br>
+            <span style="cursor:pointer;" onclick="setV('[#postnum#]');">证书编号</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao1#]');">序号1</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm1#]');">检测项目1</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian1#]');">核准时间1</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao2#]');">序号2</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm2#]');">检测项目2</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian2#]');">核准时间2</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao3#]');">序号3</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm3#]');">检测项目3</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian3#]');">核准时间3</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao4#]');">序号4</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm4#]');">检测项目4</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian4#]');">核准时间4</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao5#]');">序号5</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm5#]');">检测项目5</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian5#]');">核准时间5</span>
+            <br>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#postnum#]');">证书编号</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao6#]');">序号6</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm6#]');">检测项目6</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian6#]');">核准时间6</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao7#]');">序号7</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm7#]');">检测项目7</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian7#]');">核准时间7</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao8#]');">序号8</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm8#]');">检测项目8</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian8#]');">核准时间8</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao9#]');">序号9</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm9#]');">检测项目9</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian9#]');">核准时间9</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao10#]');">序号10</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm10#]');">检测项目10</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian10#]');">核准时间10</span>
+        </div>
+        <div style="float:left;padding-left:10px;">
+            第三页:<br>
+            <span style="cursor:pointer;" onclick="setV('[#postnum#]');">证书编号</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao11#]');">序号11</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm11#]');">检测项目11</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian11#]');">核准时间11</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao12#]');">序号12</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm12#]');">检测项目12</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian12#]');">核准时间12</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao13#]');">序号13</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm13#]');">检测项目13</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian13#]');">核准时间13</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao14#]');">序号14</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm14#]');">检测项目14</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian14#]');">核准时间14</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#xuhao15#]');">序号15</span>
+            <span style="cursor:pointer;" onclick="setV('[#jcxm15#]');">检测项目15</span>
+            <span style="cursor:pointer;" onclick="setV('[#hezhunshijian15#]');">核准时间15</span>
+            <br>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#biangen1#]');">变更记录1</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#bgn1#]');">变更年1</span>
+            <span style="cursor:pointer;" onclick="setV('[#bgy1#]');">变更月1</span>
+            <span style="cursor:pointer;" onclick="setV('[#bgr1#]');">变更日1</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#biangen2#]');">变更记录2</span>
+            <br>
+            <span style="cursor:pointer;" onclick="setV('[#bgn2#]');">变更年2</span>
+            <span style="cursor:pointer;" onclick="setV('[#bgy2#]');">变更月2</span>
+            <span style="cursor:pointer;" onclick="setV('[#bgr2#]');">变更日2</span>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    var currentModel = "@Model.model";
+    var myLocation = getLocation();
+    var cell = document.getElementById("DCellWeb1");
+    function doOnLoad() {
+        celllogin();
+
+    }
+    function celllogin() {
+        
+        try {
+            cell.Login('长沙建研信息技术有限公司', '', '13100105585', '6440-0105-7775-6003');
+            cell.LocalizeControl(2052);
+        } catch (e) {
+        }
+        cell.OpenFile(myLocation + "/printcard/reportModel/published" + currentModel + ".html", "");
+    }
+
+    function unMergeCells() {
+        var col1, col2, row1, row2
+        var col, row
+        col = document.getElementById('DCellWeb1').GetCurrentCol();
+        row = document.getElementById('DCellWeb1').GetCurrentRow();
+        document.getElementById('DCellWeb1').UnmergeCells(col, row, col, row);
+    }
+    function mergeCells() {
+        var startCol, startRow, endCol, endRow
+        startCol = document.getElementById('DCellWeb1').GetSelectRangeJ(0);
+        startRow = document.getElementById('DCellWeb1').GetSelectRangeJ(1);
+        endCol = document.getElementById('DCellWeb1').GetSelectRangeJ(2);
+        endRow = document.getElementById('DCellWeb1').GetSelectRangeJ(3);
+        document.getElementById('DCellWeb1').MergeCells(startCol, startRow, endCol, endRow);
+    }
+    function saveModel() {
+        $("#span_saving_msg").html("正在保存数据，请耐心等待....");
+        setTimeout(function () {
+            document.getElementById('DCellWeb1').UploadFile(getLocation() + '/CheckPeopleManager/SaveReportModel?model=' + currentModel);
+            var strAll = "";
+            for (sheet = 0; sheet < 3; sheet++) {
+                var str = "";
+                var rows = cell.GetRows(sheet);
+                var cols = cell.GetCols(sheet);
+                for (var row = 1; row <= rows; row++) {
+                    for (var col = 1; col <= cols; col++) {
+                        var s = cell.GetCellString(col, row, sheet);
+                        if (s.indexOf("[#") != -1) {
+                            str += col + "," + row + "," + sheet + "," + s + "|";
+                        }
+                        cell.SetCellBackColor(col, row, sheet, -1);
+                    }
+                }
+                if (str != "") {
+                    str = str.substr(0, str.length - 1);
+                }
+                strAll += "reportModelColumnListAr[" + sheet + "]=\"" + str + "\";";
+            }
+            window.dhx.ajax.post('/CheckPeopleManager/WriteVariables',"id=" + currentModel + "&value=" + disposePostStr(strAll), function (response) {
+               
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "保存成功！", ok: "确定" });
+                }
+                else {
+                    dhtmlx.alert({ text: "保存失败！", ok: "确定" });
+                }
+                $("#span_saving_msg").html("");
+            });
+        }, 500);
+    }
+    
+
+
+
+      function doOnUnload() {
+
+      }
+</script>
+

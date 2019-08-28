@@ -1,0 +1,402 @@
+﻿@model  PkpmGX.Models.CheckQualifyViewModels
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div id="form_container" style="width:100%;height:170px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:170px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+           { type: "combo", label: "检测机构名称", name: "CheckUnitName" },
+           { type: "combo", name: "status", label: "状态", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "combo", label: "区域", name: "Area", options: [{ text: "", value: "" }] },
+             { type: "newcolumn" },
+
+           {
+               type: "block", width: 420, list: [
+                 { type: "calendar", label: "开始日期", name: "CMADStartDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 100 },
+                  { type: "newcolumn" },
+                  { type: "calendar", label: "至", name: "CMADEndDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 15 },
+               ]
+           },
+              {
+                  type: "block", width: 340, list: [
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 150 }
+                  ]
+              }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/ApplyQualify/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/ApplyQualify/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "NewCustom") {
+                NewCustom();
+            }
+            else if (id == "DeleteCustom") {
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定要进行删除操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/ApplyQualify/Delete", "id=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/ApplyQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的行')
+                }
+            }
+            else if (id == "SetState") {
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/ApplyQualify/SetInstState", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/ApplyQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的机构')
+                }
+            }
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        mygrid.setHeader("&nbsp,序号,单位名称/申请人姓名,机构基本情况表,法定代表人基本情况,技术负责人基本情况,检测类别、内容、具备相应注册工程师资格人员情况,专业技术人员情况总表,主要仪器设备（检测项目）及其检定/校准一览表,状态,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,40,*,100,120,120,290,100,280,160,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,right,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+
+        var checkInstCombo = myForm.getCombo("CheckUnitName");
+        var statusCombo = myForm.getCombo("status");
+        var areaCombo = myForm.getCombo("Area")
+
+
+        checkInstCombo.enableFilteringMode('between');
+        areaCombo.enableFilteringMode('between');
+
+        checkInstCombo.load("/ApplyQualify/InstCombo");
+        areaCombo.load("/ApplyQualify/AreaCombo")
+
+        setComboCustomFilter(checkInstCombo);
+        setComboCustomFilter(areaCombo);
+
+        @{
+            foreach (var item in Model.CompanyStatus)
+            {
+                @:statusCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                    }
+        }
+
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/ApplyQualify/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function showItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='selectItemDetail();'>" + value + "</a></div>";
+    }
+
+    //审核
+    function Audit(id) {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "受理",
+            content: '/ApplyQualify/Audit?id=' + id
+        });
+    }
+
+
+    function NewCustom() {
+        layer.open({
+            type: 2,
+            area: ['500px', '400px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "检测机构法定代表人声明-新增",
+            content: '/ApplyQualify/AddQualifyOne'
+        });
+    }
+
+
+    function EditQualifyOne(id) {
+        layer.open({
+            type: 2,
+            area: ['500px', '400px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "检测机构法定代表人声明-修改",
+            content: '/ApplyQualify/EditQualifyOne/' + id
+        });
+    }
+
+    function DetailQualifyOne(id) {
+        layer.open({
+            type: 2,
+            area: ['500px', '400px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "检测机构法定代表人声明-查看",
+            content: '/ApplyQualify/DetailQualifyOne/' + id
+        });
+    }
+
+    //打印通知单
+    function Print(id) {
+        window.open("/ApplyQualify/Print?id=" + id, "打印通知单");
+    }
+
+    function Reason(outstaticinfo) {
+        layer.alert(outstaticinfo);
+    }
+
+
+    function selectItemDetail() {
+
+        clearItemDetail();
+        itemWin = dhxWins.createWindow("itemWin", 20, 30, 580, 480);
+        itemWin.setModal(true);
+        itemWin.center();
+        itemWin.setText('检测资质类别');
+
+        itemForm = itemWin.attachForm();
+        itemForm.load('/ApplyQualify/UnitQualificaiton');
+
+        itemForm.attachEvent("onChange", function (cname, cvalue, isCheck) {
+            //your code here
+            //console.log(cvalue);
+            if (isCheck) {
+                selectedItem.push(cvalue);
+            } else {
+                selectedItem = jQuery.grep(selectedItem, function (value) {
+                    return value != cvalue;
+                });
+            }
+
+            myForm.setItemValue('QuantityCategory', selectedItem.join('、'));
+        });
+    }
+
+    function clearItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='clearItemDetail();'>" + value + "</a></div>";
+    }
+
+    function clearItemDetail() {
+        selectedItem = [];
+        myForm.setItemValue('QuantityCategory', '');
+    }
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/Details?id=" + rowId, "检测机构查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+
+        window.dhx.ajax.get("/ApplyQualify/CheckEdit?Id=" + rowId, function (r) {
+            var r = window.dhx.s2j(r.xmlDoc.responseText);
+            if (r != null && r.APPROVALSTATUS == "0") {
+                window.parent.Hui_admin_tab_raw("/ApplyQualify/Edit?id=" + rowId, "检测机构编辑");
+            }
+            else {
+                alert("该条记录已被递交，请按确定刷新");
+                window.location.replace(location.href);
+            }
+        });
+
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function AddQualifyTwo(id, customid) {
+     window.parent.Hui_admin_tab_raw("/ApplyQualify/AddQualifyTwo?id=" + id + "&customid=" + customid, "检测机构-添加");
+     //   window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyTwo?id=" + id + "&customid=" + customid, "检测机构-添加");
+    }
+
+    function EditQualifyTwo(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyTwo?id=" + id + "&customid=" + customid, "检测机构-编辑");
+    }
+
+    function DetailQualifyTwo(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/DetailQualifyTwo?id=" + id + "&customid=" + customid, "检测机构-查看");
+    }
+
+    function DetailQualifyThree(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/DetailQualifyThree?pid=" + id + "&customid=" + customid, "法定代表人基本情况-查看");
+    }
+
+    function EditQualifyThree(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyThree?pid=" + id + "&customid=" + customid, "法定代表人基本情况-编辑");
+    }
+
+    function AddQualifyThree(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyThree?pid=" + id + "&customid=" + customid, "法定代表人基本情况-添加");
+    }
+
+    function DetailQualifyFour(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/DetailQualifyFour?pid=" + id + "&customid=" + customid, "技术负责人基本情况-查看");
+    }
+
+    function EditQualifyFour(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyFour?pid=" + id + "&customid=" + customid, "技术负责人基本情况-编辑");
+    }
+
+    function AddQualifyFour(id, customid) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/EditQualifyFour?pid=" + id + "&customid=" + customid, "技术负责人基本情况-添加");
+    }
+
+
+    function DetailQualifyFive(pid, customId) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifyFive/Details?pid=" + pid + "&customid=" + customId, "具备注册工程师资格人员情况");
+    }
+
+    function EditQualifyFive(pid, customId) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifyFive/Edit?pid=" + pid + "&customid=" + customId, "具备注册工程师资格人员情况");
+    }
+
+   
+
+    function EditQualifySix(id) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySix/Index?id=" + id, "专业技术人员情况总表");
+    }
+    
+    function DetailQualifySix(id) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySix/Index?id=" + id, "专业技术人员情况总表");
+    }
+
+   
+  
+
+    function DetailQualifySeven(pid, customId) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySeven/Details?pid=" + pid + "&customid=" + customId, "主要仪器设备（检测项目）及其检定/校准一览表");
+    }
+
+
+    function EditQualifySeven(pid, customId) {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySeven/Edit?pid=" + pid + "&customid=" + customId, "主要仪器设备（检测项目）及其检定/校准一览表");
+    }
+
+   
+
+</script>
+
+
+

@@ -1,0 +1,417 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div id="layoutObj" class="row" style="width:100%;height:680px;">
+    </div>
+</div>
+
+<script type="text/javascript">
+
+        var myLayout, mygrid, dhxWins, newWin, menuWin, editWin, editMenuWin, actionWin, editActionWin, newForm, menuForm, editForm, editMenuForm, actionForm, editAcionForm, myTree, editTree;
+        var myMenu, selectedMenuId;
+
+        function doOnLoad() {
+
+            var myLayout = new dhtmlXLayoutObject({
+                parent: "layoutObj",
+                pattern: "2U"  // <-- pattern
+            });
+
+
+
+            mygrid = myLayout.cells("b").attachGrid();
+            myLayout.cells("b").setText('模块');
+
+            mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+            mygrid.setHeader("模块名称,模块地址,排序号,状态,操作,&nbsp;,&nbsp;");//the headers of columns
+            mygrid.setInitWidths("150,120,*,120,100,50,50");          //the widths of columns
+            mygrid.setColAlign("left,left,left,left,left,left,left");       //the alignment of columns
+            mygrid.setColTypes("tree,ro,ro,status,layuijslink,edit,del");                //the types of columns
+            mygrid.setColSorting("str,str,str,str,str,str,str");          //the sorting types
+            mygrid.init();      //finishes initialization and renders the grid on the page
+            mygrid.setEditable(false);
+
+
+            myLayout.cells("a").setText('模块类别');
+            myLayout.cells("a").setWidth(280);
+            myMenu = myLayout.cells("a").attachMenu();
+            myMenu.loadStruct('/SysMenu/Menu');
+            myMenu.attachEvent("onClick", function (id, zoneId, cas) {
+                if (id == 'newMenCategory') {
+                    newMenuCategory();
+                }
+                if (id == 'newMenu') {
+                    newMenu();
+                }
+                if (id == 'EditMenuCategory') {
+                    EditMenuCategory();
+                }
+                if (id == 'DeleteMenuCategory') {
+                    DeleteMenuCategory();
+                }
+            });
+            myTree = myLayout.cells("a").attachTreeView();
+
+            myTree.enableMultiselect(false);
+            myTree.attachEvent("onSelect", function (id, mode) {
+                if (mode) {
+                    mygrid.clearAll();
+                    selectedMenuId = id;
+                    mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                }
+            });
+
+            loadMenuCategory();
+
+            dhxWins = new dhtmlXWindows();
+
+        }
+
+        function loadMenuCategory() {
+            myTree.clearAll();
+            myTree.loadStruct("/SysMenu/Category", function () {
+                var items = myTree.getSubItems('Main');
+                if (items != null && items.length > 0) {
+                    myTree.selectItem(items[0]);
+                }
+            });
+        }
+
+        //添加一个action
+        function actionInPath(pathId) {
+            actionWin = dhxWins.createWindow("wAction", 20, 30, 330, 580);
+            actionWin.setModal(true);
+            actionWin.center();
+            actionWin.setText("新建按钮");
+
+            actionForm = actionWin.attachForm();
+
+            var actionFormStructrue = [
+               { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+               { type: "input", label: "按钮名称", name: "ActionName", required: true },
+               { type: "input", label: "按钮地址", name: "ActionuUrl", required: true },
+               { type: "checkbox", name: "ActionStatus", label: "是否启用", checked: true },
+               { type: "hidden", name: "PathId", value: pathId },
+               { type: "button", name: 'ActionAdd', value: "确定", offsetLeft: 80 }
+            ];
+            actionForm.load(actionFormStructrue);
+            actionForm.attachEvent("onButtonClick", function (name) {
+                actionForm.send("/SysMenu/NewAction", "post", function (actoinCreateResponse) {
+                    var t = window.dhx.s2j(actoinCreateResponse.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.message("按钮创建成功！");
+                        actionWin.close();
+                        mygrid.clearAll();
+                        mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                    } else {
+                        dhtmlx.alert(t.ErroMsg);
+                    }
+
+                });
+            });
+        }
+
+        function newMenu() {
+            menuWin = dhxWins.createWindow("w2", 20, 30, 330, 580);
+            menuWin.setModal(true);
+            menuWin.center();
+            menuWin.setText("新建模块");
+
+            menuForm = menuWin.attachForm();
+            var menuFormStructrue = [
+                 { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                 { type: "input", label: "模块名称", name: "MenuName", required: true },
+                 { type: "input", label: "模块序号", name: "MenuOrderNo", required: true, validate: "ValidInteger" },
+                 { type: "input", label: "模块地址", name: "MenuUrl", required: true },
+                 { type: "hidden", name: "IsCategory", value: "0" },
+                 { type: "checkbox", name: "MenuStatus", label: "是否启用", checked: true },
+                 { type: "hidden", name: "CategoryId", value: selectedMenuId },
+                 { type: "input", name: "MenuCategory", label: "模块类别", value: myTree.getItemText(selectedMenuId), readonly: true },
+                 { type: "button", name: 'MenuAdd', value: "确定", offsetLeft: 80 }
+            ];
+            menuForm.load(menuFormStructrue);
+
+            menuForm.attachEvent("onButtonClick", function (name) {
+                if (name == "MenuAdd") {
+                    menuForm.send("SysMenu/Create", "post", function (menuCategoryResponse) {
+                        var t = window.dhx.s2j(menuCategoryResponse.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("模块创建成功！");
+                            menuWin.close();
+                            mygrid.clearAll();
+                            mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    });
+                }
+            });
+        }
+
+        function newMenuCategory() {
+            newWin = dhxWins.createWindow("w1", 20, 30, 340, 260);
+            newWin.setModal(true);
+            newWin.center();
+            newWin.setText("新建模块类别");
+
+            newForm = newWin.attachForm();
+            var newFormStructrue = [
+                 { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                 { type: "input", label: "模块类别名称", name: "MenuName", required: true },
+                 { type: "hidden", value: "", name: "MenuUrl" },
+                 { type: "input", label: "模块类别图标", name: "MenuIcon", required: true },
+                 { type: "input", label: "模块类别序号", name: "MenuOrderNo", required: true, validate: "ValidInteger" },
+                 { type: "checkbox", name: "MenuStatus", label: "是否启用", checked: true },
+                 { type: "hidden", name: "IsCategory", value: "1" },
+                 { type: "hidden", name: "MenuStatus", value: "1" },
+                 { type: "hidden", name: "CategoryId", value: "-1" },
+                 { type: "button", name: 'MenuCategoryAdd', value: "确定", offsetLeft: 80 }
+            ];
+            newForm.load(newFormStructrue);
+
+            newForm.attachEvent("onButtonClick", function (name) {
+                if (name == "MenuCategoryAdd") {
+                    newForm.send("/SysMenu/Create", "post", function (menuResponse) {
+                        var t = window.dhx.s2j(menuResponse.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("模块类别创建成功！");
+                            newWin.close();
+                            loadMenuCategory();
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+                    });
+                }
+            });
+        }
+
+        function DeleteMenuCategory() {
+            if (!selectedMenuId) {
+                dhtmlx.alert("请先选择一个模块类别！");
+                return;
+            }
+
+            dhtmlx.message({
+                type: "confirm",
+                text: "你确定要进行删除操作？",
+                callback: function (u) {
+                    if (u) {
+                        window.dhx.ajax.post("/SysMenu/Delete", "id=" + selectedMenuId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("删除模块类别成功！");
+                                loadMenuCategory();
+                            } else {
+                                dhtmlx.alert(t.ErroMsg);
+                            }
+
+                        });
+                    }
+                }
+            });
+        }
+
+        function EditMenuCategory() {
+            if (!selectedMenuId) {
+                dhtmlx.alert("请先选择一个模块类别！");
+                return;
+            }
+
+            window.dhx.ajax.get("/SysMenu/Edit?Id=" + selectedMenuId, function (r) {
+                var path = window.dhx.s2j(r.xmlDoc.responseText); // convert response to json object
+                if (path.IsCategory) {
+                    editWin = dhxWins.createWindow("w3", 20, 30, 320, 380);
+                    editWin.setModal(true);
+                    editWin.center();
+                    editWin.setText("模块类别编辑");
+
+                    editForm = editWin.attachForm();
+                    var editFormStructrue = [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                             { type: "input", label: "模块类别名称", name: "MenuName", value: path.Name, required: true },
+                             { type: "hidden", value: path.Url, name: "MenuUrl" },
+                             { type: "input", label: "模块类别序号", name: "MenuIcon", value: path.Icon, required: true },
+                             { type: "input", label: "模块类别序号", name: "MenuOrderNo", value: path.OrderNo, required: true, validate: "ValidInteger" },
+                             { type: "checkbox", name: "MenuStatus", label: "是否启用", checked: path.Status == 1 ? true : false },
+                             { type: "hidden", name: "IsCategory", value: "1" },
+                             { type: "hidden", name: "PathId", value: path.Id },
+                             { type: "hidden", name: "MenuStatus", value: "1" },
+                             { type: "hidden", name: "CategoryId", value: "-1" },
+                             { type: "button", name: 'MenuCategoryEdit', value: "确定", offsetLeft: 80 }
+                    ];
+                    editForm.load(editFormStructrue);
+
+                    editForm.attachEvent("onButtonClick", function (name) {
+                        if (name == "MenuCategoryEdit") {
+                            editForm.send("/SysMenu/Edit", "post", function (menuCateResponse) {
+                                var t = window.dhx.s2j(menuCateResponse.xmlDoc.responseText);//将json转换为js object
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.message("模块类别修改成功！");
+                                    editWin.close();
+                                    loadMenuCategory();
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function excellEdit_click(obj) {
+            var rowId = $(obj).attr('data-rowId');
+            if (rowId.indexOf('Action,') == 0) {
+                var actionId = rowId.split(',')[1];
+                window.dhx.ajax.get("/SysMenu/Action?Id=" + actionId, function (r) {
+                    var jsonAction = window.dhx.s2j(r.xmlDoc.responseText); // convert response to json object
+                    if (jsonAction != null) {
+
+                        editActionWin = dhxWins.createWindow("editAction", 20, 30, 330, 580);
+                        editActionWin.setModal(true);
+                        editActionWin.center();
+                        editActionWin.setText("按钮编辑");
+
+                        editAcionForm = editActionWin.attachForm();
+                        var editAcionFormStructrue = [
+                       { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                       { type: "input", label: "按钮名称", name: "ActionName", value: jsonAction.Name, required: true },
+                       { type: "input", label: "按钮地址", name: "ActionuUrl", value: jsonAction.Url, required: true },
+                       { type: "checkbox", name: "ActionStatus", label: "是否启用", checked: jsonAction.Status == 1 ? true : false },
+                       { type: "hidden", name: "PathId", value: jsonAction.PathId },
+                        { type: "hidden", name: "ActionId", value: jsonAction.Id },
+                       { type: "button", name: 'EditAction', value: "确定", offsetLeft: 80 }
+                        ];
+                        editAcionForm.load(editAcionFormStructrue);
+
+                        editAcionForm.attachEvent("onButtonClick", function (name) {
+                            if (name == "EditAction") {
+                                editAcionForm.send("/SysMenu/EditAction", "post", function (r) {
+                                    var t = window.dhx.s2j(r.xmlDoc.responseText);
+                                    if (t != null && t.IsSucc) {
+                                        dhtmlx.message("按钮修改成功！");
+                                        editActionWin.close();
+                                        mygrid.clearAll();
+                                        mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                                    } else {
+                                        dhtmlx.alert(t.ErroMsg);
+                                    }
+
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                window.dhx.ajax.get("/SysMenu/Edit?Id=" + rowId, function (r) {
+                    var path = window.dhx.s2j(r.xmlDoc.responseText); // convert response to json object
+                    if (path != null) {
+
+                        editMenuWin = dhxWins.createWindow("w4", 20, 30, 330, 580);
+                        editMenuWin.setModal(true);
+                        editMenuWin.center();
+                        editMenuWin.setText("模块编辑");
+
+                        editMenuForm = editMenuWin.attachForm();
+                        var editMenuFormStructrue = [
+                         { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                         { type: "input", label: "模块名称", name: "MenuName", value: path.Name, required: true },
+                         { type: "input", label: "模块序号", name: "MenuOrderNo", value: path.OrderNo, required: true, validate: "ValidInteger" },
+                         { type: "input", label: "模块地址", name: "MenuUrl", value: path.Url, required: true },
+                         { type: "hidden", name: "IsCategory", value: "0" },
+                         { type: "hidden", name: "PathId", value: path.Id },
+                         { type: "checkbox", name: "MenuStatus", label: "是否启用", checked: path.Status == 1 ? true : false },
+                         { type: "hidden", name: "CategoryId", value: path.CategoryId },
+                         { type: "container", name: "MenuCategory", label: "模块类别", inputHeight: 450 },
+                         { type: "button", name: 'MenuEdit', value: "确定", offsetLeft: 80 }
+                        ];
+                        editMenuForm.load(editMenuFormStructrue);
+
+                        editTree = new dhtmlXTreeView(editMenuForm.getContainer("MenuCategory"));
+                        editTree.enableMultiselect(false);
+                        editTree.loadStruct("/SysMenu/Category", function () {
+                            editTree.selectItem(path.CategoryId);
+                        });
+                        editTree.attachEvent("onSelect", function (id, mode) {
+                            if (mode) {
+                                editMenuForm.setItemValue("CategoryId", id);
+                            }
+                        });
+
+                        editMenuForm.attachEvent("onButtonClick", function (name) {
+                            if (name == "MenuEdit") {
+                                editMenuForm.send("SysMenu/Edit", "post", function (menuEditResponse) {
+                                    var t = window.dhx.s2j(menuEditResponse.xmlDoc.responseText);
+                                    if (t != null && t.IsSucc) {
+                                        dhtmlx.message("模块修改成功！");
+                                        editMenuWin.close();
+                                        mygrid.clearAll();
+                                        mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                                    } else {
+                                        dhtmlx.alert(t.ErroMsg);
+                                    }
+
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+        }
+
+        function excellDel_click(obj) {
+            var rowId = $(obj).attr('data-rowId');
+            dhtmlx.message({
+                type: "confirm",
+                text: "你确定要进行删除操作？",
+                callback: function (u) {
+                    if (u) {
+                        if (rowId.indexOf('Action,') == 0) {
+                            var actionId = rowId.split(',')[1];
+                            window.dhx.ajax.post("SysMenu/ActionDelete", "id=" + actionId, function (response) {
+                                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.message("删除按钮成功！");
+                                    mygrid.clearAll();
+                                    mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        } else {
+                            window.dhx.ajax.post("SysMenu/Delete", "id=" + rowId, function (response) {
+                                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.message("删除模块成功！");
+                                    mygrid.clearAll();
+                                    mygrid.load("/SysMenu/Grid?id=" + selectedMenuId);
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        }
+                    }
+                }
+            });
+
+        }
+
+        function doOnUnload() {
+            if (dhxWins != null && dhxWins.unload != null) {
+                dhxWins.unload();
+                dhxWins = newWin = editWin = menuWin = editMenuWin = editActionWin = actionWin = null;
+            }
+        }
+</script>
+
+

@@ -1,0 +1,313 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* 隐藏多余的tabbar */
+    .dhxtabbar_tabs.dhxtabbar_tabs_top {
+        display: none;
+    }
+
+    /* 使网格上移，占据tabbar留下的空白 */
+    .dhx_cell_tabbar {
+        top: 0;
+    }
+
+    /* 弹框 */
+    .dhx_popup_material .dhx_popup_area td.dhx_popup_td {
+        border: solid 1px #3399CC;
+    }
+</style>
+
+<div id="form_container"></div>
+<div id="gridbox" style="width: 100%; height: 100%"></div>
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js"></script>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, areaCombo, myTabbar, myToolBar, myAcc, gridQString, areaCombo, exporter, dhxWins, searchWin, itemWin, dhxTree;
+    var myPop;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        /* 初始化标签页 */
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "综合查询", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        /* 初始化工具栏 */
+        myToolBar = myTabbar.tabs("gridboxOne").attachToolbar();
+        myToolBar.setIconset("awesome");
+        myToolBar.loadStruct("/TotalSearch/ToolBar");
+        myToolBar.attachEvent("onClick", function (id) {
+            if (id == 'Search') {
+                gridQString = '/TotalSearch/Search?' + getToolBarQueryStr();
+                mygrid.clearAll();
+                searchWin.hide();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+                mygrid.setSortImgState(true, 8, "desc");
+            } else if (id == 'AdvSearch') {
+                searchWin.setModal(true);
+                searchWin.show();
+            } else if (id = 'Export') {
+                exporter.show();
+            }
+        });
+
+        var formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+            {
+                type: "block", name: "formBlock", width: 850, list: [
+                    { type: "input", name: 'ProjectName', label: '工程名称' },
+            {
+                type: "combo", name: "IsChanged", label: "是否被修改", options: [
+                     { text: "全部", value: "-1", selected: true },
+                    { text: "是", value: "1" },
+                    { text: "否", value: "0" }
+                ]
+            },
+            {
+                type: "combo", name: "DtType", label: "日期类别", options: [
+                    { text: "检测日期", value: "CheckDt", selected: true }, 
+                    { text: "批准日期", value: "APPROVEDATE" },
+                    { text: "上传日期", value: "UploadDt" }
+                ]
+            },
+            { type: "combo", label: "检测类别", name: "TestCategories" },
+            { type: "input", label: "报告编号", name: "ReportNum" },
+             {
+                 type: "combo", label: "停业检测机构", name: "IsUse"
+             },
+            { type: "newcolumn" },
+            { type: "combo", name: "CheckInstID", label: "检测机构名称" },
+             
+              {
+                  type: "combo", name: "CheckStatus", label: "结论状态", options: [
+                      { text: "全部", value: "A", selected: true },
+                      { text: "合格", value: "Y" },
+                      { text: "不合格", value: "N" },
+                      { text: "不下结论", value: "X" },
+                      { text: "未知结论", value: "W" }
+                  ]
+              },
+            { type: "calendar", label: "开始日期", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")' },
+            { type: "combo", name: 'CheckItem', label: '检测项目' },
+                    { type: "input", label: "样品编号", name: "SampleNum" },
+            
+            { type: "newcolumn" },
+            { type: "container", label: "地区选择", name: "Area" },
+             {
+                 type: "combo", name: "HasArc", label: "是否有曲线", options: [
+                     { text: "全部", value: "-1", selected: true },
+                     { text: "是", value: "1" },
+                     { text: "否", value: "0" }
+                 ]
+             },
+             { type: "calendar", label: "结束日期", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+             {
+                 type: "combo", label: "数据状态", name: "DataState", options: [
+                     { text: "全部", value: "-1", selected: true },
+                    { text: "已打印", value: "6" },
+                    { text: "已收样", value: "0" },
+                    { text: "已检测", value: "3" },
+                     { text: "已批准", value: "5" }
+                 ]
+                    },
+                    { type: "input", label: "委托编号", name: "EntrustNum" },
+             {type:"newcolumn"},
+             {
+                  type: "block", name: "buttonblock", width: 600, offsetLeft: 200, list: [
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 100 },
+                      { type: "newcolumn" },
+                      { type: "button", name: 'Reset', value: "重置", offsetLeft: 30 },
+                       { type: "newcolumn" },
+                     { type: "button", name: 'Cancel', value: "关闭", offsetLeft: 30 },
+                  ]
+              }
+                ]
+            }];
+
+        searchWin = dhxWins.createWindow("searchWin", 50, 50, 900, 400);
+        searchWin.button('close').hide();
+        searchWin.button('minmax').hide();
+        searchWin.button('park').hide();
+        searchWin.addUserButton("conf", 0, "close");
+        searchWin.button("conf").attachEvent("onClick", function () {
+            searchWin.setModal(false);
+            searchWin.hide();
+        });
+        searchWin.setModal(true);
+        searchWin.center();
+        searchWin.setText("高级查询");
+
+        myForm = searchWin.attachForm(formStructure);
+        checkUnitNameCombo = myForm.getCombo("CheckInstID");
+        checkUnitNameCombo.enableFilteringMode('between');
+        checkUnitNameCombo.load("/TotalSearch/InstCombo");
+        TestCategoriesCombo = myForm.getCombo("TestCategories");
+        TestCategoriesCombo.enableFilteringMode('between');
+        TestCategoriesCombo.load("/TotalSearch/TestCategoriesCombo");
+        TestCategoriesCombo.attachEvent("onChange", function (value, text) {
+            //console.log(value);
+            if(value != null )
+            {
+                CheckItemCombo.load("/TotalSearch/CheckItemChangeCombo?value="+value);
+            }
+            else
+            {
+                CheckItemCombo.load("/TotalSearch/CheckItemCombo");
+            }
+        });
+
+        CheckItemCombo = myForm.getCombo("CheckItem");
+        CheckItemCombo.enableFilteringMode('between');
+        CheckItemCombo.load("/TotalSearch/CheckItemCombo");
+        IsUseCombo = myForm.getCombo("IsUse");
+        IsUseCombo.enableFilteringMode('between');
+        IsUseCombo.load("/TotalSearch/IsUseCombo");
+
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/TotalSearch/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+        areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Cancel') {
+                searchWin.setModal(false);
+                searchWin.hide();
+            } else if (name == 'Reset') {
+                resetForm();
+            } else if (name == 'Search') {
+                clearToolBarInputButton();
+                gridQString = '/TotalSearch/Search?' + getQueryStr(myForm);
+                mygrid.clearAll();
+                searchWin.setModal(false);
+                searchWin.hide();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+                mygrid.setSortImgState(true, 8, "desc");
+            }
+
+        });
+
+        gridQString = '/TotalSearch/Search?' + getQueryStr(myForm);
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,工程名称,结论,机构名称,结构部位,检测项目,报告编号,二维码,检测日期,批准日期,数据状态,&nbsp");
+        mygrid.setInitWidths("30,500,80,260,200,160,160,160,80,80,80,50");
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,layuijslink,layuijslink,ro,ro,ro,view");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+    }
+
+    function resetForm() {
+        areaCombo.setComboText('');
+        areaCombo.clearAll();
+        areaCombo.load('/TotalSearch/AreaCombo');
+        checkUnitNameCombo.setComboText('');
+        checkUnitNameCombo.setComboValue(null);
+        myForm.setItemValue('CheckItem', '');
+        myForm.setItemValue('ProjectName', '');
+        myForm.getCombo('DtType').setComboValue('CheckDt');
+        myForm.getCombo('IsChanged').setComboValue('-1');
+        myForm.getCombo('CheckStatus').setComboValue('A');
+        myForm.getCombo('HasArc').setComboValue('-1');
+        myForm.setItemValue('EndDt', '');
+        myForm.setItemValue('StartDt', '');
+    }
+
+
+    function doOnUnload() {
+
+    }
+
+
+    function getToolBarQueryStr() {
+        var data = [];
+        myToolBar.forEachItem(function (itemId) {
+            if (myToolBar.getType(itemId) == 'buttonInput') {
+                data.push(itemId + '=' + encodeURIComponent(myToolBar.getValue(itemId)));
+
+            }
+        });
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind == 8 || ind == 9 || ind == 6) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+
+    function getQueryStr(form) {
+        var data = [];
+        var formData = form.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function clearToolBarInputButton() {
+        myToolBar.forEachItem(function (itemId) {
+            if (myToolBar.getType(itemId) == 'buttonInput') {
+                myToolBar.setValue(itemId, '', false);
+            }
+        });
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + rowId, "检测报告查看");
+    }
+
+    function OpenQzQr(qrinfo) {
+        window.parent.Hui_admin_tab_raw("/LiftingEquipment/Details?qrinfo=" + qrinfo, "二维码查看");
+    }
+
+    function OpenQr(qrCodebar) {
+        //window.parent.Hui_admin_tab_raw("http://gxjzqy.jyjzqy.com/orders/qrinfo/QrInfoStatus.aspx?info=" + qrCodebar,"二维码查看");
+        window.parent.Hui_admin_tab_raw("/TotalSearch/DetailQrCode?qrinfo=" + qrCodebar, "二维码查看");
+    }
+</script>

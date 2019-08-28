@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "GetFile";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <table class="layui-table">
+        @{
+            if (Model.Modify == 1)
+            {
+                <colgroup>
+                    <col width="100" />
+                    <col />
+                    <col width="200" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <td>序号</td>
+                        <td>附件名称</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        foreach (var item in Model.Ids)
+                        {
+                            <tr>
+                                <td>@item.Value</td>
+                                <td>@item.Key</td>
+                                <td><a href="/CheckQualify/AttachFileDownload?id=@item.Key">下载</a></td>
+                            </tr>
+                         
+
+                        }
+                    }
+                </tbody>
+            }
+            else
+            {
+                foreach (var item in Model.Ids)
+                {
+                    <tr>
+                       
+                            <img src="/CheckQualify/Image?itemValue= +@item.Key" width="600px" height="600px">
+                       
+                    </tr>
+                }
+
+            }
+        }
+    </table>
+</div>
+
+<script>
+    function attach_download(attachfilepath) {
+        window.open('/CheckQualify/AttachFileDownload?id=' + attachfilepath, "_blank");
+    }
+</script>

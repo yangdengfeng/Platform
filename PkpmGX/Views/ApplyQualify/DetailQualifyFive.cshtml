@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewBag.Title = "DetailQualifyFive";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:980px;height:0px;"></div>
+    </div>
+    <div class="mt-5">
+        <div id="gridbox" style="position:fixed;width:100%; height:800px; top:40px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var myTabbar, mygrid, gridQString, myToolbar, myForm, exporter;
+
+    function doOnLoad() {
+        gridQString = '/NoDataUpload/GetReportNumberTotal';
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "具备注册工程师资格人员情况", active: true }
+            ]
+        });
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+        text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,检测类别,检测类容,姓名,注册资格证书号,上岗资格证书号,注册单位名称,职称,专业,学历,检测年限,注册证书有效期,备注,&nbsp");//the headers of columns
+        mygrid.setInitWidths("40,*,160,160,160,160,160,160,160,160,160,160,160,40");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,view");                //the types of columns
+        mygrid.setColSorting("int,str,str,str,str,str,str,str,str,str,str,str,str,str");          //the sorting types
+        mygrid.init();   //finishes initialization and renders the grid on the page
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+        console.log('@ViewBag.id');
+        console.log(mygrid);
+        mygrid.load('/ApplyQualify/DetailQualifyFiveSearch?Customid='+'@ViewBag.id', function () {
+            myTabbar.tabs("gridboxOne").progressOff();
+        });
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ApplyQualify/QualifyFivePeopleDetalify/" + rowId, "人员查看");
+    }
+
+</script>
+

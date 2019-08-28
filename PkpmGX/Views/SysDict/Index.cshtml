@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:980px;height:100%;"></div>
+<div id="gridbox" style="position:fixed; top:90px; left: 0; right: 0; bottom: 3px"></div>
+
+
+<script type="text/javascript">
+
+    var mygrid, myForm, dhxWins, newWin, dictWin, editWin, editdictWin, newForm, dictForm, editForm, editdictForm, myTree, editTree;
+
+    function doOnLoad() {
+
+        dhxWins = new dhtmlXWindows();
+
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 120, labelWidth: 120 },
+           { type: "input", label: "字典名称", name: "DictName" },
+            { type: "newcolumn" },
+            { type: "button", name: 'DictSearch', value: "查询", offsetLeft: 20 },
+            { type: "newcolumn" },
+            { type: "button", name: 'DictCategoryAdd', value: "新增字典类别", offsetLeft: 20 },
+            { type: "newcolumn" },
+            { type: "button", name: 'DictAdd', value: "新增字典", offsetLeft: 20 }
+
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            dhxWins.attachViewportTo("gridbox");
+            if (name == 'DictCategoryAdd') {
+                newWin = dhxWins.createWindow("w1", 20, 20, 350, 300);
+                newWin.setModal(true);
+                newWin.center();
+                newWin.setText("新增字典类别");
+
+                newForm = newWin.attachForm();
+                var newFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                     { type: "input", label: "字典类别名称", name: "DictName", required: true },
+                     { type: "input", label: "字典类别编码", name: "KeyValue", required: true },
+                     { type: "checkbox", name: "DictStatus", label: "是否启用", checked: true },
+                     { type: "hidden", name: "DictStatus", value: "1" },
+                     { type: "hidden", name: "CategoryId", value: "-1" },
+                     { type: "hidden", name: "DictOrderNo", value: null },
+                     { type: "button", name: 'DictCategoryAdd', value: "确定", offsetLeft: 230 }
+                ];
+                newForm.load(newFormStructrue);
+
+                newForm.attachEvent("onButtonClick", function (name) {
+                    if (name == "DictCategoryAdd") {
+                        newForm.send("/SysDict/Create", "post", function (loader,response) {
+                            var t = window.dhx.s2j(response);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("字典类别创建成功！");
+                                newWin.close();
+                                mygrid.clearAll();
+                                mygrid.load("/SysDict/Grid");
+                            } else {
+                                dhtmlx.alert(t.ErroMsg);
+                            }
+                        });
+                    }
+                });
+            }
+
+            if (name == 'DictAdd') {
+                dictWin = dhxWins.createWindow("w2", 20, 20, 350, 500);
+                dictWin.setModal(true);
+                dictWin.center();
+                dictWin.setText("新增字典");
+
+                dictForm = dictWin.attachForm();
+                var DictFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                     { type: "input", label: "字典名称", name: "DictName", required: true },
+                     { type: "input", label: "字典编码", name: "KeyValue", required: true },
+                     { type: "input", label: "字典序号", name: "DictOrderNo", required: true, validate: "ValidInteger" },
+                     { type: "checkbox", name: "DictStatus", label: "是否启用", checked: true },
+                     { type: "hidden", name: "CategoryId", value: "-1" },
+                     { type: "container", name: "DictCategory", label: "字典类别", inputHeight: 200 },
+                     { type: "button", name: 'DictAdd', value: "确定", offsetLeft: 230 }
+                ];
+                dictForm.load(DictFormStructrue);
+
+                myTree = new dhtmlXTreeView(dictForm.getContainer("DictCategory"));
+                myTree.enableMultiselect(false);
+                myTree.loadStruct("/Sysdict/Category");
+                myTree.attachEvent("onSelect", function (id, mode) {
+                    if (mode) {
+                        dictForm.setItemValue("CategoryId", id);
+                    }
+                });
+
+                dictForm.attachEvent("onButtonClick", function (name) {
+                    if (name == "DictAdd") {
+                        dictForm.send("/Sysdict/Create", "post", function (loader, response) {
+                            var t = window.dhx.s2j(response);
+                            if (t != null && t.IsSucc) {
+                                dhtmlx.message("字典创建成功！");
+                                dictWin.close();
+                                mygrid.clearAll();
+                                mygrid.load("Sysdict/Grid");
+                            } else {
+                                dhtmlx.alert(t.ErroMsg);
+                            }
+
+                        });
+                    }
+                });
+            }
+
+            if (name == "DictSearch") {
+                myForm.send("Sysdict/Search", "get", function (loader, response) {
+                    mygrid.clearAll();
+                    mygrid.parse(response);
+                });
+            }
+        });
+
+        mygrid = new dhtmlXGridObject('gridbox');
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("字典名称,字典编码,排序号,状态,&nbsp;,&nbsp;");//the headers of columns
+        mygrid.setInitWidths("200,200,*,120,50,50");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("tree,ro,ro,status,edit,del");                //the types of columns
+        mygrid.setColSorting("str,str,str,str,str,str");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.setEditable(false);
+        mygrid.load("Sysdict/Grid");
+    }
+
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.dhx.ajax.get("/Sysdict/Edit?Id=" + rowId, function (r) {
+            var sysdict = window.dhx.s2j(r.xmlDoc.responseText); // convert response to json object
+            if (sysdict != null) {
+
+                if (sysdict.CategoryId < 0) {
+                    editWin = dhxWins.createWindow("w3", 20, 20, 350, 300);
+                    editWin.setModal(true);
+                    editWin.center();
+                    editWin.setText("字典类别编辑");
+
+                    editForm = editWin.attachForm();
+                    var editFormStructrue = [
+                           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                             { type: "input", label: "字典类别名称", name: "DictName", value: sysdict.Name, required: true },
+                             { type: "input", label: "字典类别编码", name: "KeyValue", value: sysdict.KeyValue, required: true },
+                             { type: "checkbox", name: "DictStatus", label: "是否启用", checked: sysdict.Status == 1 ? true : false },
+                             { type: "hidden", name: "SysDictId", value: sysdict.Id },
+                             { type: "hidden", name: "DictStatus", value: "1" },
+                             { type: "hidden", name: "CategoryId", value: "-1" },
+                             { type: "hidden", name: "DictOrderNo", value: "0" },
+                             { type: "button", name: 'DictCategoryEdit', value: "确定", offsetLeft: 230 }
+                            ];
+                    editForm.load(editFormStructrue);
+
+                    editForm.attachEvent("onButtonClick", function (name) {
+                        if (name == "DictCategoryEdit") {
+                            editForm.send("Sysdict/Edit", "post", function (loader, response) {
+                                var t = window.dhx.s2j(response);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.message("字典类别修改成功！");
+                                    editWin.close();
+                                    mygrid.clearAll();
+                                    mygrid.load("Sysdict/Grid");
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        }
+                    });
+                }
+                else {
+                    editdictWin = dhxWins.createWindow("w4", 20, 20, 350, 500);
+                    editdictWin.setModal(true);
+                    editdictWin.center();
+                    editdictWin.setText("字典编辑");
+
+                    editdictForm = editdictWin.attachForm();
+                    var editdictFormStructrue = [
+                     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+                     { type: "input", label: "字典名称", name: "DictName", value: sysdict.Name, required: true },
+                     { type: "input", label: "字典编码", name: "KeyValue", value: sysdict.KeyValue, required: true },
+                     { type: "input", label: "字典序号", name: "DictOrderNo", value: sysdict.OrderNo },
+                     { type: "hidden", name: "sysdictId", value: sysdict.Id },
+                     { type: "checkbox", name: "DictStatus", label: "是否启用", checked: sysdict.Status == 1 ? true : false },
+                     { type: "hidden", name: "CategoryId", value: sysdict.CategoryId },
+                     { type: "container", name: "DictCategory", label: "字典类别", inputHeight: 200 },
+                     { type: "button", name: 'DictEdit', value: "确定", offsetLeft: 230 }
+                    ];
+                    editdictForm.load(editdictFormStructrue);
+
+                    editTree = new dhtmlXTreeView(editdictForm.getContainer("DictCategory"));
+                    editTree.enableMultiselect(false);
+                    editTree.loadStruct("Sysdict/Category", function () {
+                        editTree.selectItem(sysdict.CategoryId);
+                    });
+                    editTree.attachEvent("onSelect", function (id, mode) {
+                        if (mode) {
+                            editdictForm.setItemValue("CategoryId", id);
+                        }
+                    });
+
+                    editdictForm.attachEvent("onButtonClick", function (name) {
+                        if (name == "DictEdit") {
+                            editdictForm.send("/Sysdict/Edit", "post", function (loader, response) {
+                                var t = window.dhx.s2j(response);
+                                if (t != null && t.IsSucc) {
+                                    dhtmlx.message("字典修改成功！");
+                                    editdictWin.close();
+                                    mygrid.clearAll();
+                                    mygrid.load("Sysdict/Grid");
+                                } else {
+                                    dhtmlx.alert(t.ErroMsg);
+                                }
+
+                            });
+                        }
+                    });
+                }
+
+
+            }
+        });
+    }
+
+    function excellDel_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要进行删除操作？",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/Sysdict/Delete", "id=" + rowId, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+                            dhtmlx.message("删除成功！");
+                            mygrid.clearAll();
+                            mygrid.load("/Sysdict/Grid");
+                        } else {
+                            dhtmlx.alert(t.ErroMsg);
+                        }
+
+                    })
+                }
+            }
+        });
+
+    }
+
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = newWin = editWin = dictWin = editdictWin = null;
+        }
+    }
+</script>
+

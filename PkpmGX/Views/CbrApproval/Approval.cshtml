@@ -1,0 +1,214 @@
+﻿@model PkpmGX.Models.CBRUnitApprovalUIModel
+
+@{
+    ViewBag.Title = "Approval";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="header_cq" style="height:10px">
+</div>
+<div class="layui-container">
+    <div class="layui-row" id="Approval-tableContainer">
+        <form class="layui-form" action="" lay-filter="Approval-form">
+            <div class="layui-card">
+                <div class="layui-card-header">审批</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">自治区住房和城乡建设厅审批意见</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ThreeYJ" id="ThreeYJ" placeholder="" autocomplete="off" class="layui-input">
+                                <input type="text" name="id" id="id" value="@Model.id" autocomplete="off" class="layui-hide">
+                                <input type="text" name="pid" id="pid" value="@Model.pid" autocomplete="off" class="layui-hide">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">负责人签字</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ThreeFZr" id="ThreeFZr" value="@Model.ThreeFZr"  placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">资质证书编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ThreeZZZSBH" id="ThreeZZZSBH" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">有效开始日期 </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ThreeYXQBegin" id="ThreeYXQBegin"  placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <label class="layui-form-label">有效结束日期</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ThreeYXQEnd" id="ThreeYXQEnd"  placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <label class="layui-form-label">不通过原因</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="outstaticinfo" id="outstaticinfo" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-input-block">
+                                <center>
+                                    <button class="layui-btn" lay-submit lay-filter="Approval-save">通过</button>
+                                    <button class="layui-btn" lay-submit lay-filter="NoApproval-save">不通过</button>
+                                </center>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            laydate = layui.laydate,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+        form.on('submit(Approval-save)', function (data) {
+
+            if (data.field.ThreeYJ == "") {
+                layer.msg('请填写自治区住房和城乡建设厅审批意见');
+                return false;
+            }
+            if (data.field.ThreeFZr == "") {
+                layer.msg('请填写负责人');
+                return false;
+            }
+            if (data.field.ThreeZZZSBH == "") {
+                layer.msg('请填写资质证书编号');
+                return false;
+            }
+            if (data.field.ThreeYXQBegin == "") {
+                layer.msg('请选择有效开始日期');
+                return false;
+            }
+            if (data.field.ThreeYXQEnd == "") {
+                layer.msg('请选择有效结束日期');
+                return false;
+            }
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/CbrApproval/Approval",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('保存成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/CbrApproval/Approval?id" + @Model.id + "&pid=" + @Model.pid);
+                            },
+
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('保存失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+
+        });
+
+        form.on('submit(NoApproval-save)', function (data) {
+
+            if (data.field.outstaticinfo == "") {
+                layer.msg('请填写不通过原因');
+                return false;
+            }
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/CbrApproval/NoApproval",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('保存成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/CbrApproval/Approval?id" + @Model.id + "&pid=" + @Model.pid);
+                            },
+
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('保存失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+
+        });
+
+        laydate.render({
+            elem: '#ThreeYXQBegin'
+        });
+        laydate.render({
+            elem: '#ThreeYXQEnd'
+        });
+
+
+    });
+
+
+
+
+</script>
+

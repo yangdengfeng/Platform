@@ -1,0 +1,341 @@
+﻿@model Pkpm.Entity.Models.CheckEquipViewModels
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<link href="~/Static/layuiadmin/layui/font/dtreefont.css" rel="stylesheet" />
+<link href="~/Static/layuiadmin/layui/css/dtree.css" rel="stylesheet" />
+<div class="layui-container">
+    <div class="layui-row" id="QrCodeData-dateils-tableContaniner">
+        <form class="layui-form" action="" lay-filter="CheckEquip-details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">检测机构</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <input type="text" name="checkcerfnumpath" id="checkcerfnumpath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="repaircerfnumpath" id="repaircerfnumpath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="id" placeholder="" autocomplete="off" class="layui-hide">
+                        <div class="layui-form-label">检测机构名称<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <select name="Customid" lay-verify="required" disabled>
+                                @{
+                                    foreach (var item in Model.CheckInsts)
+                                    {
+                                        if (item.Key == Model.Equip.customid)
+                                        {
+                                            <option value="@item.Key" selected>@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">设备基本信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备名称<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="EquName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备型号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equtype" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">测量范围</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="testrange" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备规格<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equspec" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备编号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equnum" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">不确定度</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="uncertainty" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">准确度等级</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="degree" placeholder="" autocomplete="off" class="layui-input">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">仪器资质类别</div>
+                <ul id="dTree" class="dtree" data-id="0"></ul>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">检定/校准信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准机构</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkunit" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备检定/校准证书号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkcerfnum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准有效日期</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkdate" id="checkdate" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">其它信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="150">
+                                    <col>
+                                    <col width="150">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>设备检定/校准证书</td>
+                                        <td id="IsCheckcerfNumPath">@Model.IsCheckcerfNumPath</td>
+                                        <td>
+                                            <a href="javascript:void(0);" onclick="fileGrid_Edit(0)" id="CheckcerfNumPathStatus">
+                                                @{
+                                                    if (Model.IsCheckcerfNumPath == "未上传")
+                                                    {
+                                                        <text>添加</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>查看</text>
+                                                    }
+                                                }
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @*<tr><td>设备校准证书</td><td>@Model.IsRepaircerfNumPath</td><td><a href="javascript:void(0);" onclick="fileGrid_Edit(1)">查看</a></td></tr>*@
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md5">
+                            <button class="layui-btn" lay-submit lay-filter="checkEquip-Edit-save">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        eleTree: 'dtree'
+    });
+
+
+
+    layui.use(["form", "element", "laydate", "dtree", "layer", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            dtree = layui.dtree,
+            router = layui.router();
+
+        var DemoTree = dtree.render({
+            elem: '#dTree',
+            url: "/CheckEquip/BuildDTressData?equipId=@Model.Equip.id",
+            type: "all",
+            initLevel: 1,
+            checkbar: true,
+            skin: "layui",  // layui主题风格
+            checkbarType: "no-all",
+        });
+      
+
+      
+        form.val("CheckEquip-details-form", {
+            "id": "@Model.Equip.id",
+            "Customid": "@(Model.Equip.customid)",
+            "equclass": "@Model.Equip.equclass",
+            "degree": "@Model.Equip.degree",
+            "testrange": "@Model.Equip.testrange",
+            "EquName": "@Model.Equip.EquName",
+            "equnum": "@Model.Equip.equnum",
+            "uncertainty": "@Model.Equip.uncertainty",
+            "equspec": "@Model.Equip.equspec",
+            "equtype": "@Model.Equip.equtype",
+            "checkunit": "@Model.Equip.checkunit",
+            "checkcerfnum": "@Model.Equip.checkcerfnum",
+            "repairunit": "@Model.Equip.repairunit",
+            "repaircerfnum": "@Model.Equip.repaircerfnum",
+            "checkdate": "@(Model.Equip.checkstartdate.HasValue?Model.Equip.checkstartdate.Value.ToString("yyyy-MM-dd"):"") - @(Model.Equip.checkenddate.HasValue?Model.Equip.checkenddate.Value.ToString("yyyy-MM-dd"):"")",
+            "selfcheckitem": "@Model.Equip.selfcheckitem",
+            "selfcheckstandardname": "@Model.Equip.selfcheckstandardname",
+            "selfchecknum": "@Model.Equip.selfchecknum",
+            "selfrepairitem": "@Model.Equip.selfrepairnum",
+            "selfrepairstandardname": "@Model.Equip.selfrepairstandardname",
+            "selfrepairnum": "@Model.Equip.selfrepairnum",
+            "isautoacs": "@Model.Equip.isautoacs",
+            "autoacsprovider": "@Model.Equip.autoacsprovider",
+            "explain": "@Model.Equip.explain",
+            "repaircerfnumpath": "@Model.Equip.repaircerfnumpath",
+            "checkcerfnumpath": "@Model.Equip.checkcerfnumpath"
+        });
+
+        laydate.render({
+            elem: '#checkdate'
+            , range: true
+        });
+        laydate.render({
+            elem: '#repairedate'
+           , range: true
+        });
+
+
+        form.on('submit(checkEquip-Edit-save)', function (data) {
+            var dataField = data.field;
+            var params = dtree.getCheckbarNodesParam("dTree");
+            var equclassId = '';
+            $.each(params, function (index, value) {
+                equclassId += value.nodeId + ',';
+            })
+            dataField["equclassId"] = equclassId;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: dataField,
+                url: "/CheckEquip/Edit",
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('设备编辑成功', {
+                            time: 0,
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/CheckEquip/Edit/" + "@Model.Equip.id.ToString()");
+                            },
+                            icon: 1
+                        });
+                    } else {
+                        layer.msg('设备编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        });
+
+    });
+</script>
+
+<script>
+    function fileGrid_Edit(file) {
+        var windowText = "";
+        var fileUrl = "";
+        if (file == 0) {
+            //改成了只有一个附件信息，如果checkcerfnumpath为空，则用repaircerfnumpath
+            fileUrl = $('#checkcerfnumpath').val();
+            if (fileUrl == '') {
+                fileUrl = $('#repaircerfnumpath').val();
+            }
+            windowText = "设备检定/校准证书附件编辑";
+        }
+
+        var paths = fileUrl.split('|');
+
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            title: windowText,
+            content: "/CheckEquip/EditAttachFile?filePath=" + encodeURIComponent(fileUrl) + "&name=" + windowText.split("编辑")[0],
+            cancel: function (index, layero) {
+
+                if ($('#filePath').val()) {
+                    if (file == 0) {
+                        $('#checkcerfnumpath').val($('#filePath').val());
+                        $('#IsCheckcerfNumPath').text("已上传");
+                        $('#CheckcerfNumPathStatus').text("查看");
+                    }
+                }
+                else {
+                    $('#IsCheckcerfNumPath').text("未上传");
+                    $('#CheckcerfNumPathStatus').text("添加");
+                }
+            }
+        });
+    }
+
+
+
+    function file_Details() {
+
+    }
+
+    function file_Delete() {
+        $(this).parent().parent().remove();
+    }
+
+
+</script>
+

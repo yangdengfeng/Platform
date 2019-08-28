@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div id="form_container" style="width:auto;height:100%;"></div>
+<div id="gridbox" style="position:fixed; top:60px; left: 0; right: 0; bottom: 43px"></div>
+
+<script type="text/javascript">
+    var myForm, myTabbar, mygrid, gridQString;
+
+    function doOnLoad() {
+       var formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 120, labelWidth: 120 },
+           { type: "input", label: "用户名称", name: "LogUserName" },
+            { type: "newcolumn" },
+            { type: "input", label: "日志事件", name: "LogType" },
+            { type: "newcolumn" },
+            {
+                type: "block", width: 420, list: [
+                  { type: "calendar", label: "日志时间", name: "LogStartDt", value: '@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")', dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 100 },
+                   { type: "newcolumn" },
+                   { type: "calendar", label: "至", name: "LogEndDt", value: '@DateTime.Now.ToString("yyyy-MM-dd")', dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 40 },
+                ]
+            },
+            { type: "newcolumn" },
+            { type: "button", name: 'Search', value: "查询", offsetLeft: 20 }
+
+       ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            gridQString = '/SysLog/Search?' + getQueryStr();
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString, doOnGridLoaded);
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        gridQString = '/SysLog/Search?' + getQueryStr();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,操作账号,ip地址,操作事件,事件类型,操作时间");//the headers of columns
+        mygrid.setInitWidths("40,150,100,*,100,200");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+</script>
+

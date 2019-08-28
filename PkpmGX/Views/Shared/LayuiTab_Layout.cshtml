@@ -1,0 +1,36 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="~/static/layuiadmin/layui/css/layui.css" rel="stylesheet" media="all" />
+    <link rel="stylesheet" href="~/static/layuiadmin/layui/icon/icon.css" media="all">
+    <link rel="stylesheet" href="~/static/layuiadmin/style/admin.css" media="all">
+    <script type="text/javascript" src="~/Scripts/jquery-1.10.2.js"></script>
+    <title>我的桌面</title>
+
+</head>
+<body>
+    <script src="~/Static/layuiadmin/layui/layui.js">
+        function Hui_admin_tab_raw(href, text) {
+            layui.index.openTabsPage(href, text);
+        }
+
+        function Hui_admin_close(id) {
+            layui.admin.closeThisTabs();
+        }//关闭当前窗口，不然会导致新增能够新增多次等问题
+
+    </script>
+    @RenderBody()
+
+</body>
+</html>

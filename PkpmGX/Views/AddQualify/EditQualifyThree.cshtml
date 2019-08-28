@@ -1,0 +1,497 @@
+﻿@model PkpmGX.Models.EditQualifyThreeVeiwModel
+@{
+    ViewBag.Title = "EditQualifyThree";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="ApplyQualify-EditQualifyThree-Container">
+        <form class="layui-form" action="" lay-filter="ApplyQualify-EditQualifyThree-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 法定代表人基本情况 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <input type="text" name="photopath" value="@Model.photopath" id="photopath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="xlpath" value="@Model.xlpath" id="xlpath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="zcpath" value="@Model.zcpath" id="zcpath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="postNumpath" value="@Model.postNumpath" id="postNumpath" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="pid" value="@Model.pid" id="pid" placeholder="" autocomplete="off" class="layui-hide">
+                            <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                            <div class="layui-form-label">姓名</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="@Model.name" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">性别</div>
+                            <div class="layui-input-block">
+                                <select name="sex" lay-search="">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.Sex)
+                                        {
+                                            if (Model.sex == null)
+                                            {
+                                                Model.sex = "";
+                                            }
+                                            if (Model.sex.Contains(@item.Date))
+                                            {
+                                                <option value="@item.Date" selected>@item.Date</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Date">@item.Date</option>
+                                            }
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">出生年月</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="time" id="time" value="@(Model.time.HasValue?Model.time.Value.ToString("yyyy-MM-dd"):string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职务</div>
+                            <div class="layui-input-block">
+                                <select name="zw" xm-select="zw" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.PersonnelStaff)
+                                        {
+                                            if (Model.zw == null)
+                                            {
+                                                Model.zw = "";
+                                            }
+                                            if (Model.zw.Contains(@item.Name))
+                                            {
+                                                <option value="@item.Name" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职称</div>
+                            <div class="layui-input-block">
+                                <select name="zc" lay-verify="required">
+                                    @{
+                                        foreach (var item in Model.CompayTypeList["personnelTitles"])
+                                        {
+                                            if (item.Name == Model.zc)
+                                            {
+                                                <option value="@item.Name" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">学历</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="xl" value="@Model.xl" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">办公电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="bgdh" value="@Model.bgdh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">移动电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yddh" value="@Model.yddh" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测工作年限</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jcgzlx" value="@Model.jcgzlx" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">何时/何校/何专业毕业</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="hshxhzy" value="@Model.hshxhzy" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">岗位证书编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="postNum" value="@Model.postNum" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">工作简历</div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        工作简历
+                        <a style='color:#5FB878' href="javascript:void(0);" id="addFRWorkExperience">[增加]</a>
+                    </label>
+                    <div class="layui-col-md10">
+                        <table class="layui-table" lay-size="sm" id="frWorkExperience-table">
+                            <colgroup>
+                                <col width="250">
+                                <col>
+                                <col width="100">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>由何年何月 至 何年何月</th>
+                                    <th>在何单位、从事何工作、任何职、受过何种奖励或处分</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    if (Model.Gzjl != null)
+                                    {
+                                        foreach (var item in Model.Gzjl)
+                                        {
+                                            <tr>
+                                                <td data-frwork="WorkExperienceTime">@item.Date</td>
+                                                <td data-frwork="WorkExperienceContent">@item.Type</td>
+                                                <td>
+                                                    <button class="layui-btn  frWorkExperience-table-table-btnDel">删除</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space30">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.File)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td>@item.Name</td>
+                                                <td class="state">@item.State</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick=MemberInformation("@item.Id","@item.Name","@item.Modify","@item.Type")>
+                                                        @{
+                                                            if (item.State == "未上传")
+                                                            {
+                                                                <text>添加</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <text>查看</text>
+                                                            }
+                                                        }
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit lay-filter="EditQualifyThree-Edit-save">保存</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+
+    });
+    $('#frWorkExperience-table').on('click', '.frWorkExperience-table-table-btnDel', function () {
+        $(this).parent().parent().remove();
+    });
+
+    $('#addFRWorkExperience').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '工作简历',
+            content: '/ApplyQualify/addFRWorkExperience'
+        });
+    });
+
+    layui.use(["form", "laydate","element", "layer","upload", "table", "view"],
+    function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            upload = layui.upload,
+            laydate = layui.laydate,
+            view = layui.view,
+            table = layui.table,
+            router = layui.router();
+
+            laydate.render({
+                elem: "#time"
+            });
+
+
+        form.on('submit(EditQualifyThree-Edit-save)', function (data) {
+            var dataField = data.field;
+            var Gzjl = '';
+            var Gzjls = [];
+            $.each($('#frWorkExperience-table tr'), function (i) {
+                var onepeo = {};
+                $(this).find('td').each(function (i) {
+                    $td = $(this);
+                    onepeo[$td.attr("data-frwork")] = $td.text();
+                    if (i == 2) {
+                        Gzjls.push(onepeo);
+                        onepeo = {};
+                    }
+                })
+            });
+            dataField["gzjls"] = Gzjls;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: dataField,
+                url: "/ContinuingQualify/EditQualifyThreee/",
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('法定代表人基本情况编辑成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/ContinuingQualify/EditQualifyThree/" + "@Model.pid");
+                            },
+
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('法定代表人基本情况编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        });
+
+        var uploadFRZCImg = upload.render({
+            elem: "#uploadFRZCImg"
+                , url: "/ApplyQualify/attachUpload"
+                , done: function (res) {
+                    //console.log(res);
+                    //如果上传失败
+                    if (res.state > 0) {
+                        $("#zcpath").val(res.name);
+                        return layer.msg('扫描件或照片上传成功');
+                    } else {
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                }
+                , error: function () {
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function () {
+                        uploadInst.upload();
+                    });
+                }
+        });
+        $("#detailFRZCImg").on("click", function () {
+            var imagePath = $("#zcpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+        var uploadFRXLImg = upload.render({
+            elem: "#uploadFRXLImg"
+               , url: "/ApplyQualify/attachUpload"
+               , done: function (res) {
+                   //console.log(res);
+                   //如果上传失败
+                   if (res.state > 0) {
+                       $("#xlpath").val(res.name);
+                       return layer.msg('扫描件或照片上传成功');
+                   } else {
+                       return layer.msg('上传失败');
+                   }
+                   //上传成功
+               }
+               , error: function () {
+                   //演示失败状态，并实现重传
+                   var demoText = $('#demoText');
+                   demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                   demoText.find('.demo-reload').on('click', function () {
+                       uploadInst.upload();
+                   });
+               }
+        });
+        $("#detailFRXLImg").on("click", function () {
+            var imagePath = $("#xlpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+        var uploadFRphotoImg = upload.render({
+            elem: "#uploadFRphotoImg"
+            , url: "/ApplyQualify/attachUpload"
+            , done: function (res) {
+                //console.log(res);
+                //如果上传失败
+                if (res.state > 0) {
+                    $("#photopath").val(res.name);
+                    return layer.msg('扫描件或照片上传成功');
+                } else {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        $("#detailFREducationImg").on("click", function () {
+            var imagePath = $("#photopath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+
+    });
+    function MemberInformation(id, name, modify, type) {
+        var path = $('#' + type).val();
+        $('#filePath').val('');
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name,
+            content: '/ApplyQualify/EditAttachFile?id=' + id + '&path=' + path + "&IsFile=" + modify,
+            cancel: function (index, layero) {
+                var filePath = $('#filePath').val();
+                type = type + '';
+                if (filePath) {
+                    if (type == "zcpath") {
+                        if (filePath == '|') {
+                            $('#zcpath').val('');
+                        } else {
+                            $('#zcpath').val(filePath);
+                        }
+                    } else if (type == "xlpath") {
+                        if (filePath == '|') {
+                            $('#xlpath').val('');
+                        } else {
+                            $('#xlpath').val(filePath);
+                        }
+                    } else if (type == "photopath") {
+                        if (filePath == '|') {
+                            $('#photopath').val('');
+                        } else {
+                            $('#photopath').val(filePath);
+                        }
+                    } else if (type == "postNumpath") {
+                        if (filePath == '|') {
+                            $('#postNumpath').val('');
+                        } else {
+                            $('#postNumpath').val(filePath);
+                        }
+                    }
+                }
+            }
+        });
+    };
+</script>

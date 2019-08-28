@@ -1,0 +1,214 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div id="form_container" style="width:100%;height:170px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:170px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 250, labelWidth: 120 },
+           { type: "combo", label: "检测机构名称", name: "CheckUnitName" },
+             { type: "newcolumn" },
+              {
+                  type: "block", width: 340, list: [
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 150 }
+                  ]
+              }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/CbrApproval/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        //myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        //myToolbar.setIconset("awesome");
+        //myToolbar.loadStruct("/DistributeExpert/ToolBar");
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        mygrid.setHeader("&nbsp,序号,单位名称,专家1/建设工程质量检测资质机构审核表,专家1/专项检测备案审核表,专家2/建设工程质量检测资质机构审核表,专家2/专项检测备案审核表,受理人,承办人,状态,&nbsp,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,40,250,290,215,290,215,100,100,120,75,60");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,right,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,layuijslink,layuijslink,layuijslink,layuijslink,ro,ro,ro,layuijslink,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+
+        var checkInstCombo = myForm.getCombo("CheckUnitName");
+        checkInstCombo.enableFilteringMode('between');
+        checkInstCombo.load("/CbrApproval/InstCombo");
+
+        setComboCustomFilter(checkInstCombo);
+
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/CbrApproval/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+
+    function DistributeExpert(id) {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "分配专家",
+            content: '/CbrApproval/Distribute/' + id
+        });
+    }
+
+    function FillIn(id) {
+        window.parent.Hui_admin_tab_raw("/CbrApproval/FillIn?id=" + id, "初审表");
+    }
+
+    function Detail(id) {
+        window.parent.Hui_admin_tab_raw("/CbrApproval/Detail?id=" + id, "初审表");
+    }
+
+    function Approval(id, pid) {
+        window.parent.Hui_admin_tab_raw("/CbrApproval/Approval?id=" + id + "&pid=" + pid, "审批");
+    }
+
+    function DetailUnitBuildingQualify(id, pid) {
+        window.parent.Hui_admin_tab_raw("/ExpertApproval/DetailUnitBuildingQualify?id=" + id + "&pid=" + pid, "建设工程质量检测机构资质审核表-查看");
+    }
+
+    function DetailSpecialQualify(id, pid) {
+        window.parent.Hui_admin_tab_raw("/ExpertApproval/DetailSpecialQualify?id=" + id + "&pid=" + pid, "专项检测备案审核表-查看");
+    }
+
+    function Reason(outstaticinfo) {
+        layer.alert(outstaticinfo);
+    }
+
+
+    function showItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='selectItemDetail();'>" + value + "</a></div>";
+    }
+
+    function selectItemDetail() {
+
+        clearItemDetail();
+        itemWin = dhxWins.createWindow("itemWin", 20, 30, 580, 480);
+        itemWin.setModal(true);
+        itemWin.center();
+        itemWin.setText('检测资质类别');
+
+        itemForm = itemWin.attachForm();
+        itemForm.load('/ApplyQualify/UnitQualificaiton');
+
+        itemForm.attachEvent("onChange", function (cname, cvalue, isCheck) {
+            //your code here
+            //console.log(cvalue);
+            if (isCheck) {
+                selectedItem.push(cvalue);
+            } else {
+                selectedItem = jQuery.grep(selectedItem, function (value) {
+                    return value != cvalue;
+                });
+            }
+
+            myForm.setItemValue('QuantityCategory', selectedItem.join('、'));
+        });
+    }
+
+    function clearItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='clearItemDetail();'>" + value + "</a></div>";
+    }
+
+    function clearItemDetail() {
+        selectedItem = [];
+        myForm.setItemValue('QuantityCategory', '');
+    }
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+
+    function doOnUnload() {
+
+    }
+
+
+
+
+
+
+</script>
+
+
+

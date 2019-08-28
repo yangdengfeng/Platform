@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row cl ml-5">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="mt-10">
+        <div id="gridbox" style="position:fixed;width:100%; top:60px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+
+<script type="text/javascript">
+    var mygrid, myForm, dhxWins, applyWin, applyForm, auditWin, auditForm;
+    var gridQString = '';
+    function doOnLoad() {
+
+
+        formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+             { type: "combo", label: "检测机构名称", name: "UnitName" },
+              { type: "newcolumn" },
+             { type: "calendar", label: "开始日期", name: "UpdataStartDate", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")' },
+              { type: "newcolumn" },
+             { type: "calendar", label: "结束日期", name: "UpdataEndDate", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+              { type: "newcolumn" },
+              {
+                  type: "block", width: 340, list: [
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 50 }
+                  ]
+              }
+        ]
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/ZJPileUpdateInfo/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        myTabbar.enableAutoReSize();
+
+
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,记录编号,修改类型,原始值,修改值,修改时间");//设置列的头文本
+        mygrid.setInitWidths("40,*,200,200,200,200,250");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/ZJPileUpdateInfo/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+
+
+        var checkInstCombo = myForm.getCombo("UnitName");
+        checkInstCombo.enableFilteringMode('between');
+        checkInstCombo.load("/ZJPileUpdateInfo/InstCombo");
+    }
+
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+</script>
+

@@ -1,0 +1,83 @@
+﻿@model PkpmGX.Models.ChangeQualifyUIModel
+
+@{
+    ViewBag.Title = "Print";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+
+<html>
+    <body>
+        <form class="layui-form">
+            <div class="layui-card">
+                <table class="layui-table" lay-even style="margin-left:5px;margin-right:5px; margin-top:5px">
+                    <tr>
+                        <td style="text-align:center;" colspan="3"><h1><b>检测机构资质审批通知单</b></h1></td>
+                    </tr>
+                    <tr><td colspan="3"><h3><span style="color:green;">@Model.unitname</span> 于 <span style="color:green;">@Model.EndTime</span> 通过业务审批,现生成此通知单。</h3></td></tr>
+                    <tr>
+                        <td width="20%"><h3>变更项</h3></td>
+                        <td width="40%"><h3>变更前</h3></td>
+                        <td><h3>变更后</h3></td>
+                    </tr>
+                    <tr>
+                        <td><h3>@Model.bgnr</h3></td>
+                        <td><h3>@Model.bgq</h3></td>
+                        <td><h3>@Model.bgh</h3></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><img src="@Model.ImageUrl" /></td>
+                        <td style="text-align:right;vertical-align:bottom;"><h3>广西壮族自治区住房和城乡建设厅</h3></td>
+                    </tr>
+                    <tr></tr>
+                    <tr style="border-bottom:1px;height:10px">
+                        <td colspan="2"> </td>
+                        <td style="text-align:right"><h3>@Model.time.Value.ToString("yyyy-MM-dd HH:mm:ss")</h3></td>
+                    </tr>
+                </table>
+                <span style="font-size:20px;text-align:center;">你单位申请的建设工程质量检测机构资质材料齐全，已审批通过，请于公告后打印并带上此通知单、单位介绍信、本人身份证到南宁市怡宾路6号自治区政务中心领取证书。 </span>
+            </div>
+        </form>
+    </body>
+    </html>
+
+
+
+
+
+
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            upload = layui.upload,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+
+
+
+
+    });
+
+
+
+
+</script>
+

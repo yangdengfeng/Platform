@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+<div id="form_container" style="width:100%;height:130px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+@*<div id="gridbox" style="position:fixed; top:130px; left: 0; right: 0; bottom: 43px"></div>*@
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+<div class="row mt-10">
+    <div id="gridbox" style="width:100%;overflow:auto"></div>
+</div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, itemWin, selectedItem;
+    dhxWins = new dhtmlXWindows();
+    dhxWins.attachViewportTo("gridbox");
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+            { type: "combo", label: "单位名称", name: "customId" },
+            { type: "input", label: "检测人员", name: "testpeople" },
+            { type: "input", label: "实验类别", name: "testtype" },
+            { type: "newcolumn" },
+            { type: "input", label: "工程名称", name: "projectname" },
+            { type: "input", label: "检测设备", name: "testequip" },
+            { type: "newcolumn" },
+            { type: "combo", label: "所在城市", name: "areainfo" },
+            {
+                type: "combo", label: "桩型", name: "piletype", options: [
+                    { value: "", text: "全部" },
+                    { value: "钻孔灌注桩", text: "钻孔灌注桩" },
+                    { value: "冲孔灌注桩", text: "冲孔灌注桩" },
+                    { value: "人工挖孔桩", text: "人工挖孔桩" },
+                    { value: "预应力混凝土管桩", text: "预应力混凝土管桩" },
+                    { value: "沉管灌注桩", text: "沉管灌注桩" },
+                    { value: "水泥土搅拌桩", text: "水泥土搅拌桩" },
+                    { value: "旋喷桩", text: "旋喷桩" },
+                    { value: "水泥粉煤灰碎石桩", text: "水泥粉煤灰碎石桩" },
+                    { value: "混凝土桩", text: "混凝土桩" },
+                ]
+            },
+            { type: "block", width: 340, list: [{ type: "button", name: 'Search', value: "查询", offsetLeft: 150 }] },
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#gridbox').css('height', layoutHeight + 'px');
+
+        var CheckUnitNameCombo = myForm.getCombo("customId");
+        CheckUnitNameCombo.enableFilteringMode('between');
+        CheckUnitNameCombo.load("/ZJSceneCheck/InstCombo");//InstSTCombo
+
+
+
+        var areaInfoCombo = myForm.getCombo("areainfo");
+        areaInfoCombo.enableFilteringMode('between');
+        areaInfoCombo.load("/ZJSceneCheck/AreaCombo");
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/ZJSceneCheck/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,工程名称,所在区域,工程地址,检测人员,实验类别,桩型,检测数量");//设置列的头文本
+        mygrid.setInitWidths("40,*,300,80,160,100,150,150,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/ZJSceneCheck/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+    }
+
+    function DetailsQrInfo(qrinfo) {
+        window.parent.Hui_admin_tab_raw("/ZJSceneCheck/Details?qrinfo=" + qrinfo, "二维码查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function details(checknum, customid) {
+        detailsReportWin = dhxWins.createWindow("detailsReportWin", 50, 50, 1200, 600);
+        detailsReportWin.setModal(true);
+        detailsReportWin.center();
+        detailsReportWin.setText("检测详情");
+        var gridTabber = detailsReportWin.attachTabbar({
+            tabs: [
+                { id: "gridDetails", text: "查询结果", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDetails").attachStatusBar({
+            text: "<div id='recinfo1'></div><div id='paging1'></div>",
+        });
+
+        dataGrid = gridTabber.tabs("gridDetails").attachGrid();
+        dataGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        dataGrid.setHeader("工程名称,检测类别,桩号,开始采集时间,开始上传时间,上报设备编号,检测设备编号,GPS定位,修改记录,图片上传情况,查看数据");//the headers of columns
+        dataGrid.setInitWidths("*,80,80,120,120,120,120,80,80,80,80");          //the widths of columns
+        dataGrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        dataGrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,jslink");                //the types of columns
+        dataGrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        dataGrid.init();      //finishes initialization and renders the grid on the page
+        dataGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        dataGrid.setPagingSkin("bricks");
+        customGrid(dataGrid);
+
+        gridTabber.tabs("gridDetails").progressOn();
+        var dataGridSearch = '/ZJSceneCheck/GetPileDataList?checknum=' + checknum + '&customid=' + customid;
+        dataGrid.load(dataGridSearch, function () {
+            gridTabber.tabs("gridDetails").progressOff();
+        });
+    }
+
+    function detailsUpload(basicInfoId, checknum,pileNo) {
+        window.parent.Hui_admin_tab_raw("/ZJSceneCheck/Details?id=" + basicInfoId + '&checkNum=' + checknum + '&pileNo=' + pileNo, "静载数据详情");
+    }
+</script>
+

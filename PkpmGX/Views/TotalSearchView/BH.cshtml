@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "BH";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* 隐藏多余的tabbar */
+    .dhxtabbar_tabs.dhxtabbar_tabs_top {
+        display: none;
+    }
+
+    /* 使网格上移，占据tabbar留下的空白 */
+    .dhx_cell_tabbar {
+        top: 0;
+    }
+</style>
+
+<div id="form_container" style="width:100%;height:120px;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:120px; left: 0; right: 0; bottom: 0"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, dhxWins, applyWin, applyForm, auditWin, auditForm, areaCombo, checkInstCombo;
+    var gridQString = '';
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+            { type: "container", label: "地区选择", name: "Area" },
+            { type: "combo", label: "机构", name: "CheckInst" },
+            { type: "input", label: "工程名称", name: "ProjectName" },
+            { type: "newcolumn" },
+            { type: "combo", label: "检测项目", name: "ItemName" },
+            {
+                type: "combo", label: "是否闭合", name: "IsBH", options: [
+                    { text: "全部", value: "", selected: true },
+                    { text: "未闭合", value: "0" },
+                    { text: "取样员已闭合", value: "1" },
+                    { text: "见证员已闭合", value: "2" },
+                ]
+            },
+
+            { type: "newcolumn" },
+            {
+                type: "block", width: 465, list: [
+                    { type: "calendar", label: "报告日期", name: "StartDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 100, value: '@DateTime.Today.AddMonths(-3).ToString("yyyy-MM-dd")' },
+                    { type: "newcolumn" },
+                    { type: "calendar", label: "至", name: "EndDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 17, value: '@DateTime.Today.ToString("yyyy-MM-dd")'  },
+                ]
+            },
+            { type: "input", label: "报告/样品/委托编号", name: "EntrustNo", labelWidth: 150, offsetLeft: 30 },
+            { type: "button", name: 'Search', value: "查询", offsetLeft: 100, offsetTop: 10 },
+
+
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                gridQString = '/TotalSearchView/SearchBH?' + getQueryStr();
+                mygrid.clearAll();
+                mygrid.load(gridQString);
+            }
+        });
+
+        //var unitCategoryCombo = myForm.getCombo("CustomType");
+        checkInstCombo = myForm.getCombo("CheckInst");
+
+        checkInstCombo.enableFilteringMode('between');;
+        checkInstCombo.load("/TotalSearchView/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/TotalSearchView/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+            areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+        CheckItemCombo = myForm.getCombo("ItemName");
+        CheckItemCombo.enableFilteringMode('between');
+        CheckItemCombo.load("/TotalSearchView/CheckItemCombo");
+
+        gridQString = '/TotalSearchView/SearchBH?' + getQueryStr();
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+
+        myTabbar.enableAutoReSize();
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        //先创建 grid
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        //设置列的header名称
+        mygrid.setHeader("序号,机构名称,工程名称,工程部位,检测项目,报告编号,二维码,闭合情况,时间,取样处理人,见证处理人");
+        //设置列的宽度
+        mygrid.setInitWidths("30,160,*,250,160,180,100,100,100,100,100");
+        //设置列的左右对其方式
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left");
+        //设置列的类型 ro 为只读，edit,view,del为框架自带的编辑，查看和删除
+        mygrid.setColTypes("ro,ro,ro,ro,ro,layuijslink,layuijslink,layuijslink,ro,ro,ro");
+        //设置列的排序类型
+        mygrid.setColSorting("str,str,str,str,str,str,str,str,str,str,str");
+        //mygrid.enableMultiline(true);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        mygrid.init();
+
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        //最后从服务器加载数据
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+    function ReportDetail(id) {
+        window.open("/TotalSearchView/Details?id=" + id, "检测报告查看");
+    }
+
+    function openQrDetail(qrCodebar) {
+        window.open("http://gxjzqy.jyjzqy.com/orders/qrinfo/QrInfoStatus.aspx?info=" + qrCodebar, "二维码查看");
+    }
+
+    function bhDetail(syskey) {
+        window.open("http://gxjzqy.jyjzqy.com/orders/others/InfoShowPage.aspx?NoCheckSession=Yes&primarykey=" + syskey, "闭合详情查看");
+    }
+
+
+</script>

@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:100%;height:70px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:70px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar;
+    dhxWins = new dhtmlXWindows();
+    dhxWins.attachViewportTo("gridbox");
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+          { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+          { type: "input", label: "单位名称", name: "Name" },
+          { type: "newcolumn" },
+             {
+                 type: "block", width: 340, list: [
+                     { type: "button", name: 'Search', value: "查询", offsetLeft: 150 }
+                 ]
+             },
+
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/SysSoftwareVers/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        //mygrid = new dhtmlXGridObject('gridbox');
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位编号,单位名称,检测软件版本号,获取版本时间,软件到期时间,今天上传情况,上传软件最后运行时间,上传软件版本号,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,100,*,100,150,150,100,150,150,150");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,edit");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        gridQString = '/SysSoftwareVers/Search?' + getQueryStr();
+        mygrid.load(gridQString, doOnGridLoaded);
+        mygrid.enablePaging(true, 20, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/SysSoftwareVers/Edit?id=" + rowId, "软件版本编辑");
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+</script>
+
+

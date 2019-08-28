@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "AddPumpSystem";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<div class="layui-container">
+    <div class="layui-row" id="STCheckQualify-AddPumpSystem-Container">
+        <form class="layui-form" action="" lay-filter="STCheckQualify-AddPumpSystem-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">型号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="type" id="type" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">设备生产厂家<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="producefactory" id="producefactory" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">生产率m<sup>3</sup>/h<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="spec" id="spec" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">数量<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="num" id="num" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" id="AddPumpSystem">新增</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#AddPumpSystem').on('click', function () {
+        var index = parent.layer.getFrameIndex(window.name);
+        var type = $('#type').val();
+        var producefactory = $('#producefactory').val();
+        var spec = $('#spec').val();
+        var num = $('#num').val();
+
+        if (type == '') {
+            parent.layer.msg('请填写型号');
+            return false;
+        }
+        if (num == '') {
+            parent.layer.msg('请填写数量');
+            return false;
+        }
+        if (producefactory == '') {
+            parent.layer.msg('请填写生产厂家');
+            return false;
+        }
+        if (spec == '') {
+            parent.layer.msg('生产效率');
+            return false;
+        }
+        var str = '<tr><td  data-PumpSystem="Type">' + type + '</td><td data-PumpSystem="ProduceFactory">' + producefactory + '</td><td data-PumpSystem="Spec">' + spec + '</td><td data-PumpSystem="Num">' + num + '</td><td>' + '<button class="layui-btn editPumpSystem-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#editPumpSystem-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+ 
+

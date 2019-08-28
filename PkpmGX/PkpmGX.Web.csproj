@@ -1,0 +1,2138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6300D360-51BE-4306-A1E3-C3BC61851834}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PkpmGX</RootNamespace>
+    <AssemblyName>PkpmGX</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspose.Cells, Version=8.3.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Cells.8.3.1\lib\net40\Aspose.Cells.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Aspose.Words, Version=15.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Words.15.1.0\lib\net3.5-client\Aspose.Words.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.5.5.0\lib\net46\Elasticsearch.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.13605.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MiniProfiler, Version=3.2.0.157, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.3.2.0.157\lib\net40\MiniProfiler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MiniProfiler.Mvc, Version=3.0.11.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
+      <HintPath>..\packages\MiniProfiler.MVC4.3.0.11\lib\net40\MiniProfiler.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nest, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.5.5.0\lib\net46\Nest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.3.0\lib\net45\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.WebHost.3.3.0\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="QZWebService.ServiceModel">
+      <HintPath>..\packages\QZWebService.ServiceModel.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Client, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Client.4.5.12\lib\net45\ServiceStack.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.4.5.12\lib\net45\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Interfaces.4.5.12\lib\portable-wp80+sl5+net45+win8+wpa81+monotouch+monoandroid+xamarin.ios10\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.4.5.12\lib\net45\ServiceStack.OrmLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.5.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.12\lib\net45\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.4778.30637, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ThoughtWorks.QRCode.1.1.0\lib\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Architecture\PkpmApplication.cs" />
+    <Compile Include="Architecture\PkpmController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AcsGraphController.cs" />
+    <Compile Include="Controllers\AcsGraphSTController.cs" />
+    <Compile Include="Controllers\AddQualifyController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ApplyQualifyFiveController.cs" />
+    <Compile Include="Controllers\ApplyQualifySixController.cs" />
+    <Compile Include="Controllers\ApplyQualifyController.cs" />
+    <Compile Include="Controllers\ApplyQualifySevenController.cs" />
+    <Compile Include="Controllers\CbrApprovalController.cs" />
+    <Compile Include="Controllers\ChangeQualifyController.cs" />
+    <Compile Include="Controllers\CheckByAreaController.cs" />
+    <Compile Include="Controllers\CheckByQualifyController.cs" />
+    <Compile Include="Controllers\CheckEquipController.cs" />
+    <Compile Include="Controllers\CheckEvalController.cs" />
+    <Compile Include="Controllers\CheckPeopleManagerController.cs" />
+    <Compile Include="Controllers\CheckPeoplePostController.cs" />
+    <Compile Include="Controllers\CheckQualifyController.cs" />
+    <Compile Include="Controllers\CheckStatisController.cs" />
+    <Compile Include="Controllers\CheckStatisDataController.cs" />
+    <Compile Include="Controllers\CheckStatisHNKYController.cs" />
+    <Compile Include="Controllers\CheckStatisInspectController.cs" />
+    <Compile Include="Controllers\CheckStatisReportController.cs" />
+    <Compile Include="Controllers\CheckStatisSJKYController.cs" />
+    <Compile Include="Controllers\CheckStatisUnQuailfyController.cs" />
+    <Compile Include="Controllers\CheckStatisUnQuailfyViewController.cs" />
+    <Compile Include="Controllers\ContinuingQualifyController.cs" />
+    <Compile Include="Controllers\DistributeExpertController.cs" />
+    <Compile Include="Controllers\ExpertApprovalController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InstBaseRecordController.cs" />
+    <Compile Include="Controllers\ItemNameController.cs" />
+    <Compile Include="Controllers\LayuiAdminController.cs" />
+    <Compile Include="Controllers\LiftingEquipmentController.cs" />
+    <Compile Include="Controllers\ReportInfoController.cs" />
+    <Compile Include="Controllers\STCheckEquipController.cs" />
+    <Compile Include="Controllers\STCheckPeopleController.cs" />
+    <Compile Include="Controllers\STCheckQualifyController.cs" />
+    <Compile Include="Controllers\SysCacheController.cs" />
+    <Compile Include="Controllers\SysDictController.cs" />
+    <Compile Include="Controllers\SysInfoController.cs" />
+    <Compile Include="Controllers\SysLogController.cs" />
+    <Compile Include="Controllers\SysMenuController.cs" />
+    <Compile Include="Controllers\SysRoleController.cs" />
+    <Compile Include="Controllers\SysSoftwareVersController.cs" />
+    <Compile Include="Controllers\SysUserController.cs" />
+    <Compile Include="Controllers\TBpItemCheckController.cs" />
+    <Compile Include="Controllers\TotalSearchViewController.cs" />
+    <Compile Include="Controllers\TotalSearchController.cs" />
+    <Compile Include="Controllers\TotalStatisController.cs" />
+    <Compile Include="Controllers\TrainController.cs" />
+    <Compile Include="Controllers\TrainEnrollController.cs" />
+    <Compile Include="Controllers\TrainFeeController.cs" />
+    <Compile Include="Controllers\TrainPrintController.cs" />
+    <Compile Include="Controllers\TrainUserController.cs" />
+    <Compile Include="Controllers\WelcomeController.cs" />
+    <Compile Include="Controllers\ZJCheckController.cs" />
+    <Compile Include="Controllers\ZJHistoryCheckController.cs" />
+    <Compile Include="Controllers\ZJLocaleTestGPSController.cs" />
+    <Compile Include="Controllers\ZJSceneCheckController.cs" />
+    <Compile Include="Controllers\ZJPileUpdateInfoController.cs" />
+    <Compile Include="Controllers\ZNHTYController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AcsGraphViewModel.cs" />
+    <Compile Include="Models\AdminViewModels.cs" />
+    <Compile Include="Models\ApplyQualifyFiveModels.cs" />
+    <Compile Include="Models\ApplyQualifySevenModels.cs" />
+    <Compile Include="Models\ApplyQualifySixModels.cs" />
+    <Compile Include="Models\ChangeQualifyViewModels.cs" />
+    <Compile Include="Models\ApplyQualifyViewModels.cs" />
+    <Compile Include="Models\CheckQualifyViewModels.cs" />
+    <Compile Include="Models\CheckStatisDataViewModels.cs" />
+    <Compile Include="Models\CheckStatisHNKYModels.cs" />
+    <Compile Include="Models\CheckStatisInspectModels.cs" />
+    <Compile Include="Models\CheckStatisSJKYViewModels.cs" />
+    <Compile Include="Models\CheckStatisUnQuailfyViewModels.cs" />
+    <Compile Include="Models\DictViewModels.cs" />
+    <Compile Include="Models\DistributeExpertViewModels.cs" />
+    <Compile Include="Models\FileModels.cs" />
+    <Compile Include="Models\ImageViewModels.cs" />
+    <Compile Include="Models\InstBaseRecordModels.cs" />
+    <Compile Include="Models\LiftingEquipmentViewModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MenuViewModels.cs" />
+    <Compile Include="Models\PrintPostViewModels.cs" />
+    <Compile Include="Models\ReportInfoViewModels.cs" />
+    <Compile Include="Models\RoleViewModels.cs" />
+    <Compile Include="Models\STCheckEquipModels.cs" />
+    <Compile Include="Models\STCheckPeopleModels.cs" />
+    <Compile Include="Models\STTotalSearchModels.cs" />
+    <Compile Include="Models\SysInfoViewModel.cs" />
+    <Compile Include="Models\SysLogViewModels.cs" />
+    <Compile Include="Models\SysSoftwareVersModel.cs" />
+    <Compile Include="Models\SysViewModels.cs" />
+    <Compile Include="Models\TotalSearchModels.cs" />
+    <Compile Include="Models\TotalStatisModels.cs" />
+    <Compile Include="Models\WelcomeViewModels.cs" />
+    <Compile Include="Models\ZJCheckModels.cs" />
+    <Compile Include="Models\ZJHistoryCheckModels.cs" />
+    <Compile Include="Models\ZJSceneCheckModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Dhtmlx\codebase\dhtmlx.css" />
+    <Content Include="Dhtmlx\codebase\dhtmlx.js" />
+    <Content Include="Dhtmlx\codebase\dhtmlx_deprecated.js" />
+    <Content Include="Dhtmlx\codebase\ext\dhxupload.xap" />
+    <Content Include="Dhtmlx\codebase\ext\swfobject.js" />
+    <Content Include="Dhtmlx\codebase\ext\uploader.swf" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\css\font-awesome.css" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\css\font-awesome.min.css" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\font-awesome-license.txt" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\LICENSE-2.0.txt" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\roboto.css" />
+    <Content Include="Dhtmlx\codebase\imgs\close-icon.png" />
+    <Content Include="Dhtmlx\codebase\imgs\close.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxacc_material\dhxacc_btns.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxacc_material\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxacc_web\dhxacc_btns.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxacc_web\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_arrow_left.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_arrow_right.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_clock.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_marker.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_material\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_arrow_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_arrow_left2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_arrow_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_arrow_right2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_clock.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_mark.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcalendar_web\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_material\dhxcarousel_arrow_left.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_material\dhxcarousel_arrow_left_dis.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_material\dhxcarousel_arrow_right.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_material\dhxcarousel_arrow_right_dis.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_material\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcarousel_web\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_material\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_material\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_material\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_web\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_web\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcombo_web\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcp_material\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxcp_web\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_material\dnd_selector.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_material\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_material\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_material\marker.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_web\dnd_selector.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_web\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_web\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxdataview_web\marker.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\align_center.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\align_justify.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\align_left.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\align_right.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\bold.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\buttons.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\clear.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\h1.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\h2.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\h3.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\h4.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\indent_dec.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\indent_inc.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\italic.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\list_bullet.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\list_number.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\script_sub.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\script_super.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\strike.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_material\underline.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\align_center.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\align_justify.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\align_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\align_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\bold.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\buttons.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\clear.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\h1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\h2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\h3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\h4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\indent_dec.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\indent_inc.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\italic.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\list_bullet.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\list_number.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\script_sub.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\script_super.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\strike.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxeditor_web\underline.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_chbxrd.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_image_calendar.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_image_calendar_dis.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_upload_buttons.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_material\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_web\dhxform_chbxrd.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_web\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_web\dhxform_upload_buttons.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxform_web\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\combo_select_dhx_web.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\dyn_.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\dyn_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\dyn_up.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\imageloaderror.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\item_chk0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\item_chk1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\paging_page.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\paging_pages.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\paging_rows.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\radio_chk0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\radio_chk1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\separator.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\sort_asc.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\sort_desc.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\folder.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\leaf.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\line.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\line1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\line2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\line3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\line4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\minus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_material\tree\plus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\combo_select_dhx_web.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\dyn_.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\dyn_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\dyn_up.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\imageloaderror.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\item_chk0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\item_chk1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\paging_page.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\paging_pages.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\paging_rows.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\radio_chk0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\radio_chk1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\separator.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\sort_asc.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\sort_desc.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\folder.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\leaf.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\line.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\line1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\line2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\line3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\line4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\minus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxgrid_web\tree\plus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_material\dhxlayout_cell_btns.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_material\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_material\dhxlayout_sep_hor.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_material\dhxlayout_sep_ver.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_web\dhxlayout_cell_btns.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_web\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_web\dhxlayout_sep_h.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxlayout_web\dhxlayout_sep_v.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_arrow_down.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_arrow_down_dis.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_arrow_up.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_arrow_up_dis.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_chrd.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_material\dhxmenu_subar.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_arrow_up.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_arrow_up_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_chrd.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxmenu_web\dhxmenu_subar.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_material\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_material\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_material\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_material\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_web\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_web\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_web\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxpopup_web\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_material\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_material\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_material\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_web\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_web\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxribbon_web\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_material\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_material\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_material\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_material\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_web\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_web\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_web\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxsidebar_web\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_material\dhxtabbar_arrows.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_material\dhxtabbar_button_close.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_material\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_web\dhxtabbar_arrows.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_web\dhxtabbar_button_close.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtabbar_web\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtoolbar_material\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtoolbar_material\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtoolbar_web\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtoolbar_web\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_file.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\icon_plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_material\loading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_file.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\icon_plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtreeview_web\loading.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\but_cut.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\folderClosed.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\folderOpen.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\leaf.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\lock.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\radio_off.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_material\radio_on.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\blank.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\but_cut.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\folderClosed.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\folderOpen.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\leaf.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line1_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line2_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line3_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\line4_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\lock.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus2_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus3_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus4_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\minus5_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus1.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus2.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus2_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus3.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus3_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus4.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus4_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus5.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\plus5_rtl.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\radio_off.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxtree_web\radio_on.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxvault_web\dhxvault_buttons.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxvault_web\dhxvault_icons.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxvault_web\dhxvault_loader.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxvault_web\dhxvault_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxvault_web\icons_licence.txt" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_material\dhxwins_buttons.png" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_material\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_material\dhxwins_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_web\dhxwins_buttons.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_web\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\dhxwins_web\dhxwins_progress.gif" />
+    <Content Include="Dhtmlx\codebase\imgs\down.png" />
+    <Content Include="Dhtmlx\codebase\imgs\open.png" />
+    <Content Include="Dhtmlx\codebase\imgs\rim-icon.png" />
+    <Content Include="Dhtmlx\codebase\imgs\solid-icon.png" />
+    <Content Include="Dhtmlx\codebase\thirdparty\excanvas\excanvas.js" />
+    <Content Include="Dhtmlx\ext\DhtmlCalendarZh.js" />
+    <Content Include="Dhtmlx\ext\DhtmlxGridCustom.js" />
+    <Content Include="Dhtmlx\ext\excel_exporter.js" />
+    <Content Include="Dhtmlx\ext\itemcode_search.js" />
+    <Content Include="Dhtmlx\icons_web\desktop.png" />
+    <Content Include="Dhtmlx\icons_web\disk_c.png" />
+    <Content Include="Dhtmlx\icons_web\disk_d.png" />
+    <Content Include="Dhtmlx\icons_web\disk_e.png" />
+    <Content Include="Dhtmlx\icons_web\documents.png" />
+    <Content Include="Dhtmlx\icons_web\downloads.png" />
+    <Content Include="Dhtmlx\icons_web\music.png" />
+    <Content Include="Dhtmlx\icons_web\pictures.png" />
+    <Content Include="Dhtmlx\icons_web\recent.png" />
+    <Content Include="Dhtmlx\icons_web\video.png" />
+    <Content Include="Dhtmlx\Ribbon\48\application_cascade.png" />
+    <Content Include="Dhtmlx\Ribbon\48\check.png" />
+    <Content Include="Dhtmlx\Ribbon\48\copy.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\copy_dis.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\cut.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\cut_dis.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\mainpage.png" />
+    <Content Include="Dhtmlx\Ribbon\48\new.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\open.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\open_dis.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\page_find.png" />
+    <Content Include="Dhtmlx\Ribbon\48\paste.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\paste_dis.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\pencil_ruler.png" />
+    <Content Include="Dhtmlx\Ribbon\48\printer.png" />
+    <Content Include="Dhtmlx\Ribbon\48\printer_add.png" />
+    <Content Include="Dhtmlx\Ribbon\48\printer_dis.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\redo.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\sample.png" />
+    <Content Include="Dhtmlx\Ribbon\48\save.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\sysmanger.png" />
+    <Content Include="Dhtmlx\Ribbon\48\tab_go.png" />
+    <Content Include="Dhtmlx\Ribbon\48\undo.gif" />
+    <Content Include="Dhtmlx\Ribbon\48\zoom_selection.png" />
+    <Content Include="Dhtmlx\skins\material\dhtmlx.css" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxacc_material\dhxacc_btns.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxacc_material\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_arrow_left.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_arrow_right.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_clock.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_marker.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcalendar_material\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcarousel_material\dhxcarousel_arrow_left.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcarousel_material\dhxcarousel_arrow_left_dis.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcarousel_material\dhxcarousel_arrow_right.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcarousel_material\dhxcarousel_arrow_right_dis.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcarousel_material\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcombo_material\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcombo_material\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcombo_material\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxcp_material\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxdataview_material\dnd_selector.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxdataview_material\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxdataview_material\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxdataview_material\marker.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\align_center.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\align_justify.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\align_left.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\align_right.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\bold.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\buttons.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\clear.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\h1.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\h2.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\h3.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\h4.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\indent_dec.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\indent_inc.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\italic.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\list_bullet.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\list_number.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\script_sub.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\script_super.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\strike.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxeditor_material\underline.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_chbxrd.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_image_calendar.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_image_calendar_dis.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_upload_buttons.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxform_material\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_left.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_right.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\blank.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\combo_select_dhx_web.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\dyn_.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\dyn_down.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\dyn_up.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\imageloaderror.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\item_chk0.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\item_chk1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\minus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\paging_page.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\paging_pages.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\paging_rows.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\plus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\radio_chk0.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\radio_chk1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\separator.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\sort_asc.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\sort_desc.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\blank.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\folder.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\leaf.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\line.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\line1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\line2.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\line3.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\line4.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus2.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus3.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus4.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\minus5.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus2.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus3.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus4.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxgrid_material\tree\plus5.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxlayout_material\dhxlayout_cell_btns.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxlayout_material\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxlayout_material\dhxlayout_sep_hor.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxlayout_material\dhxlayout_sep_ver.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_arrow_down.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_arrow_down_dis.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_arrow_up.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_arrow_up_dis.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_chrd.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxmenu_material\dhxmenu_subar.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxpopup_material\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxpopup_material\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxpopup_material\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxpopup_material\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxribbon_material\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxribbon_material\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxribbon_material\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxsidebar_material\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxsidebar_material\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxsidebar_material\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxsidebar_material\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtabbar_material\dhxtabbar_arrows.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtabbar_material\dhxtabbar_button_close.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtabbar_material\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtoolbar_material\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtoolbar_material\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_file.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_minus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\icon_plus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtreeview_material\loading.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\blank.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\but_cut.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\folderClosed.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\folderOpen.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\leaf.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\lock.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\minus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\plus.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\radio_off.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxtree_material\radio_on.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxwins_material\dhxwins_buttons.png" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxwins_material\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\skins\material\imgs\dhxwins_material\dhxwins_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\dhtmlx.css" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxacc_skyblue\dhxacc_btns.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxacc_skyblue\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_clock.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_mark.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcalendar_skyblue\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcarousel_skyblue\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcombo_skyblue\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcombo_skyblue\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcombo_skyblue\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcp_skyblue\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxcp_skyblue\dhxcp_icon_save.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxdataview_skyblue\dnd_selector.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxdataview_skyblue\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxdataview_skyblue\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxdataview_skyblue\marker.png" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\align_center.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\align_justify.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\align_left.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\align_right.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\bold.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\buttons.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\clear.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\h1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\h2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\h3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\h4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\indent_dec.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\indent_inc.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\italic.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\list_bullet.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\list_number.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\script_sub.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\script_super.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\strike.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxeditor_skyblue\underline.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxform_skyblue\dhxform_chbxrd.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxform_skyblue\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxform_skyblue\dhxform_upload_buttons.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxform_skyblue\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_left.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_right.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\blank.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\combo_select_dhx_skyblue.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\dyn_.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\dyn_down.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\dyn_up.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\imageloaderror.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\item_chk0.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\item_chk1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\minus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\paging_page.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\paging_pages.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\paging_rows.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\plus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\radio_chk0.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\radio_chk1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\sort_asc.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\sort_desc.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\blank.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\folder.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\leaf.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\line.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\line1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\line2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\line3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\line4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\minus5.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxgrid_skyblue\tree\plus5.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxlayout_skyblue\dhxlayout_cell_btns.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxlayout_skyblue\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxlayout_skyblue\dhxlayout_sep_h.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxlayout_skyblue\dhxlayout_sep_v.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_arrow_up_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_chrd.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxmenu_skyblue\dhxmenu_subar.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxpopup_skyblue\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxpopup_skyblue\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxpopup_skyblue\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxpopup_skyblue\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxribbon_skyblue\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxribbon_skyblue\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxribbon_skyblue\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxsidebar_skyblue\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxsidebar_skyblue\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxsidebar_skyblue\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxsidebar_skyblue\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtabbar_skyblue\dhxtabbar_arrows.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtabbar_skyblue\dhxtabbar_button_close.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtabbar_skyblue\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtoolbar_skyblue\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtoolbar_skyblue\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_file.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_minus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\icon_plus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtreeview_skyblue\loading.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\blank.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\but_cut.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\folderClosed.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\folderOpen.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\leaf.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line1_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\line4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\lock.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus5.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\minus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus1.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus2.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus3.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus4.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus5.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\plus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\radio_off.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxtree_skyblue\radio_on.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxwins_skyblue\dhxwins_buttons.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxwins_skyblue\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\skins\skyblue\imgs\dhxwins_skyblue\dhxwins_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\dhtmlx.css" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxacc_terrace\dhxacc_btns.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxacc_terrace\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_clock.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_mark.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcalendar_terrace\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcarousel_terrace\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcombo_terrace\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcombo_terrace\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcombo_terrace\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxcp_terrace\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxdataview_terrace\dnd_selector.png" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxdataview_terrace\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxdataview_terrace\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxdataview_terrace\marker.png" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\align_center.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\align_justify.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\align_left.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\align_right.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\bold.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\buttons.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\clear.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\h1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\h2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\h3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\h4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\indent_dec.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\indent_inc.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\italic.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\list_bullet.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\list_number.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\script_sub.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\script_super.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\strike.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxeditor_terrace\underline.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxform_terrace\dhxform_chbxrd.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxform_terrace\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxform_terrace\dhxform_upload_buttons.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxform_terrace\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_left.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_right.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\blank.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\combo_select_dhx_terrace.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\dyn_.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\dyn_down.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\dyn_up.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\imageloaderror.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\item_chk0.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\item_chk1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\minus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\paging_page.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\paging_pages.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\paging_rows.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\plus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\radio_chk0.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\radio_chk1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\sort_asc.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\sort_desc.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\blank.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\folder.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\leaf.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\line.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\line1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\line2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\line3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\line4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\minus5.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxgrid_terrace\tree\plus5.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxlayout_terrace\dhxlayout_cell_btns.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxlayout_terrace\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxlayout_terrace\dhxlayout_sep_h.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxlayout_terrace\dhxlayout_sep_v.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_arrow_up_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_chrd.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxmenu_terrace\dhxmenu_subar.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxpopup_terrace\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxpopup_terrace\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxpopup_terrace\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxpopup_terrace\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxribbon_terrace\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxribbon_terrace\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxribbon_terrace\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxsidebar_terrace\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxsidebar_terrace\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxsidebar_terrace\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxsidebar_terrace\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtabbar_terrace\dhxtabbar_arrows.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtabbar_terrace\dhxtabbar_button_close.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtabbar_terrace\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtoolbar_terrace\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtoolbar_terrace\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_file.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_minus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\icon_plus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtreeview_terrace\loading.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\blank.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\but_cut.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\folderClosed.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\folderOpen.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\leaf.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line1_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\line4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\lock.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus5.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\minus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus1.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus2.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus3.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus4.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus5.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\plus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\radio_off.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxtree_terrace\radio_on.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxwins_terrace\dhxwins_buttons.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxwins_terrace\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\skins\terrace\imgs\dhxwins_terrace\dhxwins_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\dhtmlx.css" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxacc_web\dhxacc_btns.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxacc_web\dhxacc_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_arrow_left2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_arrow_right2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_clock.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_mark.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_selector_bottom.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcalendar_web\dhxcalendar_selector_top.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcarousel_web\dhxcarousel_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcombo_web\dhxcombo_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcombo_web\dhxcombo_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcombo_web\dhxcombo_chbx.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxcp_web\dhxcp_colors.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxdataview_web\dnd_selector.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxdataview_web\dnd_selector_cells.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxdataview_web\dnd_selector_lines.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxdataview_web\marker.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\align_center.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\align_justify.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\align_left.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\align_right.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\bold.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\buttons.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\clear.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\h1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\h2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\h3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\h4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\indent_dec.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\indent_inc.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\italic.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\list_bullet.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\list_number.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\script_sub.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\script_super.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\strike.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxeditor_web\underline.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxform_web\dhxform_chbxrd.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxform_web\dhxform_image_uploading.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxform_web\dhxform_upload_buttons.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxform_web\dhxform_upload_uploading.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_left.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_left_abs.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_left_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_left_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_right.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_right_abs.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_right_abs_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\ar_right_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\blank.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\combo_select_dhx_web.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\dyn_.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\dyn_down.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\dyn_up.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\imageloaderror.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\item_chk0.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\item_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\item_chk1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\item_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\minus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\paging_page.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\paging_pages.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\paging_rows.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\plus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\radio_chk0.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\radio_chk0_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\radio_chk1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\radio_chk1_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\separator.png" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\sort_asc.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\sort_desc.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\blank.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\folder.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\leaf.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\line.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\line1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\line2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\line3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\line4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\minus5.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxgrid_web\tree\plus5.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxlayout_web\dhxlayout_cell_btns.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxlayout_web\dhxlayout_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxlayout_web\dhxlayout_sep_h.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxlayout_web\dhxlayout_sep_v.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_arrow_down_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_arrow_up_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_chrd.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_loader.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxmenu_web\dhxmenu_subar.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxpopup_web\dhxpopup_arrow_bottom.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxpopup_web\dhxpopup_arrow_left.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxpopup_web\dhxpopup_arrow_right.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxpopup_web\dhxpopup_arrow_top.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxribbon_web\dhxribbon_arrow.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxribbon_web\dhxribbon_checked.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxribbon_web\dhxribbon_checked_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxsidebar_web\dhxsidebar_arrow_down.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxsidebar_web\dhxsidebar_arrow_up.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxsidebar_web\dhxsidebar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxsidebar_web\dhxsidebar_side_icon.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtabbar_web\dhxtabbar_arrows.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtabbar_web\dhxtabbar_button_close.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtabbar_web\dhxtabbar_cell_progress.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtoolbar_web\dhxtoolbar_arrow.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtoolbar_web\dhxtoolbar_arrow_dis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_chbx_0.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_chbx_1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_chbx_dis_0.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_chbx_dis_1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_file.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_folder_closed.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_folder_opened.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_minus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\icon_plus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtreeview_web\loading.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\blank.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\but_cut.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\folderClosed.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\folderOpen.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\iconCheckAll.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\iconCheckDis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\iconCheckGray.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\iconUncheckAll.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\iconUncheckDis.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\leaf.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line1_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\line4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\lock.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus5.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\minus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus1.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus2.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus2_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus3.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus3_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus4.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus4_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus5.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\plus5_rtl.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\radio_off.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxtree_web\radio_on.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxwins_web\dhxwins_buttons.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxwins_web\dhxwins_icon.gif" />
+    <Content Include="Dhtmlx\skins\web\imgs\dhxwins_web\dhxwins_progress.gif" />
+    <Content Include="echart\echarts.common.min.js" />
+    <Content Include="echart\echarts.min.js" />
+    <Content Include="echart\echarts.simple.min.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="images\admin-login-bg.jpg" />
+    <Content Include="images\bc-bnt.png" />
+    <Content Include="images\bg.jpg" />
+    <Content Include="images\bnt.png" />
+    <Content Include="images\button_close.gif" />
+    <Content Include="images\button_close.png" />
+    <Content Include="images\cj.png" />
+    <Content Include="images\down-1.png" />
+    <Content Include="images\fh-bnt.png" />
+    <Content Include="images\footer_bg.png" />
+    <Content Include="images\gc.png" />
+    <Content Include="images\GetValidateCode.jpg" />
+    <Content Include="images\gmm-icon.png" />
+    <Content Include="images\gnbg-1.png" />
+    <Content Include="images\gou.png" />
+    <Content Include="images\help-icon.png" />
+    <Content Include="images\icons\contract-icon.png" />
+    <Content Include="images\icons\data-icon.png" />
+    <Content Include="images\icons\Detection-icon.png" />
+    <Content Include="images\icons\icon_arrow.png" />
+    <Content Include="images\icons\qualification-icon.png" />
+    <Content Include="images\icons\sample-icon.png" />
+    <Content Include="images\icons\site-icon.png" />
+    <Content Include="images\icons\site-icon_03.png" />
+    <Content Include="images\icons\Supervision-icon.png" />
+    <Content Include="images\icons\xin-icon.png" />
+    <Content Include="images\ico_go.png" />
+    <Content Include="images\ico_password.png" />
+    <Content Include="images\ico_safe.png" />
+    <Content Include="images\ico_user.png" />
+    <Content Include="images\loading.gif" />
+    <Content Include="images\login_bg.png" />
+    <Content Include="images\login_box.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\logo_03.png" />
+    <Content Include="images\logo_content.png" />
+    <Content Include="images\message-icon.png" />
+    <Content Include="images\nopic.png" />
+    <Content Include="images\out-icon.png" />
+    <Content Include="images\p.png" />
+    <Content Include="images\rem.png" />
+    <Content Include="images\search-icon.png" />
+    <Content Include="images\sl.png" />
+    <Content Include="images\smalllog.png" />
+    <Content Include="images\spn.png" />
+    <Content Include="images\user.jpg" />
+    <Content Include="images\user.png" />
+    <Content Include="images\vertical-icon.png" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\fonts\FontAwesome.otf" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\animated.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\bordered-pulled.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\core.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\fixed-width.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\font-awesome.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\icons.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\larger.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\list.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\mixins.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\path.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\rotated-flipped.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\stacked.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\less\variables.less" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\font-awesome.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_animated.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_bordered-pulled.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_core.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_fixed-width.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_icons.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_larger.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_list.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_mixins.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_path.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_rotated-flipped.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_stacked.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_awesome\scss\_variables.scss" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\-2n2p-_Y08sg57CNWQfKNvesZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\CWB0XYA8bzo0kSThX0UTuA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\d-6IYplOFocCacKzxwXSOFtXRa8TVwTICgirnJhmVJw.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\ek4gzZ-GeXAPcSbHtCeQI_esZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\Fcx7Wwv8OzT71A3E1XOAjvesZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\mErvLBYg_cXG3rLvUsKT_fesZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\NdF9MtnOpLzo-noMoG0miPesZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\RxZJdnzeo3R5zSexge8UUVtXRa8TVwTICgirnJhmVJw.woff2" />
+    <Content Include="Dhtmlx\codebase\fonts\font_roboto\u0TOpm082MNkS5K0Q4rhqvesZW2xOQ-xsNqO47m55DA.woff2" />
+    <Content Include="Dhtmlx\codebase\thirdparty\excanvas\AUTHORS" />
+    <Content Include="Dhtmlx\codebase\thirdparty\excanvas\COPYING" />
+    <Content Include="Dhtmlx\codebase\thirdparty\excanvas\README" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\PkpmGX.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\viewer.min.css" />
+    <Content Include="Scripts\viewer.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Static\h-ui\css\H-ui.css" />
+    <Content Include="Static\h-ui\css\H-ui.ie.css" />
+    <Content Include="Static\h-ui\css\H-ui.min.css" />
+    <Content Include="Static\h-ui\css\H-ui.reset.css" />
+    <Content Include="Static\layer\layer.js" />
+    <Content Include="Static\layer\mobile\layer.js" />
+    <Content Include="Static\layer\mobile\need\layer.css" />
+    <Content Include="Static\layer\theme\default\icon-ext.png" />
+    <Content Include="Static\layer\theme\default\icon.png" />
+    <Content Include="Static\layer\theme\default\layer.css" />
+    <Content Include="Static\layer\theme\default\loading-0.gif" />
+    <Content Include="Static\layer\theme\default\loading-1.gif" />
+    <Content Include="Static\layer\theme\default\loading-2.gif" />
+    <Content Include="Static\layuiadmin\config.js" />
+    <Content Include="Static\layuiadmin\layui\css\admin.css" />
+    <Content Include="Static\layuiadmin\layui\css\dtree.css" />
+    <Content Include="Static\layuiadmin\layui\css\eleTree.css" />
+    <Content Include="Static\layuiadmin\layui\css\formSelects-v4.css" />
+    <Content Include="Static\layuiadmin\layui\css\layui.css" />
+    <Content Include="Static\layuiadmin\layui\css\layui.mobile.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\code.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\laydate\default\font.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\laydate\default\laydate.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\icon-ext.png" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\icon.png" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\layer.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\loading-0.gif" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\loading-1.gif" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layer\default\loading-2.gif" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\html\chatlog.html" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\html\find.html" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\html\msgbox.html" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\layim.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\mobile\layim.css" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\1.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\2.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\3.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\4.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\5.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\skin\logo.jpg" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\voice\default.mp3" />
+    <Content Include="Static\layuiadmin\layui\font\dtreefont.css" />
+    <Content Include="Static\layuiadmin\layui\font\dtreefont.svg" />
+    <Content Include="Static\layuiadmin\layui\font\fontawesome-webfont.svg" />
+    <Content Include="Static\layuiadmin\layui\font\iconfont.svg" />
+    <Content Include="Static\layuiadmin\layui\font\strawberryicon.svg" />
+    <Content Include="Static\layuiadmin\layui\icon\icon.css" />
+    <Content Include="Static\layuiadmin\layui\images\face\0.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\1.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\10.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\11.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\12.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\13.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\14.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\15.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\16.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\17.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\18.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\19.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\2.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\20.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\21.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\22.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\23.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\24.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\25.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\26.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\27.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\28.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\29.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\3.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\30.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\31.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\32.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\33.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\34.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\35.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\36.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\37.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\38.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\39.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\4.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\40.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\41.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\42.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\43.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\44.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\45.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\46.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\47.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\48.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\49.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\5.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\50.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\51.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\52.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\53.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\54.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\55.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\56.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\57.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\58.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\59.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\6.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\60.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\61.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\62.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\63.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\64.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\65.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\66.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\67.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\68.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\69.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\7.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\70.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\71.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\8.gif" />
+    <Content Include="Static\layuiadmin\layui\images\face\9.gif" />
+    <Content Include="Static\layuiadmin\layui\layui.all.js" />
+    <Content Include="Static\layuiadmin\layui\layui.js" />
+    <Content Include="Static\layuiadmin\layui\lay\all-mobile.js" />
+    <Content Include="Static\layuiadmin\layui\lay\all.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\carousel.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\code.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\colorpicker.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\element.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\flow.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\form.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\jquery.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\laydate.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\layedit.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\layer.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\layim.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\laypage.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\laytpl.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile\layer-mobile.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile\layim-mobile-open.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile\layim-mobile.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile\upload-mobile.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\mobile\zepto.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\rate.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\slider.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\table.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\tree.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\upload.js" />
+    <Content Include="Static\layuiadmin\layui\lay\modules\util.js" />
+    <Content Include="Static\layuiadmin\layui\lay\mymodules\cascader.js" />
+    <Content Include="Static\layuiadmin\layui\lay\mymodules\dropdown.js" />
+    <Content Include="Static\layuiadmin\layui\lay\mymodules\eleTree.js" />
+    <Content Include="Static\layuiadmin\layui\lay\mymodules\eTree.js" />
+    <Content Include="Static\layuiadmin\layui\lay\mymodules\step.js" />
+    <Content Include="Static\layuiadmin\lib\admin.js" />
+    <Content Include="Static\layuiadmin\lib\dtree.js" />
+    <Content Include="Static\layuiadmin\lib\eleTree.js" />
+    <Content Include="Static\layuiadmin\lib\extend\echarts.js" />
+    <Content Include="Static\layuiadmin\lib\extend\echartsTheme.js" />
+    <Content Include="Static\layuiadmin\lib\formSelects-v4.js" />
+    <Content Include="Static\layuiadmin\lib\formSelects-v4.min.js" />
+    <Content Include="Static\layuiadmin\lib\index.js" />
+    <Content Include="Static\layuiadmin\lib\view.js" />
+    <Content Include="Static\layuiadmin\modules\common.js" />
+    <Content Include="Static\layuiadmin\modules\console.js" />
+    <Content Include="Static\layuiadmin\modules\contlist.js" />
+    <Content Include="Static\layuiadmin\modules\forum.js" />
+    <Content Include="Static\layuiadmin\modules\im.js" />
+    <Content Include="Static\layuiadmin\modules\message.js" />
+    <Content Include="Static\layuiadmin\modules\sample.js" />
+    <Content Include="Static\layuiadmin\modules\senior.js" />
+    <Content Include="Static\layuiadmin\modules\set.js" />
+    <Content Include="Static\layuiadmin\modules\user.js" />
+    <Content Include="Static\layuiadmin\modules\useradmin.js" />
+    <Content Include="Static\layuiadmin\modules\workorder.js" />
+    <Content Include="Static\layuiadmin\style\admin.css" />
+    <Content Include="Static\layuiadmin\style\login.css" />
+    <Content Include="Static\layuiadmin\style\res\bg-none.jpg" />
+    <Content Include="Static\layuiadmin\style\res\layui-logo.jpg" />
+    <Content Include="Static\layuiadmin\style\res\logo-black.png" />
+    <Content Include="Static\layuiadmin\style\res\logo.png" />
+    <Content Include="Static\layuiadmin\style\res\template\character.jpg" />
+    <Content Include="Static\layuiadmin\style\res\template\huge.jpg" />
+    <Content Include="Static\layuiadmin\style\res\template\portrait.png" />
+    <Content Include="Static\layuiadmin\style\template.css" />
+    <Content Include="Static\layuiadmin\tpl\layim\demo.html" />
+    <Content Include="Static\layuiadmin\tpl\system\about.html" />
+    <Content Include="Static\layuiadmin\tpl\system\get.html" />
+    <Content Include="Static\layuiadmin\tpl\system\more.html" />
+    <Content Include="Static\layuiadmin\tpl\system\theme.html" />
+    <Content Include="Static\layuiadmin\tpl\system\说明.txt" />
+    <Content Include="Static\layuiadmin\tpl\说明.txt" />
+    <Content Include="Static\login.css" />
+    <Content Include="Static\login_cq.css" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Static\layuiadmin\layui\css\modules\layim\html\getmsg.json" />
+    <Content Include="Static\layuiadmin\layui\font\fontawesome-webfont.eot" />
+    <Content Include="Static\layuiadmin\layui\font\fontawesome-webfont.ttf" />
+    <Content Include="Static\layuiadmin\layui\font\fontawesome-webfont.woff" />
+    <Content Include="Static\layuiadmin\layui\font\fontawesome-webfont.woff2" />
+    <Content Include="Static\layuiadmin\layui\font\FontAwesome.otf" />
+    <Content Include="Static\layuiadmin\layui\font\iconfont.eot" />
+    <Content Include="Static\layuiadmin\layui\font\iconfont.ttf" />
+    <Content Include="Static\layuiadmin\layui\font\iconfont.woff" />
+    <Content Include="Static\layuiadmin\layui\font\strawberryicon.eot" />
+    <Content Include="Static\layuiadmin\layui\font\strawberryicon.ttf" />
+    <Content Include="Static\layuiadmin\layui\font\strawberryicon.woff" />
+    <Content Include="Views\LayuiAdmin\Theme.cshtml" />
+    <Content Include="Views\LayuiAdmin\More.cshtml" />
+    <Content Include="Views\LayuiAdmin\About.cshtml" />
+    <Content Include="Views\Shared\CellPrint_Layout.cshtml" />
+    <Content Include="Views\Shared\Dhtmlx_Layout.cshtml" />
+    <Content Include="Views\Shared\LayuiTab_Layout.cshtml" />
+    <Content Include="Views\Shared\Layui_Layout.cshtml" />
+    <Content Include="Views\Shared\Login_Layout.cshtml" />
+    <Content Include="Views\Shared\Tab_Layout.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\TopSider.cshtml" />
+    <Content Include="Views\Admin\SiderBar.cshtml" />
+    <Content Include="Views\SysDict\Index.cshtml" />
+    <Content Include="Views\Welcome\Index.cshtml" />
+    <Content Include="Views\SysLog\Index.cshtml" />
+    <Content Include="Views\SysMenu\Index.cshtml" />
+    <Content Include="Views\SysRole\Index.cshtml" />
+    <Content Include="Views\SysUser\Index.cshtml" />
+    <Content Include="Views\CheckEquip\Index.cshtml" />
+    <Content Include="Views\CheckPeopleManager\Index.cshtml" />
+    <Content Include="Views\CheckQualify\Index.cshtml" />
+    <Content Include="Views\SysUser\ChangePwd.cshtml" />
+    <Content Include="Views\CheckPeopleManager\AwardsAddCheckItem.cshtml" />
+    <Content Include="Views\CheckPeopleManager\ChangeAddCheckItem.cshtml" />
+    <Content Include="Views\CheckPeopleManager\Create.cshtml" />
+    <Content Include="Views\CheckPeopleManager\Details.cshtml" />
+    <Content Include="Views\CheckPeopleManager\Edit.cshtml" />
+    <Content Include="Views\CheckPeopleManager\EditChange.cshtml" />
+    <Content Include="Views\CheckPeopleManager\EditFile.cshtml" />
+    <Content Include="Views\CheckPeopleManager\EditPeople.cshtml" />
+    <Content Include="Views\CheckPeopleManager\EditReportModel.cshtml" />
+    <Content Include="Views\CheckPeopleManager\EducationAddCheckItem.cshtml" />
+    <Content Include="Views\CheckPeopleManager\PostType.cshtml" />
+    <Content Include="Views\CheckPeopleManager\PrintPost.cshtml" />
+    <Content Include="Views\CheckPeopleManager\PunishAddCheckItem.cshtml" />
+    <Content Include="Views\CheckPeopleManager\VerificationAddCheckItem.cshtml" />
+    <Content Include="Views\SysInfo\Index.cshtml" />
+    <Content Include="Views\SysSoftwareVers\Index.cshtml" />
+    <Content Include="Views\Train\Index.cshtml" />
+    <Content Include="Views\TrainUser\Index.cshtml" />
+    <Content Include="Views\TrainEnroll\Index.cshtml" />
+    <Content Include="Views\TrainFee\Index.cshtml" />
+    <Content Include="Views\TrainPrint\Index.cshtml" />
+    <Content Include="Views\STCheckQualify\Index.cshtml" />
+    <Content Include="Views\STCheckPeople\Index.cshtml" />
+    <Content Include="Views\CheckEval\Index.cshtml" />
+    <Content Include="Views\TotalSearch\Index.cshtml" />
+    <Content Include="Views\TotalSearch\Area.cshtml" />
+    <Content Include="Views\TotalSearch\BH.cshtml" />
+    <Content Include="Views\STCheckEquip\Index.cshtml" />
+    <Content Include="Views\CheckPeoplePost\Index.cshtml" />
+    <Content Include="Views\CheckByQualify\Index.cshtml" />
+    <Content Include="Views\CheckByArea\Index.cshtml" />
+    <Content Include="Views\CheckStatisInspect\Index.cshtml" />
+    <Content Include="Views\CheckStatisHNKY\Index.cshtml" />
+    <Content Include="Views\CheckStatisSJKY\Index.cshtml" />
+    <Content Include="Views\CheckStatisUnQuailfy\Index.cshtml" />
+    <Content Include="Views\CheckStatisReport\Index.cshtml" />
+    <Content Include="Views\CheckStatisData\Index.cshtml" />
+    <Content Include="Views\CheckQualify\AddCheckCustom.cshtml" />
+    <Content Include="Views\CheckQualify\AddCusAchievement.cshtml" />
+    <Content Include="Views\CheckQualify\AddCusAward.cshtml" />
+    <Content Include="Views\CheckQualify\AddCusChange.cshtml" />
+    <Content Include="Views\CheckQualify\AddCusPunish.cshtml" />
+    <Content Include="Views\CheckQualify\Details.cshtml" />
+    <Content Include="Views\CheckQualify\Edit.cshtml" />
+    <Content Include="Views\CheckQualify\EditAttachFile.cshtml" />
+    <Content Include="Views\CheckQualify\EditCheckQualify.cshtml" />
+    <Content Include="Views\CheckQualify\EditCusChange.cshtml" />
+    <Content Include="Views\CheckQualify\GetFile.cshtml" />
+    <Content Include="Views\CheckQualify\GetTable.cshtml" />
+    <Content Include="Views\CheckQualify\UnitQualification.cshtml" />
+    <Content Include="Views\CheckQualify\NewCustom.cshtml" />
+    <Content Include="Views\CheckQualify\Applychange.cshtml" />
+    <Content Include="Views\CheckQualify\PrintSetConfig.cshtml" />
+    <Content Include="Views\CheckQualify\setInstFormal.cshtml" />
+    <Content Include="Views\SysInfo\Edit.cshtml" />
+    <Content Include="Views\SysInfo\Create.cshtml" />
+    <Content Include="Views\SysSoftwareVers\Edit.cshtml" />
+    <Content Include="Views\CheckEquip\AddCheckItemAndParm.cshtml" />
+    <Content Include="Views\CheckEquip\Create.cshtml" />
+    <Content Include="Views\CheckEquip\Details.cshtml" />
+    <Content Include="Views\CheckEquip\Edit.cshtml" />
+    <Content Include="Views\CheckEquip\EditAttachFile.cshtml" />
+    <Content Include="Static\layuiadmin\layui\font\dtreefont.eot" />
+    <Content Include="Static\layuiadmin\layui\font\dtreefont.ttf" />
+    <Content Include="Static\layuiadmin\layui\font\dtreefont.woff" />
+    <Content Include="Static\layuiadmin\layui\font\icons.json" />
+    <Content Include="Views\CheckStatis\Index.cshtml" />
+    <Content Include="Views\CheckPeopleManager\UnitChange.cshtml" />
+    <Content Include="Views\CheckQualify\GetSuperJob.cshtml" />
+    <Content Include="Views\STCheckQualify\Details.cshtml" />
+    <Content Include="Views\STCheckQualify\PumpSystem.cshtml" />
+    <Content Include="Views\STCheckQualify\Carriervehicle.cshtml" />
+    <Content Include="Views\STCheckQualify\Pumpvehicle.cshtml" />
+    <Content Include="Views\STCheckQualify\Edit.cshtml" />
+    <Content Include="Views\STCheckQualify\AddSTCusAward.cshtml" />
+    <Content Include="Views\STCheckQualify\AddSTCheckCustom.cshtml" />
+    <Content Include="Views\STCheckQualify\AddSTCusPunish.cshtml" />
+    <Content Include="Views\STCheckEquip\Details.cshtml" />
+    <Content Include="Views\STCheckEquip\Edit.cshtml" />
+    <Content Include="Views\STCheckEquip\Create.cshtml" />
+    <Content Include="Views\STCheckEquip\Applychange.cshtml" />
+    <Content Include="Views\STCheckEquip\GetSuperJob.cshtml" />
+    <Content Include="Views\STCheckPeople\Applychange.cshtml" />
+    <Content Include="Views\STCheckPeople\ConfirmApplyChange.cshtml" />
+    <Content Include="Views\STCheckPeople\Details.cshtml" />
+    <Content Include="Views\STCheckPeople\GetFile.cshtml" />
+    <Content Include="Views\STCheckPeople\Edit.cshtml" />
+    <Content Include="Views\STCheckPeople\AwardsAddCheckItem.cshtml" />
+    <Content Include="Views\STCheckPeople\ChangeAddCheckItem.cshtml" />
+    <Content Include="Views\STCheckPeople\EducationAddCheckItem.cshtml" />
+    <Content Include="Views\STCheckPeople\PunishAddCheckItem.cshtml" />
+    <Content Include="Views\STCheckPeople\EditFile.cshtml" />
+    <Content Include="Views\STCheckPeople\Create.cshtml" />
+    <Content Include="Views\STCheckQualify\AddPumpSystem.cshtml" />
+    <Content Include="Views\STCheckQualify\AddCarriervehicle.cshtml" />
+    <Content Include="Views\STCheckQualify\AddPumpvehicle.cshtml" />
+    <Content Include="Views\STCheckEquip\STEquipDetails.cshtml" />
+    <Content Include="Views\STCheckQualify\EditAttachFile.cshtml" />
+    <Content Include="Views\STCheckQualify\CreateCustom.cshtml" />
+    <Content Include="Views\STCheckQualify\Applychange.cshtml" />
+    <Content Include="Views\STCheckQualify\ConfirmApplyChange.cshtml" />
+    <Content Include="Views\STCheckPeople\STPeopleDetails.cshtml" />
+    <Content Include="Static\450000.json" />
+    <Content Include="Views\CheckStatisUnQuailfy\UnquailfyAnalysis.cshtml" />
+    <Content Include="Views\TotalSearch\Details.cshtml" />
+    <Content Include="Views\AcsGraph\Index.cshtml" />
+    <Content Include="Views\InstBaseRecord\Index.cshtml" />
+    <Content Include="Views\InstBaseRecord\Create.cshtml" />
+    <Content Include="Views\InstBaseRecord\JCLCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\ZJXCCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\JZJNCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\SZDLCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\SLKQCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\ZTJGCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\QZSBCheck.cshtml" />
+    <Content Include="Views\InstBaseRecord\JZJNCreate.cshtml" />
+    <Content Include="Views\InstBaseRecord\JZJNEdit.cshtml" />
+    <Content Include="Views\InstBaseRecord\JZJNDetails.cshtml" />
+    <Content Include="Views\InstBaseRecord\SZDLCreate.cshtml" />
+    <Content Include="Views\InstBaseRecord\SZDLDetails.cshtml" />
+    <Content Include="Views\InstBaseRecord\SZDLEdit.cshtml" />
+    <Content Include="Views\InstBaseRecord\SLKQCreate.cshtml" />
+    <Content Include="Views\InstBaseRecord\SLKQDetails.cshtml" />
+    <Content Include="Views\InstBaseRecord\SLKQEdit.cshtml" />
+    <Content Include="Views\InstBaseRecord\ZTJGCreate.cshtml" />
+    <Content Include="Views\InstBaseRecord\ZTJGEdit.cshtml" />
+    <Content Include="Views\InstBaseRecord\QZSBCreate.cshtml" />
+    <Content Include="Views\CheckQualify\AddFRWorkExperience.cshtml" />
+    <Content Include="Views\CheckQualify\AddJSWorkExperience.cshtml" />
+    <Content Include="Views\ApplyQualify\Index.cshtml" />
+    <Content Include="Views\ApplyQualify\Edit.cshtml" />
+    <Content Include="Views\ApplyQualify\AddFRWorkExperience.cshtml" />
+    <Content Include="Views\ApplyQualify\AddJSWorkExperience.cshtml" />
+    <Content Include="Views\ApplyQualify\Details.cshtml" />
+    <Content Include="Views\ApplyQualify\EditAttachFile.cshtml" />
+    <Content Include="Views\ApplyQualify\AddQualifyOne.cshtml" />
+    <Content Include="Views\ApplyQualify\EditQualifyOne.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailQualifyOne.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailQualifyTwo.cshtml" />
+    <Content Include="Views\SysCache\Index.cshtml" />
+    <Content Include="Views\ItemName\Index.cshtml" />
+    <Content Include="Views\TotalStatis\Index.cshtml" />
+    <Content Include="Views\InstBaseRecord\JbxxEdit.cshtml" />
+    <Content Include="Views\InstBaseRecord\JbxxDetails.cshtml" />
+    <Content Include="Views\LiftingEquipment\Details.cshtml" />
+    <Content Include="Views\DistributeExpert\Index.cshtml" />
+    <Content Include="Views\DistributeExpert\Distribute.cshtml" />
+    <Content Include="Views\ApplyQualify\CreateQualifyFive.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailQualifyFive.cshtml" />
+    <Content Include="Views\ApplyQualify\EditQualifyFive.cshtml" />
+    <Content Include="Views\ApplyQualify\QualifyFivePeopleEdit.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailQualifyFour.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailQualifyThree.cshtml" />
+    <Content Include="Views\ApplyQualify\EditQualifyThree.cshtml" />
+    <Content Include="Views\ApplyQualifySeven\Create.cshtml" />
+    <Content Include="Views\ApplyQualifySeven\Details.cshtml" />
+    <Content Include="Views\ApplyQualifySeven\Edit.cshtml" />
+    <Content Include="Views\ApplyQualify\QualifyFivePeopleDetalify.cshtml" />
+    <Content Include="Views\ApplyQualify\QualifyFivePeopleDetalify.cshtml" />
+    <Content Include="Views\ApplyQualifySix\Index.cshtml" />
+    <Content Include="Views\ApplyQualifySix\CreateQualifySix.cshtml" />
+    <Content Include="Views\ApplyQualifyFive\Edit.cshtml" />
+    <Content Include="Views\ApplyQualify\EditQualifyFour.cshtml" />
+    <Content Include="Views\ApplyQualify\DetailsAttachFile.cshtml" />
+    <Content Include="Views\ApplyQualifyFive\Details.cshtml" />
+    <Content Include="Views\ReportInfo\Index.cshtml" />
+    <Content Include="Views\ReportInfo\Details.cshtml" />
+    <Content Include="Views\CbrApproval\Approval.cshtml" />
+    <Content Include="Views\CbrApproval\Detail.cshtml" />
+    <Content Include="Views\CbrApproval\FillIn.cshtml" />
+    <Content Include="Views\CbrApproval\Index.cshtml" />
+    <Content Include="Views\ExpertApproval\DetailSpecialQualify.cshtml" />
+    <Content Include="Views\ExpertApproval\DetailUnitBuildingQualify.cshtml" />
+    <Content Include="Views\ExpertApproval\Index.cshtml" />
+    <Content Include="Views\ExpertApproval\SpecialQualify.cshtml" />
+    <Content Include="Views\ExpertApproval\UnitBuildingQualify.cshtml" />
+    <Content Include="Views\ZJCheck\Index.cshtml" />
+    <Content Include="Views\ZJCheck\Details.cshtml" />
+    <Content Include="Views\ApplyQualify\Audit.cshtml" />
+    <Content Include="Views\ApplyQualify\EditQualifyTwo.cshtml" />
+    <Content Include="Views\ApplyQualify\AddQualifyTwo.cshtml" />
+    <Content Include="Views\TotalSearchView\Area.cshtml" />
+    <Content Include="Views\TotalSearchView\BH.cshtml" />
+    <Content Include="Views\TotalSearchView\Details.cshtml" />
+    <Content Include="Views\TotalSearchView\Index.cshtml" />
+    <Content Include="Views\TotalSearchView\Index.cshtml" />
+    <Content Include="Views\TotalSearchView\Index.cshtml" />
+    <Content Include="Views\ReportInfo\SearchProgrammeSecneList.cshtml" />
+    <Content Include="Views\ZJPileUpdateInfo\Index.cshtml" />
+    <Content Include="Views\ZJSceneCheck\Index.cshtml" />
+    <Content Include="Views\LiftingEquipment\Index.cshtml" />
+    <Content Include="Views\AddQualify\AddQualifyOne.cshtml" />
+    <Content Include="Views\AddQualify\AddQualifyTwo.cshtml" />
+    <Content Include="Views\AddQualify\DetailQualifyFour.cshtml" />
+    <Content Include="Views\AddQualify\DetailQualifyOne.cshtml" />
+    <Content Include="Views\AddQualify\DetailQualifyThree.cshtml" />
+    <Content Include="Views\AddQualify\DetailQualifyTwo.cshtml" />
+    <Content Include="Views\AddQualify\EditQualifyFour.cshtml" />
+    <Content Include="Views\AddQualify\EditQualifyOne.cshtml" />
+    <Content Include="Views\AddQualify\EditQualifyThree.cshtml" />
+    <Content Include="Views\AddQualify\EditQualifyTwo.cshtml" />
+    <Content Include="Views\AddQualify\Index.cshtml" />
+    <Content Include="Views\ContinuingQualify\Index.cshtml" />
+    <Content Include="Views\ContinuingQualify\AddQualifyOne.cshtml" />
+    <Content Include="Views\ContinuingQualify\AddQualifyTwo.cshtml" />
+    <Content Include="Views\ContinuingQualify\DetailQualifyFour.cshtml" />
+    <Content Include="Views\ContinuingQualify\DetailQualifyOne.cshtml" />
+    <Content Include="Views\ContinuingQualify\DetailQualifyThree.cshtml" />
+    <Content Include="Views\ContinuingQualify\DetailQualifyTwo.cshtml" />
+    <Content Include="Views\ContinuingQualify\EditQualifyFour.cshtml" />
+    <Content Include="Views\ContinuingQualify\EditQualifyOne.cshtml" />
+    <Content Include="Views\ContinuingQualify\EditQualifyThree.cshtml" />
+    <Content Include="Views\ContinuingQualify\EditQualifyTwo.cshtml" />
+    <Content Include="Views\ReportInfo\DetailsProgrammeSecneList.cshtml" />
+    <Content Include="Views\ChangeQualify\Index.cshtml" />
+    <Content Include="Views\ChangeQualify\Create.cshtml" />
+    <Content Include="Views\ChangeQualify\Edit.cshtml" />
+    <Content Include="Views\ChangeQualify\Approval.cshtml" />
+    <Content Include="Views\ChangeQualify\Detail.cshtml" />
+    <Content Include="Views\ZJSceneCheck\Details.cshtml" />
+    <Content Include="Views\ChangeQualify\Detail.cshtml" />
+    <Content Include="Views\ChangeQualify\Detail.cshtml" />
+    <Content Include="Views\ChangeQualify\Print.cshtml" />
+    <Content Include="Views\ZJHistoryCheck\Index.cshtml" />
+    <Content Include="Views\ZJHistoryCheck\Details.cshtml" />
+    <Content Include="Views\ApplyQualify\Print.cshtml" />
+    <Content Include="Views\AddQualify\Print.cshtml" />
+    <Content Include="Views\ContinuingQualify\Print.cshtml" />
+    <Content Include="Views\TotalSearch\BHDetails.cshtml" />
+    <Content Include="Views\TotalSearch\BHChangeDetails.cshtml" />
+    <Content Include="Views\TotalSearch\DetailQrCode.cshtml" />
+    <Content Include="Views\TBpItemCheck\Details.cshtml" />
+    <Content Include="Views\TBpItemCheck\Index.cshtml" />
+    <Content Include="Views\AcsGraphST\Index.cshtml" />
+    <Content Include="Views\ZNHTY\Index.cshtml" />
+    <Content Include="Views\ZNHTY\Details.cshtml" />
+    <Content Include="Views\ZNHTY\gjIndex.cshtml" />
+    <Content Include="Views\ZNHTY\gjcqDetails.cshtml" />
+    <Content Include="Views\ZJLocaleTestGPS\Index.cshtml" />
+    <Content Include="Static\450100.json" />
+    <Content Include="Static\450200.json" />
+    <Content Include="Static\450300.json" />
+    <Content Include="Static\450400.json" />
+    <Content Include="Static\450500.json" />
+    <Content Include="Static\450600.json" />
+    <Content Include="Static\450700.json" />
+    <Content Include="Static\450800.json" />
+    <Content Include="Static\450900.json" />
+    <Content Include="Static\451000.json" />
+    <Content Include="Static\451100.json" />
+    <Content Include="Static\451200.json" />
+    <Content Include="Static\451300.json" />
+    <Content Include="Static\451400.json" />
+    <Content Include="Views\AddQualify\Audit.cshtml" />
+    <Content Include="Views\ContinuingQualify\Audit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AspNet.Identity.ServiceStack\AspNet.Identity.ServiceStack.csproj">
+      <Project>{aeb0737b-2402-447b-a5be-d0f6f3cd6389}</Project>
+      <Name>AspNet.Identity.ServiceStack</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dhtmlx.Model\Dhtmlx.Model.csproj">
+      <Project>{b0984639-aa72-43e9-847e-7e51209c2239}</Project>
+      <Name>Dhtmlx.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkpm.Contract.FileTransfer\Pkpm.Contract.FileTransfer.csproj">
+      <Project>{0dd5a5da-7c73-432f-92fd-377000861ed6}</Project>
+      <Name>Pkpm.Contract.FileTransfer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkpm.Contract.PRKReport\Pkpm.Contract.PRKReport.csproj">
+      <Project>{69cbab4f-5377-44ac-a7a8-7ebb68056ab1}</Project>
+      <Name>Pkpm.Contract.PRKReport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkpm.Core\Pkpm.Core.csproj">
+      <Project>{2a98bf8d-8c8e-4474-b568-675fc7729726}</Project>
+      <Name>Pkpm.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkpm.Entity\Pkpm.Entity.csproj">
+      <Project>{2f52268a-4cd0-4a90-9e4b-20b1ce24f665}</Project>
+      <Name>Pkpm.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkpm.Framework\Pkpm.Framework.csproj">
+      <Project>{e9b46db4-c7d1-4dfb-9859-f99cc7b321c5}</Project>
+      <Name>Pkpm.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\ElmahXML_Logs\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>57189</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:57189/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

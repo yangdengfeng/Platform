@@ -1,0 +1,114 @@
+﻿@model PkpmGX.Models.ApplyQualifySevenDetailsModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:100%;height:170px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:0px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+
+<script type="text/javascript">
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+           { type: "hidden", label: "表一编号", name: "PId", value: "@Model.pid" },
+           { type: "hidden", name: "CustomId", label: "机构编号", value: "@Model.customId" }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        mygrid.setHeader("序号,检测项目,主要仪器设备（名称/型号/规格）,测量范围,准确度等级/不确定度,检定/校准机构,有效日期,自检/校项目,自检/校规范名称及编号,备注（比对情况）,校准文件查看");//设置列的头文本
+        mygrid.setInitWidths("40,*,200,100,160,290,130,280,200,100,100");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("right,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,layuijslink,ro");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        gridQString = '/ApplyQualifySeven/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+
+    function sortGridOnServer() {
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function uploadFile(fileUrl) {//查看附件方法
+        console.log(111);
+        dhxWins.attachViewportTo("gridbox");
+        lookWin = dhxWins.createWindow("lookWin", 200, 250, 700, 700);
+        lookWin.setModal(true);
+        lookWin.setText("检定/校准证书查看");
+        dhxWins.window("lookWin").keepInViewport(true);
+
+        myLayout = lookWin.attachLayout({
+            pattern: "1C",
+            cells: [
+                   {
+                       id: "a",        // id of the cell you want to configure
+                       text: "检定/校准证书查看",     // header text
+                       collapsed_text: "检定/校准证书查看",   // header text for a collapsed cell
+                       header: true,      // hide header on init
+                       width: 700,        // cell init width
+                       height: 250,        // cell init height
+                       collapse: false        // collapse on init
+                   },
+            ]
+        });
+        myCarousel = myLayout.cells("a").attachCarousel();
+        myLayout.cells("a").hideHeader();
+
+        var uploadedphoto = fileUrl;
+        var photoarr = uploadedphoto.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+    }
+</script>

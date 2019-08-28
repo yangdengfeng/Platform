@@ -1,0 +1,475 @@
+﻿@model  PkpmGX.Models.QrCodelDetailModel
+@{
+    ViewBag.Title = "DetailQrCode";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<style type="text/css">
+    #Map {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<link href="~/Scripts/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/viewer.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gb91ysMwstDuIDV5qhRMpylKWmDnQh9x"></script>
+<div class="layui-container">
+    <div class="layui-row" id="ReportInfo-DetailsProgrammeSecneList-Container">
+        <form class="layui-form" action="" lay-filter="ReportInfo-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">二维码编号 : @Model.Iteminfo.QRINFO</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md3">
+                            <div class="layui-form-label">见证取样</div>
+                        </div>
+                        <div class="layui-col-md3">
+                            <div class="layui-form-label">送检</div>
+                        </div>
+                        <div class="layui-col-md3">
+                            <div class="layui-form-label">试验</div>
+                        </div>
+                        <div class="layui-col-md3">
+                            <div class="layui-form-label">报告</div>
+                        </div>
+                    </div>
+                    <div class="layui-progress" lay-filter="demo">
+                        <div class="layui-progress-bar" lay-percent="0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                        <ul class="layui-tab-title">
+                            <li lay-id="jgxx">监管信息</li>
+                            <li>样品信息</li>
+                            <li class="layui-this">地理位置信息</li>
+                            <li>检测信息</li>
+                        </ul>
+                        <div class="layui-tab-content" style="height:100%">
+                            <div class="layui-tab-item ">
+                                <div class="layui-form-item">
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-label">登记工程名称</div>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="PROJECTNAME" value="@(Model.Iteminfo.PROJECTNAME)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-label">取样工程名称</div>
+                                        <div class="layui-input-block">
+                                            <input type="text" name="CPROJECTNAME" value="@(Model.Iteminfo.CPROJECTNAME)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-card">
+                                    <div class="layui-card-header">取样信息</div>
+                                    <div class="layui-card-body">
+                                        <table class="layui-table" id="qytab">
+                                            <colgroup>
+                                                <col>
+                                                <col>
+                                                <col>
+                                            </colgroup>
+                                            <tr>
+                                                <th style="text-align:center">人员姓名 : @Model.Iteminfo.SLNAME</th>
+                                                <th style="text-align:center">证书编号 : @Model.Iteminfo.SLPOSTNUM</th>
+                                                <th style="text-align:center">取样时间 : @Model.Iteminfo.sldate</th>
+                                            </tr>
+                                            @{
+                                                if (!string.IsNullOrEmpty(Model.Iteminfo.SLIMGQR) && !string.IsNullOrEmpty(Model.Iteminfo.SLIMGPEOPLE) && !string.IsNullOrEmpty(Model.Iteminfo.SLIMGPHONE))
+                                                {
+                                                    var slimgqr = Model.Iteminfo.SLIMGQR.Split('|');
+                                                    var slimgpeople = Model.Iteminfo.SLIMGPEOPLE.Split('|');
+                                                    var slimgphone = Model.Iteminfo.SLIMGPHONE.Split('|');
+                                                    <tr>
+                                                        <th style="text-align:center"><img data-original title="点击可看大图" height="120px" src="@slimgqr[0]" onerror="@slimgqr[1]" /></th>
+                                                        <th style="text-align:center"><img data-original title="点击可看大图" height="120px" src="@slimgpeople[0]" onerror="@slimgpeople[1]" /></th>
+                                                        <th style="text-align:center"><img data-original title="点击可看大图" height="120px" src="@slimgphone[0]" onerror="@slimgphone[1]" /></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th style="text-align:center">图片说明1：二维码照片</th>
+                                                        <th style="text-align:center">图片说明2：人员照片</th>
+                                                        <th style="text-align:center">图片说明3：样品照片</th>
+                                                    </tr>
+
+                                                }
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.Iteminfo.SPNID))
+                                    {
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">见证信息</div>
+                                            <div class="layui-card-body">
+                                                <table class="layui-table" id="jztab">
+                                                    <colgroup>
+                                                        <col>
+                                                        <col>
+                                                        <col>
+                                                    </colgroup>
+                                                    <tr>
+                                                        <th style="text-align:center">人员姓名 : @Model.Iteminfo.SPNNAME</th>
+                                                        <th style="text-align:center">证书编号 : @Model.Iteminfo.SPNPOSTNUM</th>
+                                                        <th style="text-align:center">取样时间 : @Model.Iteminfo.spndate</th>
+                                                    </tr>
+                                                    @{
+                                                        if (!string.IsNullOrEmpty(Model.Iteminfo.SPNIMGQR) && !string.IsNullOrEmpty(Model.Iteminfo.SPNIMGPEOPLE) && !string.IsNullOrEmpty(Model.Iteminfo.SPNIMGPHONE))
+                                                        {
+                                                            var spnimgqr = Model.Iteminfo.SPNIMGQR.Split('|');
+                                                            var spnimgpeople = Model.Iteminfo.SPNIMGPEOPLE.Split('|');
+                                                            var spnimgphone = Model.Iteminfo.SPNIMGPHONE.Split('|');
+
+                                                            <tr>
+                                                                <th style="text-align:center"><img data-original=""  title="点击可看大图" height="120px"   src="@spnimgqr[0]" onerror="@spnimgqr[1]" /></th>
+                                                                <th style="text-align:center"><img data-original=""  title="点击可看大图" height="120px"   src="@spnimgpeople[0]" onerror="@spnimgpeople[1]" /></th>
+                                                                <th style="text-align:center"><img data-original=""  title="点击可看大图" height="120px"   src="@spnimgphone[0]" onerror="@spnimgphone[1]" /></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="text-align:center">图片说明1：二维码照片</th>
+                                                                <th style="text-align:center">图片说明2：人员照片</th>
+                                                                <th style="text-align:center">图片说明3：样品照片</th>
+                                                            </tr>
+
+                                                        }
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                                        }
+                                }
+
+
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.Iteminfo.REMNAME))
+                                    {
+                                        <div class="layui-card" id="shtab">
+                                            <div class="layui-card-header">商混企业见证信息</div>
+                                            <div class="layui-card-body">
+                                                <table class="layui-table">
+                                                    <colgroup>
+                                                        <col>
+                                                        <col>
+                                                        <col>
+                                                    </colgroup>
+                                                    <tr>
+                                                        <th style="text-align:center">人员姓名 : @Model.Iteminfo.REMNAME</th>
+                                                        <th style="text-align:center">见证时间 : @Model.Iteminfo.remdate</th>
+                                                        <th style="text-align:center"></th>
+                                                    </tr>
+                                                    @{
+                                                        if (!string.IsNullOrEmpty(Model.Iteminfo.SLIMGQR) && !string.IsNullOrEmpty(Model.Iteminfo.SLIMGPEOPLE) && !string.IsNullOrEmpty(Model.Iteminfo.SLIMGPHONE))
+                                                        {
+                                                            var remimgpeople = Model.Iteminfo.REMIMGPEOPLE.Split('|');
+                                                            var remimgphone = Model.Iteminfo.REMIMGPEOPLE.Split('|');
+                                                            <tr>
+                                                                <th style="text-align:center"><img data-original title="点击可看大图"  height="120px" src="@remimgpeople[0]" onerror="@remimgpeople[1]" /></th>
+                                                                <th style="text-align:center"><img data-original title="点击可看大图"  height="120px" src="@remimgphone[0]" onerror="@remimgphone[1]"/></th>
+                                                                <th style="text-align:center"></th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="text-align:center">图片说明1：二维码照片</th>
+                                                                <th style="text-align:center">图片说明2：样品照片</th>
+                                                                <th style="text-align:center"></th>
+                                                            </tr>
+
+                                                        }
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                       }
+                                }
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-form-item">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-row layui-col-space15">
+                                            <div class="layui-col-md4">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-header">样品原始信息</div>
+                                                    <div class="layui-card-body">
+                                                        <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                                            <colgroup>
+                                                                <col width="50">
+                                                                <col>
+                                                                <col width="150">
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>序号</th>
+                                                                    <th>参数名称	</th>
+                                                                    <th>参数值</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{
+                                                                    int i = 1;
+
+                                                                    foreach (var item in Model.sampleInfo)
+                                                                    {
+                                                                        <tr>
+                                                                            <td><span class="first">@i</span></td>
+                                                                            <td><span>@item.Name</span></td>
+                                                                            <td><span>@item.Value</span></td>
+                                                                        </tr>
+                                                                        i++;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="layui-col-md8">
+                                                <div class="layui-card">
+                                                    <div class="layui-card-header">样品信息修改记录</div>
+                                                    <div class="layui-card-body">
+                                                        <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                                            <colgroup>
+                                                                <col width="50">
+                                                                <col>
+                                                                <col width="150">
+                                                                <col width="150">
+                                                                <col width="150">
+                                                            </colgroup>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>序号</th>
+                                                                    <th>参数名称	</th>
+                                                                    <th>原始值</th>
+                                                                    <th>修改值</th>
+                                                                    <th>修改时间</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @{
+                                                                    int j = 1;
+                                                                    foreach (var item in Model.updatedata)
+                                                                    {
+                                                                        <tr>
+                                                                            <td><span class="first">@j</span></td>
+                                                                            <td><span>@item.columnch</span></td>
+                                                                            <td><span>@item.oldvalue</span></td>
+                                                                            <td><span>@item.newvalue</span></td>
+                                                                            <td><span>@item.DateStr</span></td>
+                                                                        </tr>
+                                                                        j++;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-tab-item layui-show">
+                                @{
+                                    if (Model.projectinfo.Longitude.HasValue && Model.projectinfo.Latitude.HasValue)
+                                    {
+                                        <div class="layui-card layui-show">
+                                            <div class="layui-card-header">位置信息</div>
+                                            <div class="layui-card-body">
+                                                <div id="Map" style="height:100%;width:100%; overflow: auto;">
+                                                    <div id="allmap" style="width: 100%; height: 800px;"> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                }
+                            </div>
+                            <div class="layui-tab-item">
+                                @{
+                                    if (!string.IsNullOrEmpty(Model.Iteminfo.ENTRUSTNUM))
+                                    {
+                                        <div class="layui-form-item">
+                                            <div class="layui-col-md6">
+                                                <div class="layui-form-label">委托编号</div>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="ENTRUSTNUM" value="@(Model.Iteminfo.ENTRUSTNUM)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                                </div>
+                                            </div>
+                                            @{
+                                                if (Model.Iteminfo.ENTRUSTDATE.HasValue)
+                                                {
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-label">委托时间</div>
+                                                        <div class="layui-input-block">
+                                                            <input type="text" name="ENTRUSTDATE" value="@(Model.Iteminfo.entrustdate)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-label">委托时间</div>
+                                                        <div class="layui-input-block">
+                                                            <input type="text" name="ENTRUSTDATE" value="未委托" placeholder="" autocomplete="off" readonly class="layui-input">
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                                }
+                                                if (!string.IsNullOrEmpty(Model.Iteminfo.SAMPLENUM))
+                                                {
+                                                    <div class="layui-form-item">
+                                                        <div class="layui-col-md6">
+                                                            <div class="layui-form-label">样品编号</div>
+                                                            <div class="layui-input-block">
+                                                                <input type="text" name="SAMPLENUM" value="@(Model.Iteminfo.SAMPLENUM)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                if (!string.IsNullOrEmpty(Model.Iteminfo.REPORTNUM))
+                                                {
+                                                    <div class="layui-form-item">
+                                                        <div class="layui-col-md6">
+                                                            <div class="layui-form-label">报告编号</div>
+                                                            <div class="layui-input-block">
+                                                                <input type="text" name="REPORTNUM" value="@(Model.Iteminfo.REPORTNUM)" placeholder="" autocomplete="off" readonly class="layui-input">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["form", "element", "layer"], function () {
+        var $ = layui.$,
+        form = layui.form,
+        layer = layui.layer,
+        element = layui.element,
+        router = layui.router();
+        element.tabChange('docDemoTabBrief', 'jgxx'); //切换到：当前数据
+    })
+
+    $('#qytab').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+    $('#jztab').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+    $('#shtab').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+    layui.use('element', function () {
+        var element = layui.element;
+    });
+    function get() {
+        layui.use(["form", "element", "layer"], function () {
+            var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            element = layui.element,
+            router = layui.router();
+
+            var status = "@(Model.Iteminfo.SAMPLESTATUS)";
+            var num = "";
+
+            if (status == "1") {
+                num = "32.5%";
+
+            }
+            else if (status == "2") {
+                num = "57.5%";
+
+            }
+
+            else if (status == "3") {
+                num = "82.5%";
+
+            }
+            else {
+                num = "6.5%";
+            }
+            element.progress('demo', num);
+        })
+    }
+
+    function getLocation() {
+        var plong = "@(Model.projectinfo.Longitude)";
+        var plat = "@(Model.projectinfo.Latitude)";
+        if (plong != "" && plat != "") {
+            var maplong = plong;//accSub(plong, 0.0072);
+            var maplat = plat;//accAdd(plat, 0.004);
+
+            var map = new BMap.Map("allmap");
+            map.centerAndZoom(new BMap.Point(maplong, maplat), 17);//13
+            map.enableScrollWheelZoom(true);
+            map.addControl(new BMap.NavigationControl());
+            map.addControl(new BMap.ScaleControl());
+            map.addControl(new BMap.OverviewMapControl());
+
+            var ppoint = new BMap.Point(plong, plat);
+            var picon = new BMap.Icon('../images/gc.png', new BMap.Size(20, 25));//../images/gc.png
+            var pmarker = new BMap.Marker(ppoint, { icon: picon });
+            map.addOverlay(pmarker);
+
+            pmarker.setLabel(new BMap.Label("范围500米", { offset: new BMap.Size(50, -10) }));
+            map.addOverlay(new BMap.Circle(ppoint, 500, { strokeColor: "red", strokeWeight: 2, strokeOpacity: 0.5, fillColor: "#000", fillOpacity: 0.1 }));
+
+            var sllong = "@(Model.Iteminfo.SLLONG)";
+            var sllat = "@(Model.Iteminfo.SLLAT)";
+            if (sllong != "" && sllat != "") {
+                var slpoint = new BMap.Point(sllong, sllat);
+                var slicon = new BMap.Icon('../images/sl.png', new BMap.Size(20, 25));
+                var slmarker = new BMap.Marker(slpoint, { icon: slicon });
+                map.addOverlay(slmarker);
+            }
+
+            var spnlong = "@(Model.Iteminfo.SPNLONG)";
+            var spnlat = "@(Model.Iteminfo.SPNLAT)";
+            if (spnlong != "" && spnlat != "") {
+                var spnpoint = new BMap.Point(spnlong, spnlat);
+                var spnicon = new BMap.Icon('../images/spn.png', new BMap.Size(20, 25));
+                var spnmarker = new BMap.Marker(spnpoint, { icon: spnicon });
+                map.addOverlay(spnmarker);
+            }
+
+            var remlong = "@(Model.Iteminfo.REMLONG)";
+            var remlat = "@(Model.Iteminfo.REMLAT)";
+            if (remlong != "" && remlat != "") {
+                var rempoint = new BMap.Point(remlong, remlat);
+                var remicon = new BMap.Icon('../images/rem.png', new BMap.Size(20, 25));
+                var remmarker = new BMap.Marker(rempoint, { icon: remicon });
+                map.addOverlay(remmarker);
+            }
+        }
+    }
+
+    @{
+        if (Model.projectinfo.Longitude.HasValue && Model.projectinfo.Latitude.HasValue)
+        {
+            @:$('#Map').append(getLocation());
+                                                                                                                                                       }
+    }
+
+    @{
+         @:$('#demo').append(get());
+                                 }
+
+</script>

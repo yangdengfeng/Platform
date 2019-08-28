@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:980px;height:0px;"></div>
+    </div>
+    <div class="mt-5">
+        <div id="gridbox" style="position:fixed;width:100%; top:40px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=2"></script>
+<script type="text/javascript">
+
+    var myTabbar, mygrid, gridQString, myToolbar, myForm, exporter;
+
+    function doOnLoad() {
+
+
+
+
+        gridQString = '/CheckStatisReport/Search';
+
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "报告上传统计", active: true }
+            ]
+        });
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+        text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        var myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/CheckStatisReport/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+
+            if (id == "Export") {
+                exporter.show();
+            }
+
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        //先创建 grid
+        //最近一周未上传报告统计
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,检测机构,最新上传时间,未上传间隔");//the headers of columns
+        mygrid.setInitWidths("40,*,130,130");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro");                //the types of columns
+        mygrid.setColSorting("int,str,str,str");          //the sorting types
+        mygrid.init();   //finishes initialization and renders the grid on the page
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load('/CheckStatisReport/Search', function () {
+            myTabbar.tabs("gridboxOne").progressOff();
+        });
+        var exporter = new ExcelExporter(null, mygrid, 30, "/CheckStatisReport/Export");
+    }
+
+
+    function sortGridOnServer(ind, gridObj, direct) {
+
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+</script>
+
+
+

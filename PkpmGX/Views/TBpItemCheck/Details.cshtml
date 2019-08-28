@@ -1,0 +1,495 @@
+﻿@model PkpmGX.Models.STReportDetailViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckPeopleManager-Details-Container">
+        <form class="layui-form" action="" lay-filter="TotalSearch-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">工程名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="PROJECTNAME" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测项目</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ItemCNName" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">报告编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="REPORTNUM" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">结构部位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="STRUCTPART" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">监督单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="SUPERUNIT" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">委托编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ENTRUSTNUM" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">企业</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CutomName" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">建设单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CONSTRACTUNIT" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">样品编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="SAMPLENUM" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">委托单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ENTRUSTUNIT" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检验类别</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CHECKTYPE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测标准</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="STANDARDNAME" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">生产厂家</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="PDSTANDARDNAME" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CHECKDATE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">审核日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="AUDITINGDATE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">委托日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ENTRUSTDATE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">报告日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="PRINTDATE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">批准</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="APPROVEMAN" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">批准日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="APPROVEDATE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">副检</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="SECONDCHECKMAN" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">审核</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="AUDITINGMAN" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">主检</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="FIRSTCHECKMAN" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">湿度</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="HUMIDITY" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">温度</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="TEMPERATURE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">使用前状态</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="BEFORESTATUS" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">使用后状态</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="AFTERSTATUS" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">唯一标识</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="QRCODEBAR" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">结论状态</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CONCLUSIONCODE" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">检测参数</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="CheckItemNormal" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md2 layui-col-md-offset2">
+                            <button type="button" class="layui-btn layui-hide" id="send">推送</button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">检测结论</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="CHECKCONCLUSION" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">详细信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab" lay-filter="totalSearchDetailsTab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="AcsInfo">曲线信息</li>
+                            <li lay-id="CommonReport">报告信息</li>
+                            <li lay-id="Modify">修改记录</li>
+                            <li lay-id="RawMaterial">原材料信息</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="50">
+                                        <col>
+                                        <col width="250">
+                                        <col width="150">
+                                        <col width="80">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>样品编号</th>
+                                            <th>曲线时间</th>
+                                            <th>极限负载</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var item in Model.acsTimeModel)
+                                            {
+                                                <tr><td>@item.index</td><td>@item.SAMPLENUM</td><td>@item.ACSTIME</td><td>@item.MAXVALUE</td><td><a href="javascript:void(0);" onclick="showAcsGraph('@item.index','@item.SysPrimaryKey')">[查看]</a></td></tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                            <div class="layui-tab-item">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="50">
+                                        <col width="200">
+                                        <col width="300">
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>上传时间</th>
+                                            <th>报告编号</th>
+                                            <th>点击查看报告</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var item in Model.commonReprtModel)
+                                            {
+                                                <tr>
+                                                    <td>@item.index</td>
+                                                    <td>@item.UpLoadTime</td>
+                                                    <td>@item.ReportNum</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" onclick="viewCommonReportBypath('@item.ReportPath')">[点击查看]</a>
+                                                        <a href="javascript:void(0);" onclick="buildBarCode('@item.Id','')">[防伪二维码]</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="80">
+                                        <col>
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="100">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>修改内容</th>
+                                            <th>修改前值</th>
+                                            <th>修改后值</th>
+                                            <th>修改时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var item in Model.modifyModel)
+                                            {
+                                                <tr>
+                                                    <td>@item.index</td>
+                                                    <td>@item.FieldName</td>
+                                                    <td>@item.BeforeModifyValues</td>
+                                                    <td>@item.AfterModifyValues</td>
+                                                    <td>@item.ModifyDateTime</td>
+                                                    <td><a href="javascript:void(0);" onclick="modifyDetails('@item.QuestionPrimaryKey')">[查看]</a></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="layui-tab-item">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="80">
+                                        <col>
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="100">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>材料名称</th>
+                                            <th>生产厂家</th>
+                                            <th>进厂日期</th>
+                                            <th>进厂数量</th>
+                                            <th>批次号</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            foreach (var item in Model.RawMaterialModel)
+                                            {
+                                                <tr>
+                                                    <td>@item.index</td>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.PRODUCEFACTORY</td>
+                                                    <td>@item.ENTRYDATE</td>
+                                                    <td>@item.ENTRYAMOUNT</td>
+                                                    <td>@item.JYPC</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script>
+    layui.use(["form", "element", "layer"], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            element = layui.element,
+             router = layui.router();
+        form.val("TotalSearch-Details-form", {
+            "PROJECTNAME": "@Model.MainItem.PROJECTNAME",
+            "ItemCNName": "@Model.ItemCNName",
+            "REPORTNUM": "@Model.MainItem.REPORTNUM",
+            "STRUCTPART": "@Model.MainItem.STRUCTPART",
+            "SUPERUNIT": "@Model.MainItem.SUPERUNIT",
+            "ENTRUSTNUM": "@Model.MainItem.ENTRUSTNUM",
+            "CutomName": "@Model.CutomName",
+            "CONSTRACTUNIT": "@Model.MainItem.CONSTRACTUNIT",
+            "SAMPLENUM": "@Model.MainItem.SAMPLENUM",
+            "ENTRUSTUNIT": "@Model.MainItem.ENTRUSTUNIT",
+            "CHECKTYPE": "@Model.MainItem.CHECKTYPE",
+            "STANDARDNAME": "@Model.MainItem.STANDARDNAME",
+            "PDSTANDARDNAME": "@Model.MainItem.PDSTANDARDNAME",
+            "CHECKDATE": "@(Model.MainItem.CHECKDATE.HasValue?Model.MainItem.CHECKDATE.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "AUDITINGDATE": "@(Model.MainItem.AUDITINGDATE.HasValue?Model.MainItem.AUDITINGDATE.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "ENTRUSTDATE": "@(Model.MainItem.ENTRUSTDATE.HasValue?Model.MainItem.ENTRUSTDATE.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "PRINTDATE": "@(Model.MainItem.PRINTDATE.HasValue?Model.MainItem.PRINTDATE.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "APPROVEMAN": "@(Model.MainItem.APPROVEMAN??"/")",
+            "APPROVEDATE": "@(Model.MainItem.APPROVEDATE.HasValue?Model.MainItem.APPROVEDATE.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "SECONDCHECKMAN": "@Model.MainItem.SECONDCHECKMAN",
+            "AUDITINGMAN": "@(Model.MainItem.AUDITINGMAN??"/")",
+            "FIRSTCHECKMAN": "@Model.MainItem.FIRSTCHECKMAN",
+            "HUMIDITY": "@Model.MainItem.HUMIDITY",
+            "TEMPERATURE": "@(Model.MainItem.TEMPERATURE??"/")",
+            "BEFORESTATUS": "@Model.MainItem.BEFORESTATUS",
+            "AFTERSTATUS": "@Model.MainItem.AFTERSTATUS",
+            "QRCODEBAR": "@Model.MainItem.QRCODEBAR",
+            "CHECKCONCLUSION": "@Model.MainItem.CHECKCONCLUSION",
+            "CONCLUSIONCODE": "@Model.MainItem.CONCLUSIONCODE",
+            "CheckItemNormal": "@(Model.CheckItemNormal?? "/")",
+        });
+
+        $('#send').on("click", function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/TotalSearch/SendItem?id=" + '@Model.MainItem.SYSPRIMARYKEY',
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('推送成功');
+                    } else {
+                        layer.alert(d)
+                    }
+
+                }
+
+            })
+        })
+
+
+        @if(Model.acsTimeModel.Count == 0)
+         {
+             @:element.tabDelete('totalSearchDetailsTab', 'AcsInfo');
+                                         }
+
+        @if (Model.commonReprtModel.Count == 0)
+         {
+             @:element.tabDelete('totalSearchDetailsTab', 'CommonReport');
+                         }
+        @if (Model.modifyModel.Count == 0)
+         {
+             @:element.tabDelete('totalSearchDetailsTab', 'Modify');
+                         }
+        @if (Model.RawMaterialModel.Count == 0)
+        {
+            @:element.tabDelete('totalSearchDetailsTab', 'RawMaterial');
+        }
+    })
+
+    function viewCommonReportBypath(path) {
+        window.open("/TBpItemCheck/CommonReportByPath?path=" + encodeURIComponent(path), "_blank");
+    }
+
+    function buildBarCode(id, qrinfo) {
+        layer.open({
+            type: 1,
+            title: '防伪二维码',
+            area: '300px',
+            skin: 'layui-layer-nobg', //没有背景色
+            shadeClose: true,
+            content: '<img  id="barCodeImg" src="/TBpItemCheck/BuildBarCode?id=' + id + '&qrinfo=' + qrinfo + '" width="280"  height="280" /> '
+        });
+    }
+
+    function showAcsGraph(iIndex, pk) {
+        layer.open({
+            type: 2,
+            title: '曲线图显示',
+            maxmin: true,
+            area: ['980px', '420px'],
+            shadeClose: true,
+            content: '/AcsGraphST/Index?id=' + pk
+        });
+        //acsWin.attachURL('/AcsGraph/Index?id=' + pk);
+    }
+
+
+
+    function modifyDetails(key) {
+        layer.open({
+            type: 2,
+            title: '修改详情',
+            area: ['800px', '600px'],
+            shadeClose: true,
+            content: '/TBpItemCheck/ModifyRecordDetails?key=' + key
+        });
+    }
+
+
+</script>
+

@@ -1,0 +1,304 @@
+﻿@model PkpmGX.Models.LiftingEquipmentViewModels
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<style type="text/css">
+    #Map {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<link href="~/Scripts/viewer.min.css" rel="stylesheet" />
+<script src="~/Scripts/viewer.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gb91ysMwstDuIDV5qhRMpylKWmDnQh9x"></script>
+<div class="layui-container">
+    <div class="layui-form" id="LiftingEquipment-Details-Container">
+        <form class="layui-form" action="" lay-filter="LiftingEquipment-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">工程概况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectname" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测机构</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="customname" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">所在城市</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="areainfo" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工程备案登记号</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectregnum" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">工程地址</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="projectaddress" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">建设单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="constructionunit" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">监理单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="supervisionunit" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="designunit" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">施工单位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="constructionunits" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">项目负责人名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="personinchargename" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">项目负责人及电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="personinchargetel" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">见证人员</div>
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="200">
+                                    <col width="260">
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>电话</th>
+                                        <th>证书号</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.WitnessPeoples)
+                                        {
+                                            <tr>
+                                                <td>@item.name</td>
+                                                <td>@item.phone</td>
+                                                <td>@item.postnum</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">方案信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">检测人员</div>
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="200">
+                                    <col width="260">
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>电话</th>
+                                        <th>证书号</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.CheckPeoples)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @item.name
+                                                </td>
+                                                <td>
+                                                    @item.phone
+                                                </td>
+                                                <td>
+                                                    @item.postnum
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">现场检测项目</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="checktype" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">现场检测计划开始结束时间</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="plandate" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测部位</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="structpart" placeholder="" autocomplete="off" readonly class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @{
+                if (!string.IsNullOrEmpty(Model.programme.qrpath) && !string.IsNullOrEmpty(Model.programme.peoplepath) && !string.IsNullOrEmpty(Model.programme.photopath))
+                {
+                    var qrpath = "http://175.6.228.209:8090/photo" + Model.programme.qrpath;
+                    var photopath = "http://175.6.228.209:8090/photo" + Model.programme.photopath;
+                    var peoplepath = "http://175.6.228.209:8090/photo" + Model.programme.peoplepath;
+                    <div class="layui-card">
+                        <div class="layui-card-header">图片信息</div>
+                        <div class="layui-card-body">
+                            <table id="Imagestable">
+                                <colgroup>
+                                    <col width="350">
+                                    <col width="350">
+                                    <col width="350">
+                                </colgroup>
+                                <tr>
+                                    <td><img data-original="@qrpath" title="点击可看大图" width="320" height="400" src="@qrpath" /></td>
+                                    <td><img data-original="@photopath" title="点击可看大图" width="320" height="400" src="@photopath" /></td>
+                                    <td><img data-original="@peoplepath" title="点击可看大图" width="320" height="400" src="@peoplepath" /></td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <a style="text-align:center"> 图片说明1：铭牌照片<br /></a>
+                                        <a style="text-align:center">二维码加铭牌照片</a>
+                                    </td>
+                                    <td align="center">
+                                        图片说明2：现场照片<br />                                起重设备现场情况照片
+                                    </td>
+                                    <td align="center">
+                                        图片说明3：人员照片   <br />                             检测人员现场照片
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="layui-card">
+                <div class="layui-card-header">位置信息</div>
+                <div class="layui-card-body">
+                    <div id="Map" style="height:100%;width:100%; overflow: auto;">
+                        <div id="allmap" style="width: 100%; height: 800px;"> </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["form", "element", "layer"], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            element = layui.element,
+             router = layui.router();
+        form.val("LiftingEquipment-Details-form", {
+            "projectname": "@Model.programme.projectname",//工程名称
+            "customname": "@Model.programme.customname",//检测机构
+            "areainfo": "@Model.programme.areainfo",//所在城市
+            "projectregnum": "@Model.programme.projectregnum",//工程备案登记号
+            "projectaddress": "@Model.programme.projectaddress",//工程地址
+            "constructionunit": "@Model.programme.constructionunit",//建设单位
+            "supervisionunit": "@Model.programme.supervisionunit",//监理单位
+            "designunit": "@Model.programme.designunit",//设计单位
+            "constructionunits": "@Model.programme.constructionunits",//施工单位
+            "personinchargename": "@Model.programme.personinchargename",//项目负责人名称
+            "personinchargetel": "@Model.programme.personinchargetel",//项目负责人及电话
+            "checktype": "@Model.programme.checktype",//现场检测项目
+            @*"plandate": "@Model.programme",//现场检测计划开始结束时间*@
+        });
+
+
+    })
+
+
+    $('#Imagestable').viewer({
+        url: 'data-original',
+        zIndexInline: 999,
+    });
+
+    function getLocation() {
+        var plong = "@(Model.programme.longitude)";
+        var plat = "@(Model.programme.latitude)";
+        if (plong != "" && plat != "") {
+            var maplong = plong;//accSub(plong, 0.0072);
+            var maplat = plat;//accAdd(plat, 0.004);
+            var map = new BMap.Map("allmap");
+            map.centerAndZoom(new BMap.Point(maplong, maplat), 13);
+            map.enableScrollWheelZoom(true);
+            map.addControl(new BMap.NavigationControl());
+            map.addControl(new BMap.ScaleControl({ anchor: BMAP_ANCHOR_TOP_LEFT }));
+            map.addControl(new BMap.MapTypeControl({ mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP] }));
+            var ppoint = new BMap.Point(plong, plat);
+            var picon = new BMap.Icon('../images/gc.png', new BMap.Size(40, 50));
+            var pmarker = new BMap.Marker(ppoint, { icon: picon });
+            map.addOverlay(pmarker);
+        }
+    }
+
+    @{
+        if(Model.programme.latitude.HasValue && Model.programme.longitude.HasValue)
+        {
+             @:$('#Map').append(getLocation());
+            }
+    }
+</script>

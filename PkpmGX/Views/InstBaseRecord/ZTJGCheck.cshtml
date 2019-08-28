@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "ZTJGCheck";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<div id="form_container" style="width:auto;height:100%;"></div>
+<div id="gridbox" style="position:fixed; top:100px; left: 0; right: 0; bottom: 43px"></div>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js"></script>
+<script type="text/javascript">
+    var myForm, myTabbar, dhxWins, mygrid, gridQString, myToolBar, peoGrid, peoGridTabber, euipGrid, euipGridTabber;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        dhxWins.attachViewportTo("gridbox");
+
+        var formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+            { type: "combo", label: "受检单位名称", name: "UnitName" },
+             { type: "button", name: 'Search', value: "查询", offsetLeft: 80 }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            gridQString = '/InstBaseRecord/ZTJGSearch?' + getQueryStr();
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString, doOnGridLoaded);
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        myToolBar = myTabbar.tabs("gridboxOne").attachToolbar();
+        myToolBar.setIconset("awesome");
+        myToolBar.loadStruct("/InstBaseRecord/ToolBar");
+
+
+        myToolBar.attachEvent("onClick", function (id) {
+            if (id == 'Export') {
+                exporter.show();
+            } else if (id == 'Create') {
+                NewCustom();
+            }
+        });
+
+        gridQString = '/InstBaseRecord/ZTJGSearch?' + getQueryStr();
+
+
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,受检日期,检测人员,查看,编辑");//the headers of columns
+        mygrid.setInitWidths("40,*,100,100,100,100");          //the widths of columns
+        mygrid.setColAlign("right,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,view,edit");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+
+        var checkInstCombo = myForm.getCombo("UnitName");
+        checkInstCombo.enableFilteringMode("between");
+        checkInstCombo.load("/InstBaseRecord/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function Create() {
+        window.parent.Hui_admin_tab_raw("/InstBaseRecord/ZTJGCreate?", "主体结构新增");
+    }
+</script>
+

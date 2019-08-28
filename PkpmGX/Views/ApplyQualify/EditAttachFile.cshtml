@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "EditAttachFile";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    @{
+        if (Model.IsFile == 1)
+        {
+            <button class="layui-btn" id="addFile">新增</button>
+        }
+        else
+        {
+            <button class="layui-btn" id="addImg">新增</button>
+        }
+    }
+    <table class="layui-table" id="EditCheckQUalifyAttachFiletable-table">
+        @{
+            if (Model.IsFile == 1)
+            {
+                <colgroup>
+                    <col  />
+                    <col width="200" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <td>附件名称</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var item in Model.paths)
+                        {
+                            <tr id="@item.Value">
+                                <td id="filepath">@item.Value</td>
+                                <td>
+                                    <button class="layui-btn EditCheckQUalifyAttachFile-table-btnDeDown">下载</button>
+                                    @*<a href="/CheckQualify/AttachFileDownload?id=@item.Value">下载</a>*@
+                                    <button class="layui-btn EditCheckQUalifyAttachFile-table-btnDel">删除</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            }
+            else
+            {
+                <colgroup>
+                    <col />
+                    <col width="200" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <td>附件名称</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        foreach (var item in Model.paths)
+                        {
+                            <tr path ="@item.Value">
+                                <td>@item.Value</td>
+                                <td>
+                                    <button class="layui-btn EditCheckQUalifyAttachFile-table-btnDetails">查看</button>
+                                    @*<a href="/CheckQualify/AttachFileDownload?id=@item.Value">查看</a>*@
+                                    <button class="layui-btn EditCheckQUalifyAttachImage-table-btnDel">删除</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            }
+        }
+    </table>
+</div>
+
+<script>
+    var EndPath = '@Model.path';
+    layui.use(["form", "element", "upload", "layer", "table", ],
+      function () {
+          var $ = layui.$,
+              element = layui.element,
+              form = layui.form,
+              layer = layui.layer,
+              table = layui.table,
+              upload= layui.upload,
+              router = layui.router();
+          var customid = parent.$('#id').val();
+
+          var uploadInst = upload.render({
+              elem: '#addFile', //绑定元素
+              url: '/ApplyQualify/attachUpload?id=' + customid, //上传接口
+              accept: 'file',
+              acceptMime: 'file/*',
+              done: function (res) {
+                  if (res.state) {
+                      EndPath += '|' + res.name;
+                      var $tr = $("#EditCheckQUalifyAttachFiletable-table tr:last");
+                      var tableth = '<tr id="' + res.name + '"> <td>' + res.name + '</td><td><button class="layui-btn EditCheckQUalifyAttachFile-table-btnDeDown">下载</button> <button class="layui-btn EditCheckQUalifyAttachFile-table-btnDel">删除</button> </td></tr>';
+                      $tr.after(tableth);
+                      parent.$('#filePath').val(EndPath);
+                      parent.$('#@Model.Id td.state').text('已上传');
+                  }
+              },
+              error: function () {
+                  layer.msg("上传文件失败，请重试");
+              }
+          });
+
+          var uploadInst = upload.render({
+              elem: '#addImg', //绑定元素
+              url: '/ApplyQualify/attachUpload?id=' + customid, //上传接口
+              accept: 'images',
+              acceptMime: 'image/*',
+              done: function (res) {
+                  if (res.state) {
+                      EndPath += '|' + res.name;
+                      var $tr = $("#EditCheckQUalifyAttachFiletable-table tr:last");
+                      var tableth = '<tr path="' + res.name + '"> <td>' + res.name + '</td><td><button class="layui-btn EditCheckQUalifyAttachFile-table-btnDetails">查看</button> <button class="layui-btn EditCheckQUalifyAttachFile-table-btnDel">删除</button> </td></tr>';
+                      $tr.after(tableth);
+                      parent.$('#filePath').val(EndPath);
+                      parent.$('#@Model.Id td.state').text('已上传');
+                  }
+              },
+              error: function () {
+                  layer.msg("上传文件失败，请重试");
+              }
+          });
+          
+      });
+    $('#EditCheckQUalifyAttachFiletable-table').on('click', '.EditCheckQUalifyAttachFile-table-btnDeDown', function () {
+        var path = $(this).parent().parent().attr("id");
+        window.location = "/ApplyQualify/AttachFileDownload?id=" + path;
+    });
+
+    $('#EditCheckQUalifyAttachFiletable-table').on('click', '.EditCheckQUalifyAttachFile-table-btnDetails', function () {
+        var path = $(this).parent().parent().attr("path");
+        layer.open({
+            type: 1,
+            area: ['500px', '600px'],
+            title: '照片查看',
+            content: '<div style="position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;">' + '<img src=/ApplyQualify/Image?itemValue=' + encodeURIComponent(path) + ' border=0 style="width: 400px;height:350px" >' + '</div>'
+        });
+    });
+    
+    //这个只删除附件，不删除图片附件
+    $('#EditCheckQUalifyAttachFiletable-table').on('click', '.EditCheckQUalifyAttachFile-table-btnDel', function () {
+        var path = $(this).parent().parent().attr("id");
+        $(this).parent().parent().remove();
+        var paths = EndPath.replace(path, ''); //split(path);//根据获得的文件名字split，可以干掉需要删除的文件
+        var filePaths = '';//存储删除之后的路径
+        //console.log(paths);
+        //$.each(paths, function (index, val) {
+        //    if (val) {
+        //        filePaths += val + '|';
+        //    }
+        //});
+        //if (filePaths == '') { //将路径全部删除了，存一个特定的字符，不然会导致验证失败（与只打开页面，不进行操作，然后关闭有关）
+        //    filePaths = '|'
+        //}
+       
+        parent.$('#filePath').val(paths);
+    });
+
+    //只删除图片
+    $('#EditCheckQUalifyAttachFiletable-table').on('click', '.EditCheckQUalifyAttachImage-table-btnDel', function () {
+        var path = $(this).parent().parent().attr("path");
+        $(this).parent().parent().remove();
+        var paths = EndPath.split(path);//根据获得的文件名字split，可以干掉需要删除的文件
+        var filePaths = '';//存储删除之后的路径
+        //console.log(paths);
+        $.each(paths, function (index, val) {
+            if (val) {
+                values = val.split('|');
+                $.each(values, function (inde, vall) {
+                    if (vall) {
+                        filePaths += vall + '|';
+                    }
+                })
+            }
+        });
+        if (filePaths == '') { //将路径全部删除了，存一个特定的字符，不然会导致验证失败（与只打开页面，不进行操作，然后关闭有关）
+            filePaths = '|'
+        }
+        EndPath = filePaths;
+        console.log(EndPath);
+        parent.$('#filePath').val(EndPath);
+    });
+
+    
+
+</script>

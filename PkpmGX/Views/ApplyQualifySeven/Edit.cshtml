@@ -1,0 +1,242 @@
+﻿@model PkpmGX.Models.ApplyQualifySevenDetailsModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div id="form_container" style="width:100%;height:170px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:0px; left: 0; right: 0; bottom: 43px"></div>
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+
+
+<script type="text/javascript">
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm, myLayout;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+           { type: "hidden", label: "表一编号", name: "PId", value: "@Model.pid" },
+           { type: "hidden", name: "CustomId", label: "机构编号", value: "@Model.customId" }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/ApplyQualifySeven/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Import") {//导入逻辑
+                importEquip();
+            } else if (id == "Save") {
+                var formData = getQueryStr();
+
+                var data = [];
+                data.push('gridStr' + '=' + encodeURIComponent(mygrid.serialize()));
+
+                formData = formData + '&' + data.join("&");
+
+                window.dhx.ajax.post("/ApplyQualifySeven/Edit", formData, function (response) {
+                    var t = window.dhx.s2j(response.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.alert({
+                            text: "设备信息导入成功！", ok: "确定", callback: function (result) {
+                                window.parent.Hui_admin_close("/ApplyQualifySeven/Edit");
+                            }
+                        });
+                    }
+                    else {
+                        dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                    }
+                })
+            }
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        mygrid.setHeader("序号,检测项目,主要仪器设备（名称/型号/规格）,测量范围,准确度等级/不确定度,检定/校准机构,有效日期,自检/校项目,自检/校规范名称及编号,备注（比对情况）,校准文件查看,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,*,200,100,160,200,130,200,200,100,100,40");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,txt,ro,ro,ro,ro,ro,txt,txt,txt,layuijslink,del");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        gridQString = '/ApplyQualifySeven/SearchEdit?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+
+    function sortGridOnServer() {
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function importEquip() {
+        dhxWins.attachViewportTo("gridbox");
+        importWin = dhxWins.createWindow("menuW", 20, 30, 1000, 500);
+        importWin.setModal(true);
+        importWin.center();
+        importWin.setText('仪器设备信息');
+
+        //importForm = importWin.attachForm();
+        //var menuFormStructrue = [
+        //     { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+        //     { type: "input", name: "JDCsutom", label: "检定机构" },
+        //     { type: "input", name: "XZCustom", label: "校准机构" },
+        //     { type: "input", name: "EquModel", label: "仪器型号" },
+        //     { type: "newcolumn" },
+        //     { type: "input", name: "EquName", label: "仪器设备名称" },
+        //     { type: "input", name: "EquNum", label: "仪器编号" },
+        //     {
+        //         type: "combo", name: "EquType", label: "仪器类别", options: [
+        //             { value: "", text: "全部" },
+        //             { value: "1", text: "主要仪器设备" },
+        //             { value: "2", text: "小仪器设备" },
+        //         ]
+        //     },
+
+        //     { type: "button", name: 'Save', value: "保存", offsetLeft: 150 }
+        //];
+        //importForm.load(menuFormStructrue);
+
+        gridTabber = importWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: "查询结果", active: true }
+            ]
+        });
+
+        var gridToolBar = gridTabber.tabs("gridDtails").attachToolbar();
+        gridToolBar.setIconset("awesome");
+        gridToolBar.loadStruct("/ApplyQualifySeven/ImportToolBar");
+        gridToolBar.attachEvent("onClick", function (id) {
+            if (id == "ImportEquips") {//导入逻辑
+                var selectdRows = importGrid.getCheckedRows(0);
+                $.each(selectdRows.split(','), function (index, value) {
+                    console.log(importGrid.cells(value, 10).cell.innerHTML);
+                    console.log(importGrid.cells(value, 9).cell.innerText)
+                    console.log(importGrid.cells(value, 8).cell.innerText)
+                    var strTem = ",,#Name#,#range#,#degree#,#repair#,#date#,,,,<a style='text-decoration:none;color:white' onclick=javascript:uploadFile('#fileUrl#'); return false; data-rowid=#dataid# href='javascript:;' <button class='layui-btn layui-btn-normal layui-btn-xs'title='检定/校准文件查看'>检定/校准文件查看</button></a> ,删除";
+                    var values = {};
+                    values["Name"] = importGrid.cells(value, 3).cell.innerText.replace(',', ' ');
+                    values["range"] = importGrid.cells(value, 4).cell.innerText;
+                    values["degree"] = importGrid.cells(value, 5).cell.innerText;
+                    values["repair"] = importGrid.cells(value, 7).cell.innerText;
+                    values["date"] = importGrid.cells(value, 8).cell.innerText;
+                    values["fileUrl"] = importGrid.cells(value, 10).cell.innerText;
+                    values["dataid"] = value;
+                    console.log(window.dhx4.template(strTem, values));
+                    mygrid.addRow(value, window.dhx4.template(strTem, values));
+
+                    //mygrid.addRow(value, ",," + importGrid.cells(value, 3).cell.innerText.replace(',', ' ') + "," + importGrid.cells(value, 4).cell.innerText + "," + importGrid.cells(value, 5).cell.innerText + "," + importGrid.cells(value, 7).cell.innerText + "," + importGrid.cells(value, 8).cell.innerText + ",,,,<a style='text-decoration:none;color:white' onclick='javascript:uploadFile('" + importGrid.cells(value, 10).cell.innerHTML + "'); return false;' data-rowid='" + value + "'href='javascript:;' <button class='layui-btn layui-btn-normal layui-btn-xs'title='检定/校准文件查看'>检定/校准文件查看</button></a> ,删除");
+                });
+                importWin.close();
+            }
+        });
+
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea1'></div><div id='pagingArea1'></div>",
+            paging: true
+        });
+
+        importGrid = gridTabber.tabs("gridDtails").attachGrid();
+
+        importGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        importGrid.setHeader("&nbsp,序号,设备编号,仪器设备名称/型号/规格,测量范围,准确度等级/不确定度,所属检测机构,(校准/检定)机构,(校准/检定)有效日期	,是否到期,&nbsp,状态,查看");//设置列的头文本
+        importGrid.setInitWidths("40,40,80,200,100,80,80,160,200,130,0,40,40");          //设置列的宽度，其中* 为动态宽度
+        importGrid.setColAlign("right,right,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        importGrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro");                //设置列的类型，一般ro 为只读类型，用的也最多
+        importGrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        importGrid.init();      //最后初始化列
+        importGrid.enablePaging(true, 30, null, "pagingArea1", true, "recinfoArea1");
+        importGrid.setPagingSkin("bricks");
+        importGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        var gridQStrings = '/ApplyQualifySeven/SearchImport?customId=@Model.customId&pid=@Model.pid' + getQueryStr();
+
+        gridTabber.tabs("gridDtails").progressOn();
+        importGrid.load(gridQStrings, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+
+
+
+    }
+
+    function uploadFile(fileUrl) {//查看附件方法
+        console.log(111);
+        dhxWins.attachViewportTo("gridbox");
+        lookWin = dhxWins.createWindow("lookWin", 200, 250, 700, 700);
+        lookWin.setModal(true);
+        lookWin.setText("检定/校准证书查看");
+        dhxWins.window("lookWin").keepInViewport(true);
+
+        myLayout = lookWin.attachLayout({
+            pattern: "1C",
+            cells: [
+                   {
+                       id: "a",        // id of the cell you want to configure
+                       text: "检定/校准证书查看",     // header text
+                       collapsed_text: "检定/校准证书查看",   // header text for a collapsed cell
+                       header: true,      // hide header on init
+                       width: 700,        // cell init width
+                       height: 250,        // cell init height
+                       collapse: false        // collapse on init
+                   },
+            ]
+        });
+        myCarousel = myLayout.cells("a").attachCarousel();
+        myLayout.cells("a").hideHeader();
+
+        var uploadedphoto = fileUrl;
+        var photoarr = uploadedphoto.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+    }
+
+    function excellDel_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        mygrid.deleteRow(rowId);
+    }
+</script>
+
+

@@ -1,0 +1,747 @@
+﻿@model PkpmGX.Models.ApplyQualifyTwoUIModels
+
+@{
+    ViewBag.Title = "AddQualifyTwo";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckQualify-Details-Container">
+        <form class="layui-form" action="" lay-filter="CheckQualify-Edit-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 基本信息 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测机构名称 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="pid" id="pid" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="unitcode" id="unitcode" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="businessnumPath" id="businessnumPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="MEASNUMPATH" id="MEASNUMPATH" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="bgcszmPath" id="bgcszmPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="zxzmPath" id="zxzmPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="gqzmPath" id="gqzmPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="zzscwjPath" id="zzscwjPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="glscwjPath" id="glscwjPath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                                <input type="text" name="NAME" placeholder="" autocomplete="off" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">成立时间<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="time" id="time" placeholder="" autocomplete="off" lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">申报人 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="SQname" id="SQname" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">联系电话（手机） <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="SQTel" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">发证机关 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="businessnumunit" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工商营业执照号码 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="businessnum" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">机构地址 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="address" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">经济性质 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="economicnature" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">计量认证证书号 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="measnum" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">计量认证证书发证机关 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="measunit" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">房屋建筑面积[m<sup>2</sup>] <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fwjzmj" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测场地面积[m<sup>2</sup>] <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="gzmj" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">仪器设备总[台]套数</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yqsbzs" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设备固定资产原值[万元]</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yqsbgtzc" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">联系电话 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="tel" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">电子邮箱</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="email" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">传真 </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fax" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">邮政编码 </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="postcode" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">注册资金[万元] <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="regaprice" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">申请检测业务内容 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select name="sqjcyw" xm-select="sqjcyw" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.CheckWork)
+                                        {
+                                            if (Model.myT_bp_Custom.sqjcyw == null)
+                                            {
+                                                Model.myT_bp_Custom.sqjcyw = "";
+                                            }
+                                            if (Model.myT_bp_Custom.sqjcyw.Contains(@item.Name))
+                                            {
+                                                <option value="@item.Name" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">人员信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">法定代表人 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fr" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职务<font color="red">*</font></div>
+                            <div class="layui-input-block">
+                                <select name="frzw" xm-select="frzw" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.PersonnelStaff)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职称 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select name="frzc" lay-verify="required">
+                                    @{
+                                        foreach (var item in Model.CompayTypeList["personnelTitles"])
+                                        {
+                                            if (item.Name == Model.myT_bp_Custom.FRTITLE)
+                                            {
+                                                <option value="@item.KeyValue" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.KeyValue">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">技术负责人 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jsfzr" placeholder="" lay-verify="required" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职务<font color="red">*</font></div>
+                            <div class="layui-input-block">
+                                <select name="jsfzrzw" xm-select="jsfzrzw" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.PersonnelStaff)
+                                        {
+                                            <option value="@item.Name">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">职称 <span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select name="jsfzrzc" lay-verify="required">
+                                    @{
+                                        foreach (var item in Model.CompayTypeList["personnelTitles"])
+                                        {
+                                            if (item.Name == Model.myT_bp_Custom.JSTIILE)
+                                            {
+                                                <option value="@item.KeyValue" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.KeyValue">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">人员总数</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="percount" disabled placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">中级职称人数</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="midpercount" disabled placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">高级职称人数</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="heipercount" disabled placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+    
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space30">
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.File)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td>@item.Name</td>
+                                                <td class="state">@item.State</td>
+                                                <td>
+                                                    <a href="javascript:void(0);" onclick=MemberInformation("@item.Id","@item.Name","@item.Modify","@item.Type")>
+                                                        @{
+                                                            if (item.State == "未上传")
+                                                            {
+                                                                <text>添加</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <text>查看</text>
+                                                            }
+                                                        }
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit lay-filter="checkQualify-Edit-save">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var EditIndex = '';
+
+
+
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            layedit = layui.layedit,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+        form.val("CheckQualify-Edit-form", {
+            "unitcode": "@Model.myT_bp_Custom.ID",
+            "pid": "@Model.myT_bp_Custom.pid",
+            "NAME": "@(Model.myT_bp_Custom.NAME)",
+            "time": "@(Model.myT_bp_Custom.CREATETIME.HasValue?Model.myT_bp_Custom.CREATETIME.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "businessnumunit": "@Model.myT_bp_Custom.BUSINESSNUMUNIT",
+            "businessnum": "@Model.myT_bp_Custom.BUSINESSNUM",
+            "address": "@Model.myT_bp_Custom.ADDRESS",
+            "phone": "@Model.myT_bp_Custom.phone",
+            "economicnature": "@Model.myT_bp_Custom.ECONOMICNATURE",
+            "fr": "@Model.myT_bp_Custom.FR",
+            "detectnum": "@Model.myT_bp_Custom.DETECTNUM",
+            "measunit": "@Model.myT_bp_Custom.MEASUNIT",
+            "detectunit": "@Model.myT_bp_Custom.detectunit",
+            "measnum": "@Model.myT_bp_Custom.MEASNUM",
+            "fwjzmj": "@Model.myT_bp_Custom.HOUSEAREA",
+            "gzmj": "@Model.myT_bp_Custom.DETECTAREA",
+            "yqsbzs": "@Model.myT_bp_Custom.instrumentNum",
+            "yqsbgtzc": "@Model.myT_bp_Custom.INSTRUMENTPRICE",
+            "tel": "@Model.myT_bp_Custom.TEL",
+            "fax": "@Model.myT_bp_Custom.fax",
+            "email": "@Model.myT_bp_Custom.EMAIL",
+            "regaprice": "@Model.myT_bp_Custom.REGAPRICE",
+            "postcode": "@Model.myT_bp_Custom.POSTCODE",
+            "jsfzr": "@Model.myT_bp_Custom.JSNAME",
+            "percount": "@Model.myT_bp_Custom.PERCOUNT",
+            "midpercount": "@Model.myT_bp_Custom.MIDPERCOUNT",
+            "heipercount": "@Model.myT_bp_Custom.HEIPERCOUNT",
+            "hasNumPerCount": "@Model.myT_bp_Custom.hasNumPerCount",
+            "zzlbgs": "@Model.myT_bp_Custom.zzlbgs",
+            "measnumDate": "@(Model.myT_bp_Custom.measnumEndDate.HasValue ? Model.myT_bp_Custom.measnumEndDate.Value.ToString("yyyy-MM-dd"):string.Empty)",
+            "businessnumPath": "@Model.myT_bp_Custom.businessnumPath",
+            "MEASNUMPATH": "@Model.myT_bp_Custom.MEASNUMPATH",
+            "instrumentpath": "@Model.myT_bp_Custom.instrumentpath",
+            "shebaopeoplelistpath": "@Model.myT_bp_Custom.shebaopeoplelistpath",
+            "companytype": "@Model.myT_bp_Custom.companytype",
+            "SQname": "@Model.myT_bp_Custom.SQname",
+            "SQTel": "@Model.myT_bp_Custom.SQTel",
+            "frzc": "@Model.myT_bp_Custom.FRTITLE",
+            "bgcszmPath": "@Model.myT_bp_Custom.bgcszmPath",
+            "zxzmPath": "@Model.myT_bp_Custom.zxzmPath",
+            "gqzmPath": "@Model.myT_bp_Custom.gqzmPath",
+            "zzscwjPath": "@Model.myT_bp_Custom.zzscwjPath",
+            "glscwjPath": "@Model.myT_bp_Custom.glscwjPath"
+        });
+
+        form.on('submit(checkQualify-Edit-save)', function (data) {
+
+            var dataField = data.field;
+
+            if (dataField.businessnumPath == '') {
+                parent.layer.msg('请上传办公场所证明');
+                return false;
+            }
+            if (dataField.MEASNUMPATH == '') {
+                parent.layer.msg('请上传计量认证证书');
+                return false;
+            }
+            if (dataField.bgcszmPath == '') {
+                parent.layer.msg('请上传办公场所证明');
+                return false;
+            }
+            if (dataField.zxzmPath == '') {
+                parent.layer.msg('请上传资信证明文件');
+                return false;
+            }
+            if (dataField.gqzmPath == '') {
+                parent.layer.msg('请上传股权证明文件');
+                return false;
+            }
+            if (dataField.zzscwjPath == '') {
+                parent.layer.msg('请上传质量手册（word文档）');
+                return false;
+            }
+            if (dataField.glscwjPath == '') {
+                parent.layer.msg('请上传管理手册（word文档）');
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/ContinuingQualify/EditQualifyTwo",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.alert('保存成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/ContinuingQualify/EditQualifyTwo/" + "@Model.myT_bp_Custom.ID.ToString()");
+                            },
+
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('保存失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+        });
+
+
+
+        var uploadFRTitleImg = upload.render({
+            elem: "#uploadFRTitleImg"
+            , url: "/ApplyQualify/attachUpload"
+            , done: function (res) {
+                //console.log(res);
+                //如果上传失败
+                if (res.state > 0) {
+                    $("#frzcpath").val(res.name);
+                    return layer.msg('扫描件或照片上传成功');
+                } else {
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+        $("#detailFRTitleImg").on("click", function () {
+            var imagePath = $("#frzcpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+        var uploadFREducationImg = upload.render({
+            elem: "#uploadFREducationImg"
+        , url: "/ApplyQualify/attachUpload"
+        , done: function (res) {
+            //console.log(res);
+            //如果上传失败
+            if (res.state > 0) {
+                $("#frxlpath").val(res.name);
+                return layer.msg('扫描件或照片上传成功');
+            } else {
+                return layer.msg('上传失败');
+            }
+            //上传成功
+        }
+        , error: function () {
+            //演示失败状态，并实现重传
+            var demoText = $('#demoText');
+            demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            demoText.find('.demo-reload').on('click', function () {
+                uploadInst.upload();
+            });
+        }
+        });
+
+        $("#detailFREducationImg").on("click", function () {
+            var imagePath = $("#frxlpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+        var uploadJSTitleImg = upload.render({
+            elem: "#uploadJSTitleImg"
+        , url: "/ApplyQualify/attachUpload"
+        , done: function (res) {
+            //console.log(res);
+            //如果上传失败
+            if (res.state > 0) {
+                $("#jszcpath").val(res.name);
+                return layer.msg('扫描件或照片上传成功');
+            } else {
+                return layer.msg('上传失败');
+            }
+            //上传成功
+        }
+        , error: function () {
+            //演示失败状态，并实现重传
+            var demoText = $('#demoText');
+            demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            demoText.find('.demo-reload').on('click', function () {
+                uploadInst.upload();
+            });
+        }
+        });
+
+        $("#detailJSTitleImg").on("click", function () {
+            var imagePath = $("#jszcpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+        var uploadJSEducationImg = upload.render({
+            elem: "#uploadJSEducationImg"
+        , url: "/ApplyQualify/attachUpload"
+        , done: function (res) {
+            //console.log(res);
+            //如果上传失败
+            if (res.state > 0) {
+                $("#jsxlpath").val(res.name);
+                return layer.msg('扫描件或照片上传成功');
+            } else {
+                return layer.msg('上传失败');
+            }
+            //上传成功
+        }
+        , error: function () {
+            //演示失败状态，并实现重传
+            var demoText = $('#demoText');
+            demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+            demoText.find('.demo-reload').on('click', function () {
+                uploadInst.upload();
+            });
+        }
+        });
+
+        $("#detailJSEducationImg").on("click", function () {
+            var imagePath = $("#jsxlpath").val();
+            if (imagePath == "") {
+                layer.msg('请先上传扫描件或照片')
+            } else {
+                layer.open({
+                    type: 1,
+                    title: '扫描件查看',
+                    closeBtn: 0,
+                    offset: ['100px', '500px'],
+                    area: ['500px'],
+                    shadeClose: true,
+                    content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ApplyQualify/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+                });
+            }
+        });
+
+
+
+
+        laydate.render({
+            elem: '#time'
+        });
+
+        
+
+    });
+
+    //type标识针对第几个进行操作
+    function MemberInformation(id, name, modify, type) {
+        var path = $('#' + type).val();
+        $('#filePath').val('');
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name,
+            content: '/ApplyQualify/EditAttachFile?id=' + id + '&path=' + path + "&IsFile=" + modify,
+            cancel: function (index, layero) {
+                var filePath = $('#filePath').val();
+                type = type + '';
+                if (filePath) {
+                    if (type == "instrumentpath") {
+                        if (filePath == '|') {
+                            $('#instrumentpath').val('');
+                        } else {
+                            $('#instrumentpath').val(filePath);
+                        }
+                    } else if (type == "businessnumPath") {
+                        if (filePath == '|') {
+                            $('#businessnumPath').val('');
+                        } else {
+                            $('#businessnumPath').val(filePath);
+                        }
+                    } else if (type == 'MEASNUMPATH') {
+                        if (filePath == '|') {
+                            $('#MEASNUMPATH').val('');
+                        } else {
+                            $('#MEASNUMPATH').val(filePath);
+                        }
+                    } else if (type == "shebaopeoplelistpath") {
+                        if (filePath == '|') {
+                            $('#shebaopeoplelistpath').val('');
+                        } else {
+                            $('#shebaopeoplelistpath').val(filePath);
+                        }
+                    }
+                    else if (type == "bgcszmPath") {
+                        if (filePath == '|') {
+                            $('#bgcszmPath').val('');
+                        } else {
+                            $('#bgcszmPath').val(filePath);
+                        }
+                    }
+                    else if (type == "zxzmPath") {
+                        if (filePath == '|') {
+                            $('#zxzmPath').val('');
+                        } else {
+                            $('#zxzmPath').val(filePath);
+                        }
+                    }
+                    else if (type == "gqzmPath") {
+                        if (filePath == '|') {
+                            $('#gqzmPath').val('');
+                        } else {
+                            $('#gqzmPath').val(filePath);
+                        }
+                    }
+                    else if (type == "zzscwjPath") {
+                        if (filePath == '|') {
+                            $('#zzscwjPath').val('');
+                        } else {
+                            $('#zzscwjPath').val(filePath);
+                        }
+                    }
+                    else if (type == "glscwjPath") {
+                        if (filePath == '|') {
+                            $('#glscwjPath').val('');
+                        } else {
+                            $('#glscwjPath').val(filePath);
+                        }
+                    }
+                }
+
+            }
+        });
+    };
+</script>

@@ -1,0 +1,1070 @@
+﻿@model PkpmGX.Models.STQualifyViewModels
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<script type="text/javascript" src="~/Dhtmlx/codebase/ext/swfobject.js"></script>
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckQualify-Details-Container">
+        <form class="layui-form" action="" lay-filter="CheckQualify-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 基本信息 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">企业名称<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="NAME" lay-verify="required" value="@Model.myT_bp_Custom.NAME" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业性质<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select name="companyType" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.CompayTypeList["CompanyType"])
+                                        {
+                                            if (item.Name == Model.myT_bp_Custom.companytype)
+                                            {
+                                                <option value="@item.Name" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Name">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">组织机构代码<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="id" lay-verify="required" id="id" value="@Model.myT_bp_Custom.Id" placeholder="" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">所在区域<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select type="text" name="areaqx" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.Area)
+                                        {
+                                            if (Model.myT_bp_Custom.areaqx == item.Key)
+                                            {
+                                                <option value="@item.Key" selected>@item.Value</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Key">@item.Value</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">信用等级</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="credit" value="@(Model.myT_bp_Custom.credit)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业注册资本金(万元)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="regaprice" lay-verify="required" value="@(Model.myT_bp_Custom.REGAPRICE)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业净资产(万元)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="captial" lay-verify="required" value="@(Model.myT_bp_Custom.captial)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">占地面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="floorarea" lay-verify="required" value="@(Model.myT_bp_Custom.floorarea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">年设计生产能力(万m<sup>3</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yearplanproduce" lay-verify="required" value="@(Model.myT_bp_Custom.yearplanproduce)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">上一年度总产量(万m<sup>3</sup>)</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="preyearproduce" value="@(Model.myT_bp_Custom.preyearproduce)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">营业执照号码<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="businesspermit" lay-verify="required" value="@(Model.myT_bp_Custom.businesspermit)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">实验面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sysarea" lay-verify="required" value="@(Model.myT_bp_Custom.sysarea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">养护室面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yharea" lay-verify="required" value="@(Model.myT_bp_Custom.yharea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">联系方式</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业地址<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="address" lay-verify="required" value="@(Model.myT_bp_Custom.ADDRESS)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">邮编<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="postcode" lay-verify="required" value="@(Model.myT_bp_Custom.POSTCODE)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">传真<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fax" lay-verify="required" value="@(Model.myT_bp_Custom.FAX)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">电子邮箱</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="email" value="@(Model.myT_bp_Custom.EMAIL)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">联系电话<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="tel" value="@(Model.myT_bp_Custom.TEL)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">主要负责人情况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">法定代表人<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fr" value="@(Model.myT_bp_Custom.FR)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业经理<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="enterprisemanager" value="@(Model.myT_bp_Custom.enterprisemanager)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">技术负责人<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jsname" value="@(Model.myT_bp_Custom.JSNAME)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">实验室主任<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="director" value="@(Model.myT_bp_Custom.director)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">资质证书情况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">资质等级<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="cerfgrade" value="@(Model.myT_bp_Custom.cerfgrade)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">资质证书号<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="cerfno" value="@(Model.myT_bp_Custom.cerfno)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        @*<div class="layui-col-md6">
+                            <div class="layui-form-label">泵车</div>
+                            <a href="javascript:void(0);" onclick="pumpvehicle()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                            </div>*@
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">主要试验检测设备</div>
+                            <a href="javascript:void(0);" onclick="checkEquipDetails()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">预拌混凝土用砂量</div>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>年份信息</th>
+                                            <th>河砂(万立立方)	</th>
+                                            <th>净化海砂(万立立方)</th>
+                                            <th>机制砂(万立立方)</th>
+                                            <th>其他(万立立方)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>2018 年 1月至今</td><td></td><td></td><td></td><td></td></tr>
+                                        <tr><td>2017年</td><td></td><td></td><td></td><td></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">砂石料场面积(m<span>2</span>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sslcmj" value="@(Model.myT_bp_Custom.sslcmj)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">砂石料场状况<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <select name="sslczk" lay-verify="required">
+                                    <option value=""></option>
+                                    @{
+                                        foreach (var item in Model.CompayTypeList["SandFactoryStatus"])
+                                        {
+                                            if (item.KeyValue == Model.myT_bp_Custom.sslczk)
+                                            {
+                                                <option value="@item.KeyValue" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.KeyValue">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">散装水泥储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="szssccnl" value="@(Model.myT_bp_Custom.szssccnl)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">粉煤灰储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="szssccnl" value="@(Model.myT_bp_Custom.szssccnl)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">掺和料(罐)储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="chlccnl" value="@(Model.myT_bp_Custom.chlccnl)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">液态外加剂(罐)储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ytwjjccnl" value="@(Model.myT_bp_Custom.ytwjjccnl)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                人员总量
+                                <br /><a href="javascript:void(0);" onclick="peopleDetail(false,false,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="percount" value="@(Model.PerCount)" placeholder="" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                管理人员数量<br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(true,false,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="managercount" value="@(Model.ManagerCount)" placeholder="" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工人数量<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="workercount" value="@(Model.myT_bp_Custom.workercount)" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                有职称的工程技术和经济管理人员<span style="color:red">*</span><br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(false,true,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jsglcount" value="@(Model.JsglCount)" placeholder="" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                实验室人员数量<br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(false,false,true)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="testcount" value="@(Model.TestCount)" placeholder="" autocomplete="off" class="layui-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-tab layui-tab-brief" lay-filter="otherInfoTab">
+                            <ul class="layui-tab-title">
+                                <li>搅拌系统</li>
+                                <li>运输车</li>
+                                <li>泵车</li>
+                            </ul>
+                            <div class="layui-tab-content" style="height:100%">
+                                <div class="layui-tab-item layui-show">
+                                    <label class="layui-form-label">
+                                        搅拌系统
+                                        <br />
+                                        <a style='color:#5FB878' href="javascript:void(0);" id="AddPumpSystem">[增加]</a>
+                                    </label>
+                                    <div class="layui-input-block">
+                                        <table class="layui-table" id="editPumpSystem-table">
+                                            <colgroup>
+                                                <col width="200">
+                                                <col width="200">
+                                                <col width="200">
+                                                <col>
+                                                <col width="100">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>型号</th>
+                                                    <th>设备生产厂家</th>
+                                                    <th>生产率m<sup>3</sup>/h</th>
+                                                    <th>数量</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var item in Model.PumpSystems)
+                                                    {
+                                                        <tr>
+                                                            <td data-PumpSystem="type">@item.type</td>
+                                                            <td data-PumpSystem="producefactory">@item.producefactory</td>
+                                                            <td data-PumpSystem="spec">@item.spec</td>
+                                                            <td data-PumpSystem="num">@item.num</td>
+                                                            <td>
+                                                                <button class="layui-btn editPumpSystem-table-btnDel">删除</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="layui-tab-item ">
+                                    <label class="layui-form-label">
+                                        运输车
+                                        <br />
+                                        <a style='color:#5FB878' href="javascript:void(0);" id="AddCarrievechicle">[增加]</a>
+                                    </label>
+                                    <div class="layui-input-block">
+
+                                        <table class="layui-table" id="editCarrievechicle-table">
+                                            <colgroup>
+                                                <col width="200">
+                                                <col>
+                                                <col width="100">
+
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>装载容积m<sup>3</sup></th>
+                                                    <th>数量</th>
+                                                    <th>操作</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var item in Model.Carriervehicles)
+                                                    {
+                                                        <tr>
+                                                            <td data-Carriervehicle="spec">@item.spec</td>
+                                                            <td data-Carriervehicle="num">@item.num  </td>
+                                                            <td>
+                                                                <button class="layui-btn editCarrievechicle-table-btnDel">删除</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="layui-tab-item ">
+                                    <label class="layui-form-label">
+                                        泵车
+                                        <br />
+                                        <a style='color:#5FB878' href="javascript:void(0);" id="AddPumpvehicle">[增加]</a>
+                                    </label>
+                                    <div class="layui-input-block">
+                                        <table class="layui-table" id="editPumpvehicle-table">
+                                            <colgroup>
+                                                <col width="200">
+                                                <col width="200">
+                                                <col>
+                                                <col width="100">
+                                            </colgroup>
+                                            <thead>
+                                                <tr>
+                                                    <th>种类</th>
+                                                    <th>高度</th>
+                                                    <th>数量</th>
+                                                    <th>操作</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    foreach (var item in Model.Pumpvehicles)
+                                                    {
+                                                        <tr>
+                                                            <td data-Pumpvehicle="variety">@item.variety</td>
+                                                            <td data-Pumpvehicle="spec">@item.spec</td>
+                                                            <td data-Pumpvehicle="num">@item.num</td>
+                                                            <td>
+                                                                <button class="layui-btn editPumpvehicle-table-btnDel">删除</button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="layui-col-md6">
+                            <div class="layui-form-label">搅拌系统</div>
+                            <a href="javascript:void(0);" onclick="pumpsystem()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                            </div>
+                            <div class="layui-col-md6">
+                            <div class="layui-form-label">运输车</div>
+                            <div class="layui-input-block">
+                            <a href="javascript:void(0);" onclick="carriervehicle()" style="color:#5FB878">查看</a>
+                            </div>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">其他信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12 layui-col-space25">
+                            <div class="layui-tab layui-tab-brief" lay-filter="otherInfoTab">
+                                <ul class="layui-tab-title">
+                                    <li>获奖情况</li>
+                                    <li>复查情况</li>
+                                    <li>不良行为记录</li>
+                                </ul>
+                                <div class="layui-tab-content" style="height:100%">
+                                    <div class="layui-tab-item layui-show">
+                                        <label class="layui-form-label">
+                                            获奖情况
+                                            <br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="addSTCusAward">[增加]</a>
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="stCusAward-table">
+                                                <colgroup>
+                                                    @*
+                                                        <col width="100" />*@
+                                                    <col width="16%" />
+                                                    <col width="16%" />
+                                                    <col width="20%" />
+                                                    <col />
+                                                    <col width="20%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        @*
+                                                            <th>序号</th>*@
+                                                        <th>获奖日期</th>
+                                                        <th>获奖名称</th>
+                                                        <th>获奖机构</th>
+                                                        <th>获奖内容</th>
+                                                        <th>备注</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.Cusawards)
+                                                        {
+                                                            <tr>
+                                                                @*
+                                                                    <td>@item.Number</td>*@
+                                                                <td data-Awards="AwaDate">@item.AwaDate</td>
+                                                                <td data-Awards="AwaName">@item.AwaName</td>
+                                                                <td data-Awards="AwaUnit">@item.AwaUnit</td>
+                                                                <td data-Awards="AwaConte">@item.AwaContent</td>
+                                                                <td data-Awards="AwaRem">@item.AwaRem</td>
+                                                                <td><button class="layui-btn stCusAward-table-btnDel">删除</button> </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            复查情况<br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="addSTCheckCustom">[增加]</a>
+
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="stCustomReCheck-table">
+                                                <colgroup>
+                                                    <col width="25%" />
+                                                    <col width="25%" />
+                                                    <col />
+                                                    <col width="25%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>复查时间</th>
+                                                        <th>复查结果</th>
+                                                        <th>备注</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckCustom)
+                                                        {
+                                                        <tr>
+                                                        <td data-CheckCustom="CheDate">@item.CheDate</td>
+                                                        <td data-CheckCustom="CheResult">@item.CheResult</td>
+                                                        <td data-CheckCustom="CheRem">@item.CheRem</td>
+                                                        <td>
+                                                        <button class="layui-btn layui-btn-sm stcheckCustom-table-btnDel">删除</button>
+                                                        </td>
+                                                        </tr>
+                                                        }
+                                                        }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            企业不良行为记录<br />
+                                            <a style='color:#5FB878' href="javascript:void(0);" id="addSTCustomPunish">[增加]</a>
+
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="stCusPunish-table">
+                                                <colgroup>
+                                                    <col width="16%" />
+                                                    <col width="16%" />
+                                                    <col width="20%" />
+                                                    <col width="20%" />
+                                                    <col />
+                                                    <col width="15%" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>处罚日期</th>
+                                                        <th>处罚名称</th>
+                                                        <th>处罚机构</th>
+                                                        <th>处罚内容</th>
+                                                        <th>备注</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CusPunish)
+                                                        {
+                                                            <tr>
+                                                                <td data-Punish="PunDate">@item.PunDate</td>
+                                                                <td data-Punish="PunName">@item.PunName</td>
+                                                                <td data-Punish="PunUnit">@item.PunUnit</td>
+                                                                <td data-Punish="PunConte">@item.PunContent</td>
+                                                                <td data-Punish="PunRem">@item.PunRem</td>
+                                                                <td>
+                                                                    <button class="layui-btn layui-btn-sm stCusPunish-table-btnDel">删除</button>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space30">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.File)
+                                        {
+                                            <tr id="@item.Id">
+                                                <td>@item.Name</td>
+                                                <td class="state">@item.State</td>
+                                                <td><a href="javascript:void(0);" onclick=MemberInformation("@item.Id","@item.Name","@item.Modify","@item.Type")>查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <input class="layui-hide" name="businesspermitpath" id="businesspermitpath" value="@Model.myT_bp_Custom.businesspermitpath" />
+                            <input class="layui-hide" name="cerfnopath" id="cerfnopath" value="@Model.myT_bp_Custom.cerfnopath" />
+                            <input class="layui-hide" name="zzbgpath" id="zzbgpath" value="@Model.myT_bp_Custom.zzbgpath" />
+                            <input class="layui-hide" id="filePath" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <div style="margin:0 auto;width:200px;">
+                        <button class="layui-btn" lay-submit lay-filter="STQualify-Edit-save" style="left:auto">保存</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    $('#editPumpSystem-table').on('click', '.editPumpSystem-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+    $('#editCarrievechicle-table').on('click', '.editCarrievechicle-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+    $('#stCusAward-table').on('click', '.stCusAward-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+
+    $('#editPumpvehicle-table').on('click', '.editPumpvehicle-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+
+    $('#stCustomReCheck-table').on('click', '.stcheckCustom-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+
+    $('#stCusPunish-table').on('click', '.stCusPunish-table-btnDel', function () {
+        $(this).parent().parent().remove();
+        return false;
+    });
+
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "element", "layer", "table", "view"],
+        function () {
+            var $ = layui.$,
+                element = layui.element,
+                form = layui.form,
+                layer = layui.layer,
+                view = layui.view,
+                table = layui.table,
+                router = layui.router();
+            var PumpSystems = [], Carrievechicles = [], Pumpvehicles = [];
+            var stCustomReChecks = [], stCusPunishs = [], stCusAwards = [];
+            form.on('submit(STQualify-Edit-save)', function (data) {
+                var datafield = data.field;
+                $.each($('#editPumpSystem-table tr'), function (i) {
+                    var onePumpSystem = {};
+                    $(this).find("td").each(function (i) {
+                        var $td = $(this);
+                        onePumpSystem[$td.attr("data-PumpSystem")] = $td.text();
+                        if (i == 3) {
+                            PumpSystems.push(onePumpSystem);
+                            onePumpSystem = {};
+                        }
+                    })
+                });
+
+
+
+
+                $.each($('#editCarrievechicle-table tr'), function () {
+                    var oneCarrievechicle = {};
+                    $(this).find("td").each(function (i) {
+
+                        var $td = $(this);
+                        oneCarrievechicle[$td.attr("data-Carriervehicle")] = $td.text();
+                        if (i == 1) {
+                            Carrievechicles.push(oneCarrievechicle);
+                            oneCarrievechicle = {};
+                        }
+                    })
+                })
+
+                $.each($('#editPumpvehicle-table tr'), function () {
+                    var onePumpvehicle = {};
+                    $(this).find("td").each(function (i) {
+                        var $td = $(this);
+                        onePumpvehicle[$td.attr("data-Pumpvehicle")] = $td.text();
+                        if (i == 2) {
+                            Pumpvehicles.push(onePumpvehicle);
+                            onePumpvehicle = {};
+                        }
+                    })
+                })
+
+                $.each($('#stCusAward-table tr'), function () {
+                    var stCusAward = {};
+                    $(this).find("td").each(function (i) {
+                        var $td = $(this);
+                        stCusAward[$td.attr("data-Awards")] = $td.text();
+                        if (i == 4) {
+                            stCusAwards.push(stCusAward);
+                            stCusAward = {};
+                        }
+                    })
+                })
+
+                $.each($('#stCustomReCheck-table tr'), function () {
+                    var stCustomReCheck = {};
+                    $(this).find("td").each(function (i) {
+                        var $td = $(this);
+                        stCustomReCheck[$td.attr("data-CheckCustom")] = $td.text();
+                        if (i == 2) {
+                            stCustomReChecks.push(stCustomReCheck);
+                            stCustomReCheck = {};
+                        }
+                    })
+                })
+
+                $.each($('#stCusPunish-table tr'), function () {
+                    var stCusPunish = {};
+                    $(this).find("td").each(function (i) {
+                        var $td = $(this);
+                        stCusPunish[$td.attr("data-Punish")] = $td.text();
+                        if (i == 4) {
+                            stCusPunishs.push(stCusPunish);
+                            stCusPunish = {};
+                        }
+                    })
+                })
+
+
+
+                datafield["stCusPunishs"] = stCusPunishs;
+                datafield["stCustomReChecks"] = stCustomReChecks;
+                datafield["stCusAwards"] = stCusAwards;
+                datafield["Pumpvehicles"] = Pumpvehicles;
+                datafield["Carrievechicles"] = Carrievechicles;
+                datafield["PumpSystems"] = PumpSystems;
+
+                console.log(datafield);
+                $.ajax({
+                    type: "POST",
+                    url: "/STCheckQualify/Edit",
+                    dataType: "json",
+                    data: datafield,
+                    success: function (d) {
+                        if (d.IsSucc) {
+                            layer.msg('企业编辑成功', {
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
+                                    window.parent.Hui_admin_close("/STCheckQualify/Edit/@Model.myT_bp_Custom.Id.ToString()");
+                                },
+                                icon: 1
+                            });
+                        } else {
+                            layer.msg('企业编辑失败，错误信息：' + d.ErroMsg, {
+                                icon: 2
+                            });
+                        }
+                    }
+                })
+                return false;
+            })
+
+        });
+
+
+
+
+    $('#addSTCusAward').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '获奖情况',
+            content: '/STCheckQualify/AddSTCusAward'
+        });
+    });
+
+    $('#addSTCheckCustom').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '复查情况',
+            content: '/STCheckQualify/AddSTCheckCustom'
+        });
+    });
+
+    $('#addSTCustomPunish').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '不良业绩情况',
+            content: '/STCheckQualify/AddSTCusPunish'
+        });
+    });
+
+    $('#AddPumpSystem').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '搅拌系统新增',
+            content: '/STCheckQualify/AddPumpSystem'
+        });
+    });
+
+    $('#AddCarrievechicle').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '运输车新增',
+            content: '/STCheckQualify/AddCarriervehicle'
+        });
+    });
+
+    $('#AddPumpvehicle').on('click', function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: '泵车新增',
+            content: '/STCheckQualify/AddPumpvehicle'
+        });
+    });
+
+</script>
+<script>
+    function Table(CheckUnitName, PeopleStatus, IsTech, TechTitle, HasCert, name) {
+        layui.use(["layer", "view"],
+            function () {
+                var $ = layui.$,
+                    element = layui.element,
+                    layer = layui.layer,
+                    view = layui.view,
+                    router = layui.router();
+                layer.open({
+                    type: 2,
+                    area: ['1000px', '500px'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    title: name,
+                    content: '/CheckQualify/GetTable?CheckUnitName=' + CheckUnitName + '&HasCert=' + HasCert + '&TechTitle=' + TechTitle + '&IsTech=' + IsTech + '&PeopleStatus=' + PeopleStatus  //'/UserInfo/Details?id=' + id+"&IsModify=0"
+                });
+            });
+    }
+
+    $('#shebaopeoplenum').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', 1, null, null, null, "社保人员信息查看")
+    });
+    $('#percountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, null, null, "人员总数")
+    });
+    $('#midpercountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, 2, null, "中级职称人数")
+    });
+    $('#heipercountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, 3, null, "高级职称人数")
+    });
+    $('#hasNumPerCountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, null, 1, "持证人员数量")
+    });
+    $('#REGYTSTABtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, 1, null, null, "注册岩土工程师人数")
+    });
+    $('#REGJGSTABtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, 2, null, null, "注册结构工程师人数")
+    });
+
+
+    //是否管理，是否有职称，是否检查    暂时没写完 需要曹乐晨写完人员 by振华
+    function peopleDetail(isAdmin, isTitle, isCheck) {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '人员信息查看',
+            content: '/STCheckPeople/STPeopleDetails?CustomId=@Model.myT_bp_Custom.Id' + '&IsAdmin=' + isAdmin + '&IsTitle=' + isTitle + '&IsCheck=' + isCheck
+        });
+    }
+
+    function checkEquipDetails() {
+        layer.open({
+            type: 2,
+            area: ['1000px', '510px'],
+            fixed: false, //不固定
+            title: '主要仪器设备查看',
+            content: '/STCheckEquip/STEquipDetails?customId=@Model.myT_bp_Custom.Id'
+        });
+    }
+
+
+    //type标识针对第几个进行操作
+    function MemberInformation(id, name, modify, type) {
+        var path = $('#' + type).val();
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name,
+            content: '/STCheckQualify/EditAttachFile?id=' + id + '&path=' + path + "&IsFile=" + modify,
+            cancel: function (index, layero) {
+                var filePath = $('#filePath').val();
+                type = type + '';
+                if (filePath) {
+                    if (type == "businesspermitpath") {
+                        if (filePath == '|') {
+                            $('#businesspermitpath').val('');
+                        } else {
+                            $('#businesspermitpath').val(filePath);
+                        }
+                    } else if (type == "cerfnopath") {
+                        if (filePath == '|') {
+                            $('#cerfnopath').val('');
+                        } else {
+                            $('#cerfnopath').val(filePath);
+                        }
+                    } else if (type == 'zzbgpath') {
+                        if (filePath == '|') {
+                            $('#zzbgpath').val('');
+                        } else {
+                            $('#zzbgpath').val(filePath);
+                        }
+                    }
+                }
+
+            }
+        });
+    };
+</script>
+
+

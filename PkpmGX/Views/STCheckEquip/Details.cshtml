@@ -1,0 +1,59 @@
+﻿@model PkpmGX.Models.STCheckEquipModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-editCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-editCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">企业名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="CustomName" value="@(Model.CustomName)" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="EquipName" lay-verify="required" value="@Model.EquipName" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备型号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="EquipType" placeholder="" value="@Model.EquipType"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备规格</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="EquipSpec" placeholder="" value="@Model.EquipSpec" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">购买时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="BuyTime" placeholder="" value="@Model.BuyTime" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">校定时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="CheckTime" placeholder="" value="@Model.CheckTime" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">有效期</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="Tiem" placeholder="" value="@Model.Time" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

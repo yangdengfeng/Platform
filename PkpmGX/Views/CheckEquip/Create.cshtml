@@ -1,0 +1,530 @@
+﻿@model Pkpm.Entity.Models.CheckEquipViewModels
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/Static/layuiadmin/layui/font/dtreefont.css" rel="stylesheet" />
+<link href="~/Static/layuiadmin/layui/css/dtree.css" rel="stylesheet" />
+<div class="layui-container">
+    <div class="layui-row" id="QrCodeData-dateils-tableContaniner">
+        <form class="layui-form" action="" lay-filter="CheckEquip-details-form">
+            @*<div class="layui-card">*@
+            @*<div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">*@
+            <div class="layui-card">
+                <div class="layui-card-header">检测机构</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <input type="text" name="checkcerfnumpath" id="checkcerfnumpath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="repaircerfnumpath" id="repaircerfnumpath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="filePath" id="filePath" placeholder="" autocomplete="off" class="layui-hide">
+                        <input type="text" name="id" placeholder="" autocomplete="off" class="layui-hide">
+                        <div class="layui-form-label">检测机构名称<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <select name="Customid" lay-verify="required" disabled>
+                                @{
+                                    foreach (var item in Model.CheckInsts)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">设备基本信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">仪器类别<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <select name="equclass" id="equclass" lay-verify="required">
+                                <option value=""></option>
+                                @{
+                                    foreach (var item in Model.EquClass)
+                                    {
+                                        <option value="@item.KeyValue">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">准确度等级</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="degree" placeholder="" autocomplete="off" class="layui-input">
+
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">测量范围</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="testrange" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备名称<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" name="EquName" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备编号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equnum" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">不确定度</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="uncertainty" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备规格<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equspec" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备型号<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="equtype" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">仪器资质类别</div>
+                <ul id="dTree" class="dtree" data-id="0"></ul>
+            </div>
+            @*<div class="layui-card">
+                    <div class="layui-card-header">检测项目及参数</div>
+                    <div class="layui-tab" style="height:400px">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">检测项目及参数</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <label class="layui-form-label">
+                                    检测项目及参数
+                                    <a style='color:#5FB878' href="javascript:void(0);" id="addCheckItem">[增加]</a>
+                                </label>
+                                <div class="layui-col-md10">
+                                    <table class="layui-table" id="checkItems-table">
+                                        <colgroup>
+                                            <col width="150">
+                                            <col>
+                                            <col width="100">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>检测项目</th>
+                                                <th>检测参数</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            <div class="layui-card">
+                <div class="layui-card-header">检定/校准信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准机构</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkunit" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备检定/校准证书号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkcerfnum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">检定/校准有效日期</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="checkdate" id="checkdate" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                @*<div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">校准机构</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="repairunit" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">设备校准证书号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="repaircerfnum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">校准有效日期</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="repairedate" id="repairedate" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">自检/校信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自检项目</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfcheckitem" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自检范围名称</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfcheckstandardname" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自检编号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfchecknum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自校项目</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfrepairitem" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自校规范名称及编号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfrepairstandardname" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自校编号</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="selfrepairnum" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">备注</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <div class="layui-input-block">
+                            <textarea name="explain" placeholder="" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">其它信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">是否自动采集</div>
+                        <div class="layui-input-block">
+                            <select name="isautoacs">
+                                <option value="" title=""></option>
+                                @{
+                                    foreach (var item in Model.YesNo)
+                                    {
+                                        <option value="@item.Name">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                            @*   <input type="text" name="isautoacs" placeholder="" autocomplete="off" class="layui-input">*@
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-label">自动采集供应商</div>
+                        <div class="layui-input-block">
+                            <input type="text" name="autoacsprovider" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">其它信息</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12">
+                        <div class="layui-input-block">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="150">
+                                    <col>
+                                    <col width="150">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>名称</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>设备鉴定证书</td>
+                                        @{
+                                            <td id="IsCheckcerfNumPath">未上传</td>
+                                            @*if (Model.IsCheckcerfNumPath == null)
+                                            {
+                                                <td> 未上传</td>
+                                            }
+                                            else
+                                            {
+                                                <td> @Model.IsCheckcerfNumPath</td>
+                                            }*@
+                                        }
+
+                                        <td><a href="javascript:void(0);"  id="CheckcerfNumPathStatus" onclick="fileGrid_Edit(0)">添加</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>设备校准证书</td>
+                                        @{
+                                            <td id="IsRepaircerfNumPath">未上传</td>
+                                            @*if (Model.IsRepaircerfNumPath == null)
+                                            {
+                                                <td> 未上传</td>
+                                            }
+                                            else
+                                            {
+                                                <td> @Model.IsRepaircerfNumPath</td>
+                                            }*@
+                                        }
+                                        <td><a href="javascript:void(0);" id="RepaircerfNumPathStatus" onclick="fileGrid_Edit(1)">添加</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md5">
+                            <button class="layui-btn" lay-submit lay-filter="checkEquip-Create-save">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        eleTree: 'dtree'
+        });
+
+    //$('#checkItems-table').on('click', '.checkItems-table-table-btnDel', function () {
+    //    $(this).parent().parent().remove();
+    //});
+
+    layui.use(["form", "element", "laydate", "dtree", "layer", "table"], function () {
+        var $ = layui.$,
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            dtree = layui.dtree,
+            router = layui.router();
+
+        var DemoTree = dtree.render({
+            elem: '#dTree',
+            url: "/CheckEquip/BuildDTressData?equipId=0",
+            type: "all",
+            initLevel: 1,
+            checkbar: true,
+            skin: "layui",  // layui主题风格
+            checkbarType: "no-all",
+        });
+
+
+
+        laydate.render({
+            elem: '#checkdate'
+            , range: true
+        });
+        //laydate.render({
+        //    elem: '#repairedate'
+        //   , range: true
+        //});
+
+        $('#addCheckItem').on("click", function () {
+            var value = $('#equclass');
+            if (value == null || value.val() == "") {
+                layer.alert("请选择仪器类别！");
+            }
+            else {
+                if (value.val() == "0") {
+                    layer.alert("小仪器设备无需填写检测项目及参数！");
+                }
+                else {
+                    //iframe层 - 父子操作
+                    layer.open({
+                        type: 2,
+                        area: ['700px', '450px'],
+                        fixed: false, //不固定
+                        maxmin: true,
+                        title: '检测项目及参数新增',
+                        content: '/CheckEquip/AddCheckItemAndParm'
+                    });
+                }
+            }
+            return false;
+        });
+
+        form.on('submit(checkEquip-Create-save)', function (data) {
+            var dataField = data.field;
+
+            if (dataField.checkcerfnumpath == '') {
+                parent.layer.msg('请上传设备鉴定证书');
+                return false;
+            }
+            if (dataField.repaircerfnumpath == '') {
+                parent.layer.msg('请上传设备校准证书');
+                return false;
+            }
+
+            var params = dtree.getCheckbarNodesParam("dTree");
+            var equclassId = '';
+            $.each(params, function (index, value) {
+                equclassId += value.nodeId + ',';
+            })
+            if (equclassId == '') {
+                layer.alert("请选择仪器资质类别！");
+                return false;
+            }
+            dataField["equclassId"] = equclassId;
+
+            //var checkItemTable = "";
+            //$("#checkItems-table td").each(function () {
+            //    var text = $(this).text();
+            //    if (text.indexOf('删除') == -1) {
+            //        checkItemTable += $(this).text() + ',';
+            //    }
+            //    else {
+            //        checkItemTable += $(this).text();
+            //    }
+            //})
+            //dataField["ProjectGrid"] = checkItemTable;
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data: dataField,
+                url: "/CheckEquip/Create",
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('设备新增成功', {
+                            time: 0,
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/CheckEquip/Edit/" );
+                            },
+                            icon: 1
+                        });
+                    } else {
+                        layer.msg('设备新增失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        });
+
+    });
+</script>
+
+<script>
+
+    function fileGrid_Edit(file) {
+        var windowText = "";
+        var fileUrl = "";
+        if (file == 0) {
+            fileUrl = $('#checkcerfnumpath').val();
+            windowText = "设备检定证书附件编辑";
+        }
+        if (file == 1) {
+            fileUrl = $('#repaircerfnumpath').val();
+            windowText = "设备校准证书附件编辑";
+        }
+        var paths = fileUrl.split('|');
+
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            title: windowText,
+            content: "/CheckEquip/EditAttachFile?filePath=" + encodeURIComponent(fileUrl) + "&name=" + windowText.split("编辑")[0],
+            cancel: function (index, layero) {
+                var filePath = $('#filePath').val();
+                if (filePath != '') {
+                    if (file == 0) {
+                        $('#checkcerfnumpath').val(filePath);
+                        $('#IsCheckcerfNumPath').text("已上传");
+                        $('#CheckcerfNumPathStatus').text("查看");
+                    } else if (file == 1) {
+                        $('#repaircerfnumpath').val(filePath);
+                        $('#IsRepaircerfNumPath').text("已上传");
+                        $('#RepaircerfNumPathStatus').text("查看");
+                    }
+                }
+                else {
+                    $('#IsCheckcerfNumPath').text("未上传");
+                    $('#IsRepaircerfNumPath').text("未上传");
+                    $('#CheckcerfNumPathStatus').text("添加");
+                    $('#RepaircerfNumPathStatus').text("添加");
+                }
+            }
+        });
+    }
+
+
+
+    function file_Details() {
+
+    }
+
+    function file_Delete() {
+        $(this).parent().parent().remove();
+    }
+
+
+</script>
+

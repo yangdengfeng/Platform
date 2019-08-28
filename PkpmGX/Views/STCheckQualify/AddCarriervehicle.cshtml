@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewBag.Title = "AddCarriervehicle";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<div class="layui-container">
+    <div class="layui-row" id="STCheckQualify-AddCarrievehicle-Container">
+        <form class="layui-form" action="" lay-filter="STCheckQualify-AddCarrievehicle-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">装载容积m<span>3</span><font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="spec" id="spec" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col6-md12">
+                        <div class="layui-form-label">数量<font color="red">*</font></div>
+                        <div class="layui-input-block">
+                            <input type="text" name="num" id="num" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" id="AddCarrievehicle">新增</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $('#AddCarrievehicle').on('click', function () {
+        var index = parent.layer.getFrameIndex(window.name);
+        var spec = $('#spec').val();
+        var num = $('#num').val();
+        if (spec =='') {
+            parent.layer.msg('请填写装载容积');
+            return false;
+        }
+        if (num == '') {
+            parent.layer.msg('请填写装载数量');
+            return false;
+        }
+        var str = '<tr><td  data-Carriervehicle="Spec">' + spec + '</td><td data-Carriervehicle="Num">' + num + '</td><td>' + '<button class="layui-btn editCarrievechicle-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#editCarrievechicle-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+
+

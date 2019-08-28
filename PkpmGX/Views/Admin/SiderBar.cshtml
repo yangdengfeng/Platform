@@ -1,0 +1,58 @@
+﻿@model PkpmGX.Models.SiderBarModel
+
+@*<div class="menu_dropdown bk_2">
+        @foreach (var item in Model.SiderBarGroups)
+        {
+            <dl>
+                <dt style="font-size:15px">
+                    <i class="Hui-iconfont @item.Icon.Trim('.')"> </i>@item.Name
+                    <i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
+                </dt>
+                <dd>
+                    <ul>
+                        @foreach (var sideritem in item.SiderBarItems)
+                        {
+                            <li>
+                                <a data-href="@sideritem.Url" data-title="@sideritem.Name" href="javascript:void(0)">
+                                    @sideritem.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </dd>
+            </dl>
+        }
+    </div>*@
+
+<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+    <li data-name="home" class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;" lay-tips="主页" lay-direction="2">
+            <i class="layui-icon layui-icon-home"></i>
+            <cite>主页</cite>
+        </a>
+        <dl class="layui-nav-child">
+            <dd data-name="console" class="layui-this">
+                <a lay-href="/Welcome/Index">控制台</a>
+            </dd>
+        </dl>
+    </li>
+
+    @foreach (var item in Model.SiderBarGroups)
+    {
+        <li data-name="checkQuality" class="layui-nav-item">
+            <a href="javascript:;" lay-tips="@item.Name" lay-direction="2">
+                <i class="layui-icon @item.Icon"></i>
+                <cite>@item.Name</cite>
+            </a>
+            <dl class="layui-nav-child">
+                @foreach (var sideritem in item.SiderBarItems)
+                {
+                    <dd>
+                        <a lay-href="@sideritem.Url">@sideritem.Name</a>
+                    </dd>
+                }
+            </dl>
+        </li>
+    }
+
+</ul>

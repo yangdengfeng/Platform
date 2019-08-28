@@ -1,0 +1,98 @@
+﻿@model Pkpm.Web.Models.AddTablePostModle
+@{
+    ViewBag.Title = "GetTable";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row">
+        <form class="layui-form" action="" lay-filter="CheckQualify-AddTable-form">
+            <div class="layui-card">
+
+                <table class="layui-hide" id="CheckQuakify-GetTable-table"></table>
+                @*<div class="layui-form-item">
+                        <table class="layui-table" lay-size="sm">
+                            <colgroup>
+                                <col width="20" />
+                                <col width="100" />
+                                <col />
+                                <col width="50" />
+                                <col width="50" />
+                                <col width="50" />
+                                <col width="50" />
+                                <col width="50" />
+                                <col width="50" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <td>序号</td>
+                                    <td>姓名</td>
+                                    <td>所属机构名称</td>
+                                    <td>身份证号</td>
+                                    <td>岗位证书编号</td>
+                                    <td>职务</td>
+                                    <td>职称</td>
+                                    <td>在职状态</td>
+                                    <td>状态</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var item in )
+                                    {
+                                        <tr>
+                                            <td>@item.number</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.CustomName</td>
+                                            <td>@item.SelfNum</td>
+                                            <td>@item.PostNum</td>
+                                            <td>@item.zw</td>
+                                            <td>@item.Title</td>
+                                            <td>@item.iscb</td>
+                                            <td>@item.Approvalstatus</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "layer", "table", "view"],
+        function () {
+            var $ = layui.$,
+
+                form = layui.form,
+                layer = layui.layer,
+                view = layui.view,
+                table = layui.table,
+                router = layui.router();
+
+            table.render({
+                elem: '#CheckQuakify-GetTable-table',
+                limit:@Model.Count,
+                cols: [
+                    [
+                        { field: 'number', title: '序号', width: "8%" },
+                        { field: 'Name', title: '姓名', width: "10%" },
+                        { field: 'CustomName', title: '所属机构名称', width: "20%" },
+                        { field: 'SelfNum', title: '身份证号', width: "20%" },
+                        { field: 'PostNum', title: '岗位证书编号', width: "10%" },
+                        { field: 'zw', title: '职务', width: "8%" },
+                        { field: 'Title', title: '职称', width: "8%" },
+                        { field: 'iscb', title: '在职状态', width: "8%" },
+                        { field: 'Approvalstatus', title: '状态', width: "8%" },
+                    ]
+                ],
+                data:@Html.Raw(@Model.CheckPeopl),
+            });
+        });
+</script>

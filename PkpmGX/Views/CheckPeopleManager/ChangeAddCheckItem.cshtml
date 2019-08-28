@@ -1,0 +1,68 @@
+﻿
+@{
+    ViewBag.Title = "ChangeAddCheckItem";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="customcompany-customedit-tableContainer">
+        <form class="layui-form" action="" lay-filter="customcompany-customedit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="ChangeDate" id="ChangeDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">变更内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ChangeContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCheckItemAndParm">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+
+        laydate.render({
+            elem: '#ChangeDate',
+        });
+
+    });
+
+   
+    var index = parent.layer.getFrameIndex(window.name);
+    $('#saveCheckItemAndParm').click(function () {
+        var ChangeDate = $('#ChangeDate').val();
+        var myDate = new Date();
+        var id = myDate.getTime();
+        var ChangeContent = $('#ChangeContent').val();
+        
+        if (ChangeDate === '') {
+            parent.layer.msg('请填写变更时间');
+            return false;
+        }
+        if (ChangeContent == '') {
+            parent.layer.msg('请填写变更内容');
+            return;
+            
+        }
+        var str = '<tr id=' + id + '><td class="ChaDate"  data-CheckPeopleChange="ChaDate">' + ChangeDate + '</td><td class="ChaContent" data-CheckPeopleChange="ChaContent">' + ChangeContent + '</td><td>' + '<button class="layui-btn ChangeCheckItems-table-table-btnEdit">编辑</button>' + '</td><td>' + '<button class="layui-btn ChangeCheckItems-table-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#ChangeCheckItems-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>

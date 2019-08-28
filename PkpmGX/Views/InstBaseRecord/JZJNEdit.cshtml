@@ -1,0 +1,292 @@
+﻿@model PkpmGX.Models.JZJNDetailsModel
+
+@{
+    ViewBag.Title = "JZJNCheck";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+
+<div class="layui-container">
+    <form class="layui-form" lay-filter="InstBaseRecord-JZJNEdit-form" action="">
+        <table class="layui-table">
+
+            <tbody>
+                <tr>
+                    <td>受检单位:</td>
+                    <td>
+                        <select class="layui-input" name="CustomId" lay-search>
+                            @{
+                                foreach (var item in Model.allUnit)
+                                {
+                                    if (Model.jzjnCheck.CustomId == item.Key)
+                                    {
+                                        <option value="@item.Key" selected>@item.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Key" disabled>@item.Value</option>
+
+                                    }
+                                }
+                            }
+                        </select>
+                        <input type="hidden" name="Id" lay-skin="primary">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        检测内容
+                    </td>
+                    <td colspan="2">
+                        检测方法
+                    </td>
+                    <td>
+                        存在问题
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        检测样品二维码信息正确、样品满足检测要求
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JCYPYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JCYPNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="JCYPQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        取样及见证上传的信息符合要求
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JZQYYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JZQYNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="JZQYQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        自动采集
+                        检测项目
+                    </td>
+                    <td>不缺项</td>
+                    <td>
+                        <input type="checkbox" name="BQXYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="BQXNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="BQXQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                <tr>
+
+                    <td>有曲线</td>
+                    <td>
+                        <input type="checkbox" name="YQXYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="YQXNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="YQXQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                <tr>
+
+                    <td>
+                        记录更改
+                        符合程序
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JLGGYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="JLGGNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="JLGGQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        报告编号连续 <br />
+                        报告完整  <br />
+                        报告结论正确
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="BBWZYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="BBWZNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="BBWZQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        报告更改符合程序
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="GGFHCXYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="GGFHCXNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="GGFHCXQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        按规定安装视频监控、资料保存期满足要求
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="SPJKYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="SPJKNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="SPJKQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        不合格台账
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="BHGTZYes" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="checkbox" name="BHGTZNo" lay-skin="primary">
+                    </td>
+                    <td>
+                        <input type="text" name="BHGTZQuestion" required lay-verify="required" placeholder="存在问题" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <input type="text" name="Remark" required lay-verify="required" placeholder="备注" autocomplete="off" class="layui-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        检查人员:
+                    </td>
+                    <td>
+                        <input name="CheckPeople" class="layui-input" placeholder="检查人员" />
+                    </td>
+                    <td></td>
+
+                    <td>检查时间:</td>
+                    <td><input name="CHECKDate" id="checkTime" class="layui-input" placeholder="检查时间" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <div class="layui-form-item">
+                    <div style="text-align:center">
+                        <button class="layui-btn" lay-submit lay-filter="InstBaseRecord-JZJNEdit-save">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.config({
+        base: '../../static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+    });
+
+    layui.use(["form", "laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+              form = layui.form;
+        form.render();
+
+        laydate.render({
+            elem: "#checkTime",
+        })
+
+        form.val('InstBaseRecord-JZJNEdit-form', {
+            "Id":"@Model.jzjnCheck.Id",
+            "JCYPYes": "@Model.jzjnCheck.JCYPYes" == "on" // "name": "value"
+           , "JCYPNo": "@Model.jzjnCheck.JCYPNo"
+           , "JCYPQuestion": "@Model.jzjnCheck.JCYPQuestion"
+           , "JZQYYes": "@Model.jzjnCheck.JZQYYes" //复选框选中状态
+           , "JZQYNo": "@Model.jzjnCheck.JZQYNo" //开关状态
+           , "JZQYQuestion": "@Model.jzjnCheck.JZQYQuestion"
+           , "BQXYes": "@Model.jzjnCheck.BQXYes"
+           , "BQXNo": "@Model.jzjnCheck.BQXNo"
+           , "BQXQuestion": "@Model.jzjnCheck.BQXQuestion"
+           , "YQXYes": "@Model.jzjnCheck.YQXYes"
+           , "YQXNo": "@Model.jzjnCheck.YQXNo"
+           , "YQXQuestion": "@Model.jzjnCheck.YQXQuestion"
+           , "JLGGYes": "@Model.jzjnCheck.JLGGYes"
+           , "JLGGNo": "@Model.jzjnCheck.JLGGNo"
+           , "JLGGQuestion": "@Model.jzjnCheck.JLGGQuestion"
+           , "BBWZYes": "@Model.jzjnCheck.BBWZYes"
+           , "BBWZNo": "@Model.jzjnCheck.BHGTZNo"
+           , "BBWZQuestion": "@Model.jzjnCheck.BHGTZQuestion"
+           , "GGFHCXYes": "@Model.jzjnCheck.GGFHCXYes"
+           , "GGFHCXNo": "@Model.jzjnCheck.GGFHCXNo"
+           , "GGFHCXQuestion": "@Model.jzjnCheck.GGFHCXQuestion"
+           , "SPJKYes": "@Model.jzjnCheck.SPJKYes"
+           , "SPJKNo": "@Model.jzjnCheck.SPJKNo"
+           , "SPJKQuestion": "@Model.jzjnCheck.SPJKQuestion"
+           , "BHGTZYes": "@Model.jzjnCheck.BHGTZYes"
+           , "BHGTZNo": "@Model.jzjnCheck.BHGTZNo"
+           , "BHGTZQuestion": "@Model.jzjnCheck.BHGTZQuestion"
+           , "Remark": "@Model.jzjnCheck.Remark"
+           , "CheckPeople": "@Model.jzjnCheck.CheckPeople"
+           , "CHECKDate": "@Model.jzjnCheck.CHECKDate"
+        });
+
+        form.on('submit(InstBaseRecord-JZJNEdit-save)', function (data) {
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/InstBaseRecord/JZJNEdit",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('建筑节能检测记录表编辑成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/InstBaseRecord/JZJNEdit/" + @Model.jzjnCheck.Id);
+                            },
+                            icon: 1
+                        });
+                    }
+                    else {
+                        layer.msg('建筑节能检测记录表编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+
+            return false;
+        });
+    });
+</script>

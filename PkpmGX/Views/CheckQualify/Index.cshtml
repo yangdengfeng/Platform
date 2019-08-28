@@ -1,0 +1,635 @@
+﻿@model  PkpmGX.Models.CheckQualifyViewModels
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+<div id="form_container" style="width:100%;height:185px;overflow:auto"></div>
+<div id="recinfoArea" style="width:100%;overflow:auto"></div>
+@*<div id="gridbox" style="position:fixed; top:170px; left: 0; right: 0; bottom: 43px"></div>*@
+<div id="pagingArea" style="position: fixed; bottom: 0; width:100%;"></div>
+<div class="row mt-10">
+    <div id="gridbox" style="width:100%;overflow:auto"></div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, applyWin, applyForm, itemWin, configWin, configForm, itemForm, selectedItem, auditWin, auditForm;
+    //dhxWins = new dhtmlXWindows();
+    //dhxWins.attachViewportTo("gridbox");
+
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+           { type: "combo", label: "检测机构名称", name: "CheckUnitName" },
+           { type: "input", label: "计量证书编号", name: "CMANum" },
+           { type: "input", label: "检测证书编号", name: "CheckCertNum" },
+            {
+                type: "container", label: "企业资质", name: "CompanyQualification"
+            },
+             { type: "combo", label: "检测机构分类", name: "ParentId", options:[
+                 { text: "全部", value: 0 },
+                 { text: "检测机构总部", value: -1 },
+                 { text: "异地实验室", value: 2 },   
+             ]},
+             { type: "newcolumn" },
+              { type: "input", label: "法人", name: "LegalPeople" },
+
+           {
+               type: "block", width: 420, list: [
+                 { type: "calendar", label: "计量证书有效期", name: "CMADStartDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 100 },
+                  { type: "newcolumn" },
+                  { type: "calendar", label: "至", name: "CMADEndDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 15 },
+               ]
+           },
+           {
+               type: "block", width: 420, list: [
+                  { type: "calendar", label: "检测证书有效期", name: "CheckCertStartDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 100 },
+                  { type: "newcolumn" },
+                  { type: "calendar", label: "至", name: "CheckCertEndDt", dateFormat: "%Y-%m-%d", inputWidth: 120, labelWidth: 15 },
+               ]
+           },
+             { type: "combo", name: "companyType", label: "企业性质", options: [{ text: "全部", value: "", selected: true }] },
+           { type: "newcolumn" },
+            { type: "combo", name: "status", label: "状态", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "container", label: "区域", name: "Area"},
+             { type: "input", label: "检测项目或参数", name: "CheckCode" },
+                          {
+                              type: "combo", label: "停业状态", name: "IsUse", options: [
+                                  { text: "未停业", value: 1 },
+                                  { text: "已停业", value: 2 },
+                                  { text: "未注销", value: 3 },
+                                  { text: "已注销", value: 0 },
+                              ]
+                          },
+              {
+                  type: "block", width: 340, list: [
+                      { type: "button", name: 'Search', value: "查询", offsetLeft: 150 }
+                  ]
+              },
+             //{
+             //    type: "block", width: "auto", list: [
+             //       { type: "input", label: "检测资质类别", name: "QuantityCategory", readonly: true, rows: 2, labelWidth: 60 },
+             //       { type: "newcolumn" },
+             //       { type: "template", label: "", value: "[选择]", format: showItem, inputWidth: 40, labelWidth: 5 },
+             //      { type: "template", label: "", value: "[清空]", format: clearItem, inputWidth: 40, labelWidth: 5 }
+             //    ]
+             //}
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/CheckQualify/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+            areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+
+        CompanyQualificationCombo = new dhtmlXCombo(myForm.getContainer("CompanyQualification"), null, null, "checkbox");
+        CompanyQualificationCombo.load('/CheckQualify/CompanyQualificationCombo');
+        CompanyQualificationCombo.attachEvent("onClose", function () {
+            CompanyQualificationCombo.setComboText(CompanyQualificationCombo.getChecked().join(','));
+        })
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#gridbox').css('height', layoutHeight + 'px');
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/CheckQualify/ToolBar");
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "NewCustom") {
+                NewCustom();
+            }
+            else if (id == "Delete") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行停业操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/CheckQualify/Stopping", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('停业成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要停业的机构')
+                }
+
+            }
+            else if (id == "ReturnState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行状态返回操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/CheckQualify/SetInstState", "selectedId=" + selectedId + "&state=0", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('状态返回成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要状态返回的机构')
+                }
+
+            }
+            else if (id == "SetState") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/CheckQualify/SetInstState", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的机构')
+                }
+            }
+            else if (id == "Export") {
+                exporter.show();
+            }
+            else if (id == "Screening") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行注销操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/CheckQualify/Screening", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('注销成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要注销的机构')
+                }
+            }
+            else if (id == "RelieveScreening") {
+                //删除
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行解除注销操作？', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        window.dhx.ajax.post("/CheckQualify/RelieveScreening", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('解除注销成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckQualify/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            }
+                            else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要解除注销的机构')
+                }
+            }
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        //mygrid = new dhtmlXGridObject('gridbox');
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+
+        //mygrid.setHeader("&nbsp,序号,机构名称,检测证书编号,计量证书编号,法人,联系电话,状态,&nbsp,&nbsp,&nbsp,&nbsp,&nbsp");//设置列的头文本
+        //mygrid.setInitWidths("40,40,*,130,120,100,120,80,100,40,40,70,150");          //设置列的宽度，其中* 为动态宽度
+        //mygrid.setColAlign("left,right,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        //mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,layuijslinks,edit,view,layuijslink,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        //mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+
+        mygrid.setHeader("&nbsp,序号,机构名称,检测证书编号,计量证书编号,法人,联系电话,状态,&nbsp,&nbsp,&nbsp,&nbsp,&nbsp,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,40,320,250,200,100,150,100,40,40,50,90,150,150");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("right,right,left,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,view,edit,layuijslink,layuijslink,layuijslink,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+
+        var checkInstCombo = myForm.getCombo("CheckUnitName");
+        //var companyQualificationCombo = myForm.getCombo("CompanyQualification");
+        var statusCombo = myForm.getCombo("status");
+        //var areaCombo = myForm.getCombo("Area")
+        var companyTypeCombo = myForm.getCombo("companyType");
+
+
+        checkInstCombo.enableFilteringMode('between');
+        //companyQualificationCombo.enableFilteringMode('between');
+        //areaCombo.enableFilteringMode('between');
+
+        checkInstCombo.load("/CheckQualify/InstCombo");
+        //companyQualificationCombo.load("/CheckQualify/CompanyQualificationCombo");
+        //areaCombo.load("/CheckQualify/AreaCombo")
+
+
+        setComboCustomFilter(checkInstCombo);
+        //setComboCustomFilter(companyQualificationCombo);
+        //setComboCustomFilter(areaCombo);
+
+        @{
+            foreach (var item in Model.CompanyStatus)
+            {
+                @:statusCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                    }
+        }
+
+
+        @{
+            foreach (var item in Model.CompanyTypes)
+            {
+                @:companyTypeCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+            }
+        }
+
+
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/CheckQualify/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+        var exporter = new ExcelExporter(myForm, mygrid, 15, "/CheckQualify/Export");
+    }
+
+    function showItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='selectItemDetail();'>" + value + "</a></div>";
+    }
+
+    //审核
+    function AuditCustom(customId) {
+        auditWin = dhxWins.createWindow("auditWin", 50, 50, 800, 500);
+        dhxWins.window("auditWin").denyResize();
+        dhxWins.window("auditWin").button("minmax").hide();
+        dhxWins.window("auditWin").centerOnScreen();
+        auditWin.setModal(true);
+        auditWin.setText("审核");
+        auditForm = auditWin.attachForm();
+        auditForm.loadStruct("/CheckQualify/AuditCustom?Id=" + customId);
+        auditForm.attachEvent("onButtonClick", function (name) {
+            var auditData = [];
+            if (name == "Y") {
+                var auditFormData = auditForm.getFormData(true);
+                for (var key in auditFormData) {
+                    if (key.indexOf("|new") > 0) {
+                        auditData.push(key.split('|')[0] + "=" + encodeURIComponent(auditFormData[key]));
+                    }
+                }
+                auditData.push("Id=" + customId);
+                auditData.push("Operate=Y");
+            }
+            else if (name = "N") {
+                auditData.push("Id=" + customId);
+                auditData.push("Operate=N");
+            }
+
+            var QueryString = auditData.join('&');
+            window.dhx.ajax.post("/CheckQualify/AuditCustom", QueryString, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({
+                        text: "审核完成！", ok: "确定",
+                        callback: function (result) {
+                            window.location.replace(location.href);
+                        }
+                    });
+                }
+                else {
+                    dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                }
+            });
+
+        });
+    }
+
+    function setInstPrintConfig(customId, printConfig) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "机构委托单打印设置",
+            content: '/CheckQualify/PrintSetConfig?id=' + customId + '&printConfig=' + printConfig
+        });
+    }
+
+    function NewCustom() {
+        layer.open({
+            type: 2,
+            area: ['500px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "新增机构",
+            content: '/CheckQualify/NewCustom'
+        });
+    }
+
+    function setInstFormal(customid, customname) {
+        layer.open({
+            type: 2,
+            area: ['500px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "新增机构",
+            content: '/CheckQualify/setInstFormal?customid=' + customid
+        });
+    }
+
+    function selectItemDetail() {
+
+        clearItemDetail();
+        itemWin = dhxWins.createWindow("itemWin", 20, 30, 580, 480);
+        itemWin.setModal(true);
+        itemWin.center();
+        itemWin.setText('检测资质类别');
+
+        itemForm = itemWin.attachForm();
+        itemForm.load('/CheckQualify/UnitQualificaiton');
+
+        itemForm.attachEvent("onChange", function (cname, cvalue, isCheck) {
+            //your code here
+            //console.log(cvalue);
+            if (isCheck) {
+                selectedItem.push(cvalue);
+            } else {
+                selectedItem = jQuery.grep(selectedItem, function (value) {
+                    return value != cvalue;
+                });
+            }
+
+            myForm.setItemValue('QuantityCategory', selectedItem.join('、'));
+        });
+    }
+
+    function clearItem(name, value) {
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='clearItemDetail();'>" + value + "</a></div>";
+    }
+
+    function clearItemDetail() {
+        selectedItem = [];
+        myForm.setItemValue('QuantityCategory', '');
+    }
+
+
+    function applyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name + "申请修改",
+            content: '/CheckQualify/ApplyChange?ID=' + id
+        });
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        data.push('CompanyQualification' + '=' + encodeURIComponent(CompanyQualificationCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        if (ind >= 2 && ind <= 7) {
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString + '&' + getGirdSortStr(ind, direct), doOnGridLoaded);
+            mygrid.setSortImgState(true, ind, direct);
+        }
+        return false;
+    }
+
+    // grid dataload callback
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/CheckQualify/Details?id=" + rowId, "检测机构查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+
+        window.dhx.ajax.get("/CheckQualify/CheckEdit?Id=" + rowId, function (r) {
+            var r = window.dhx.s2j(r.xmlDoc.responseText);
+            if (r != null && r.APPROVALSTATUS == "0") {
+                window.parent.Hui_admin_tab_raw("/CheckQualify/Edit?id=" + rowId, "检测机构编辑");
+            }
+            else {
+                alert("该条记录已被递交，请按确定刷新");
+                window.location.replace(location.href);
+            }
+        });
+
+        //var IsAdmin = '@Model.IsAdmin';
+        //IsAdmin == "True" || IsAdmin == "true"
+        //if (true) {
+        //    window.parent.Hui_admin_tab_raw("/CheckQualify/Edit?id=" + rowId, "检测机构编辑");
+        //}
+        //else {
+        //    window.parent.Hui_admin_tab_raw("/CheckQualify/EditCheckQualify?id=" + rowId, "检测机构编辑");
+        //}
+
+    }
+
+    function doOnUnload() {
+
+    }
+
+
+    function confirmApplyChange(id, name) {
+        layer.open({
+            type: 2,
+            area: ['400px', '250px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "审核"+ name + "的申请修改",
+            content: '/CheckQualify/GetSuperJob?ID=' + id
+        });
+    }
+
+    function ChangeName(id,name) {
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 400, 300);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText("机构名称修改");
+
+        detailForm = detailWin.attachForm();
+        detailformStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 160, labelWidth: 100 },
+            {
+                type: "block", name: "formBlock", width: 320, list: [
+                    { type: "input", name: "CustomName", value: name,label: "机构名称" },
+                ]
+            },
+            { type: "button", name: 'Save', value: "保存", offsetTop: 2,offsetTop: 2 },
+        ];
+
+        detailForm.load(detailformStructure);
+        detailForm.attachEvent("onButtonClick", function () {
+            var CustomName = detailForm.getItemValue("CustomName");
+            window.dhx.ajax.post("/CheckQualify/UpdateName", "id=" + id + "&CustomName=" + CustomName, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({ text: "机构名称更新成功！", ok: "确定" });
+                    mygrid.clearAll();
+                    gridQString = '/CheckQualify/Search?' + getQueryStr();
+                    mygrid.load(gridQString, doOnGridLoaded);
+                    detailWin.close();
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+            });
+        });
+
+    }
+
+
+
+        //window.dhx.ajax.get("/CheckQualify/GetSuperJob?Id=" + id, function (r) {
+        //    var supervisorJob = window.dhx.s2j(r.xmlDoc.responseText);
+        //    if (supervisorJob) {
+        //        var confirmApplyWin = dhxWins.createWindow("confirmApplyW", 20, 30, 380, 280);
+        //        confirmApplyWin.setModal(true);
+        //        confirmApplyWin.center();
+        //        confirmApplyWin.setText('审核' + name + '申请修改');
+
+        //        var confirmApplyForm = confirmApplyWin.attachForm();
+        //        var menuFormStructrue = [
+        //             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+        //             { type: "input", name: "SubmitName", label: "申请人", required: true, value: supervisorJob.SubmitName },
+        //             { type: "input", name: "SubmitText", label: "申请原因", required: true, rows: 2, value: supervisorJob.SubmitText },
+        //             { type: "hidden", value: id, name: 'SubmitId' },
+        //             { type: "button", name: 'Save', value: "确定", offsetLeft: 150 }
+        //        ];
+        //        confirmApplyForm.load(menuFormStructrue);
+
+        //        confirmApplyForm.attachEvent("onButtonClick", function (name) {
+        //            confirmApplyForm.send("/CheckQualify/ConfirmApplyChange", "post", function (loader, response) {
+        //                var t = window.dhx.s2j(response);
+        //                if (t != null && t.IsSucc) {
+        //                    dhtmlx.message("审核申请修改操作成功！");
+        //                    confirmApplyWin.close();
+        //                    mygrid.clearAll();
+        //                    myTabbar.tabs("gridboxOne").progressOn();
+        //                    mygrid.load(gridQString, doOnGridLoaded);
+        //                } else {
+        //                    dhtmlx.alert(t.ErroMsg);
+        //                }
+
+        //            });
+        //        });
+        //    }
+        //});
+
+
+
+
+</script>
+
+
+

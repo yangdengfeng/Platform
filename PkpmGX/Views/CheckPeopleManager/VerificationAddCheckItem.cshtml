@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "VerificationAddCheckItem";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="customcompany-customedit-tableContainer">
+        <form class="layui-form" action="" lay-filter="customcompany-customedit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">年审时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="VerificationDate" id="VerificationDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">年审内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="VerificationContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCheckItemAndParm">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+
+        laydate.render({
+            elem: '#VerificationDate',
+        });
+
+    });
+
+
+    var index = parent.layer.getFrameIndex(window.name);
+    $('#saveCheckItemAndParm').click(function () {
+        var VerificationDate = $('#VerificationDate').val();
+
+        var VerificationContent = $('#VerificationContent').val();
+
+        if (VerificationDate === '') {
+            parent.layer.msg('请填写年审时间');
+            return false;
+        }
+        if (VerificationContent == '') {
+            parent.layer.msg('请填写年审内容');
+            return;
+        }
+        var str = '<tr><td data-CheckPeopleVerification="AddTime">' + VerificationDate + '</td><td data-CheckPeopleVerification="Pcontext">' + VerificationContent + '</td><td>' + '<button class="layui-btn VerificationCheckItems-table-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#VerificationCheckItems-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+

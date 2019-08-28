@@ -1,0 +1,173 @@
+﻿<error errorId="d57f0f9f-c797-4ee2-a1ed-4cc954b27747" host="SKY-20190312RGH" type="System.Web.HttpException" message="未找到路径“/Distribute/InstCombo”的控制器或该控制器未实现 IController。" source="System.Web.Mvc" detail="System.Web.HttpException (0x80004005): 未找到路径“/Distribute/InstCombo”的控制器或该控制器未实现 IController。&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)&#xD;&#xA;   在 System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController&amp; controller, IControllerFactory&amp; factory)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)&#xD;&#xA;   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="PKPMAdmin" time="2019-05-15T02:34:39.4068138Z" statusCode="404">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_ACCEPT:*/*&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#xD;&#xA;HTTP_COOKIE:ASP.NET_SessionId=jgn3nidg3ce1tquwlrlwismh; .AspNet.ApplicationCookie=_RstlfOun0ci6sk3K-7ljAk_2u4RqaGkPJIiSIA3P4mSCmb1pk2wTkeZve24y21miKBoEckXwr2-fLH3b7yYLrM0sp1MUaCB863Axh0U6F4GC0PYhK_x1YrH8-SzOe5aIasNOwdgk6oBJYZCR9x33kk0OHl-88Kn2MA6kpZ35CYWwqFgJ5YiY6_j8lmF44askCx2751Zk9rokpc6FXL8JVLIzj5g0OZMBhk20iU4jDPfk_Yoy-OMoybkHo1AAdISu7cqHafVNSdW4WUyQMyt9kY1LfE6ZXWyIvDuwcR2z4_e2nfv28NgchRkgax70uIkZLmnBuDkWaynVnY9ev1OV7HFHbyv1GC3w1dMZFQtlrluFkgGmckHtccbkFooiJ17Z1TDhEN24ZnqBKsSkk8sTbWpz0hnRy-VzHF6GlwLya5PpVEaNHV_brB2_VT4si4MCoExV1KlVCxVeXF9rIzIDhvIGkv1eWYjKEQ2zdMHHh_NSyOondq-n5nBF8mHrQRIBM0FP4-8jDvSo6h18igcz4KfJQKLTPiPXyDE_Zb7gyc&#xD;&#xA;HTTP_HOST:localhost:57189&#xD;&#xA;HTTP_REFERER:http://localhost:57189/DistributeExpert&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0&#xD;&#xA;HTTP_X_REQUESTED_WITH:XMLHttpRequest&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Accept: */*&#xD;&#xA;Accept-Encoding: gzip, deflate&#xD;&#xA;Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&#xD;&#xA;Cookie: ASP.NET_SessionId=jgn3nidg3ce1tquwlrlwismh; .AspNet.ApplicationCookie=_RstlfOun0ci6sk3K-7ljAk_2u4RqaGkPJIiSIA3P4mSCmb1pk2wTkeZve24y21miKBoEckXwr2-fLH3b7yYLrM0sp1MUaCB863Axh0U6F4GC0PYhK_x1YrH8-SzOe5aIasNOwdgk6oBJYZCR9x33kk0OHl-88Kn2MA6kpZ35CYWwqFgJ5YiY6_j8lmF44askCx2751Zk9rokpc6FXL8JVLIzj5g0OZMBhk20iU4jDPfk_Yoy-OMoybkHo1AAdISu7cqHafVNSdW4WUyQMyt9kY1LfE6ZXWyIvDuwcR2z4_e2nfv28NgchRkgax70uIkZLmnBuDkWaynVnY9ev1OV7HFHbyv1GC3w1dMZFQtlrluFkgGmckHtccbkFooiJ17Z1TDhEN24ZnqBKsSkk8sTbWpz0hnRy-VzHF6GlwLya5PpVEaNHV_brB2_VT4si4MCoExV1KlVCxVeXF9rIzIDhvIGkv1eWYjKEQ2zdMHHh_NSyOondq-n5nBF8mHrQRIBM0FP4-8jDvSo6h18igcz4KfJQKLTPiPXyDE_Zb7gyc&#xD;&#xA;Host: localhost:57189&#xD;&#xA;Referer: http://localhost:57189/DistributeExpert&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0&#xD;&#xA;X-Requested-With: XMLHttpRequest&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/3/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="ApplicationCookie" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="PKPMAdmin" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="PKPMAdmin" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="0" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="3" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/3" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/Distribute/InstCombo" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\Distribute\InstCombo" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="dhxr1557887679342=1" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="63219" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="GET" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/Distribute/InstCombo" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="57189" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/Distribute/InstCombo" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="*/*" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="ASP.NET_SessionId=jgn3nidg3ce1tquwlrlwismh; .AspNet.ApplicationCookie=_RstlfOun0ci6sk3K-7ljAk_2u4RqaGkPJIiSIA3P4mSCmb1pk2wTkeZve24y21miKBoEckXwr2-fLH3b7yYLrM0sp1MUaCB863Axh0U6F4GC0PYhK_x1YrH8-SzOe5aIasNOwdgk6oBJYZCR9x33kk0OHl-88Kn2MA6kpZ35CYWwqFgJ5YiY6_j8lmF44askCx2751Zk9rokpc6FXL8JVLIzj5g0OZMBhk20iU4jDPfk_Yoy-OMoybkHo1AAdISu7cqHafVNSdW4WUyQMyt9kY1LfE6ZXWyIvDuwcR2z4_e2nfv28NgchRkgax70uIkZLmnBuDkWaynVnY9ev1OV7HFHbyv1GC3w1dMZFQtlrluFkgGmckHtccbkFooiJ17Z1TDhEN24ZnqBKsSkk8sTbWpz0hnRy-VzHF6GlwLya5PpVEaNHV_brB2_VT4si4MCoExV1KlVCxVeXF9rIzIDhvIGkv1eWYjKEQ2zdMHHh_NSyOondq-n5nBF8mHrQRIBM0FP4-8jDvSo6h18igcz4KfJQKLTPiPXyDE_Zb7gyc" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:57189" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:57189/DistributeExpert" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0" />
+    </item>
+    <item name="HTTP_X_REQUESTED_WITH">
+      <value string="XMLHttpRequest" />
+    </item>
+  </serverVariables>
+  <queryString>
+    <item name="dhxr1557887679342">
+      <value string="1" />
+    </item>
+  </queryString>
+  <cookies>
+    <item name="ASP.NET_SessionId">
+      <value string="jgn3nidg3ce1tquwlrlwismh" />
+    </item>
+    <item name=".AspNet.ApplicationCookie">
+      <value string="_RstlfOun0ci6sk3K-7ljAk_2u4RqaGkPJIiSIA3P4mSCmb1pk2wTkeZve24y21miKBoEckXwr2-fLH3b7yYLrM0sp1MUaCB863Axh0U6F4GC0PYhK_x1YrH8-SzOe5aIasNOwdgk6oBJYZCR9x33kk0OHl-88Kn2MA6kpZ35CYWwqFgJ5YiY6_j8lmF44askCx2751Zk9rokpc6FXL8JVLIzj5g0OZMBhk20iU4jDPfk_Yoy-OMoybkHo1AAdISu7cqHafVNSdW4WUyQMyt9kY1LfE6ZXWyIvDuwcR2z4_e2nfv28NgchRkgax70uIkZLmnBuDkWaynVnY9ev1OV7HFHbyv1GC3w1dMZFQtlrluFkgGmckHtccbkFooiJ17Z1TDhEN24ZnqBKsSkk8sTbWpz0hnRy-VzHF6GlwLya5PpVEaNHV_brB2_VT4si4MCoExV1KlVCxVeXF9rIzIDhvIGkv1eWYjKEQ2zdMHHh_NSyOondq-n5nBF8mHrQRIBM0FP4-8jDvSo6h18igcz4KfJQKLTPiPXyDE_Zb7gyc" />
+    </item>
+  </cookies>
+</error>

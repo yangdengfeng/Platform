@@ -1,0 +1,426 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="mt-5">
+        <div id="gridbox" style="position:fixed;width:100%; height:100%; top:1px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var myTabbar, mygrid, gridQString, myToolbar, myForm, exporter, dhxWins, updatapath;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        gridQString = '/NoDataUpload/GetReportNumberTotal';
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "专业技术人员情况总表", active: true }
+            ]
+        });
+
+        myToolBar = myTabbar.tabs("gridboxOne").attachToolbar();
+        myToolBar.setIconset("awesome");
+        myToolBar.loadStruct("/ApplyQualifySix/SixToolBar");
+
+        myToolBar.attachEvent("onClick", function (id) {
+            if (id == 'Create') {
+                Create('@ViewBag.id');
+            } else if (id == "Save") {
+
+
+                var data = [];
+                data.push('gridStr' + '=' + encodeURIComponent(mygrid.serialize()));
+                data.push("pid" + "=" + "@ViewBag.id");
+                data.push("updatapath" + "=" + updatapath)
+                var formData = data.join("&");
+
+                window.dhx.ajax.post("/ApplyQualifySix/Save", formData, function (response) {
+                    var t = window.dhx.s2j(response.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        dhtmlx.alert({
+                            text: "人员信息导入成功！", ok: "确定", callback: function (result) {
+                                window.parent.Hui_admin_close("/ApplyQualifySix/Index");
+                            }
+                        });
+                    }
+                    else {
+                        dhtmlx.alert({ text: "人员信息导入失败！错误信息：" + t.ErroMsg, ok: "确定" });
+                    }
+                })
+            } else if (id == 'Updata') {
+                Updata();
+            } else if (id == "Check") {
+                Check();
+            }
+        });
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("姓名,性别,年龄,职务,学历,专业,职称,身份证号码,上岗证书号,从事检测工作类别,从事检测工作年限,社会保险证号,学历证书路径,职称职称路径,身份证扫描件路径,上岗证书路径,附件查看,&nbsp");//the headers of columns
+        mygrid.setInitWidths("*,100,100,100,100,100,100,100,100,100,100,100,0,0,0,0,300,50");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,layuijslinks,del");                //the types of columns
+        mygrid.setColSorting("str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str,str");          //the sorting types
+        mygrid.init();   //finishes initialization and renders the grid on the page
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("gridboxOne").progressOn();
+
+        mygrid.load('/ApplyQualifySix/Search?pid=' + '@ViewBag.id', function () {
+            myTabbar.tabs("gridboxOne").progressOff();
+        });
+
+    }
+
+    function Updata() {
+        var windowText = "人员社保文档"
+        dhxWins = new dhtmlXWindows();
+        var lookFormStructrue = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+            { type: "upload", name: "myFiles", titleText: "请点击右边按钮上传", inputWidth: 600, url: "/ApplyQualifySix/attachUpload?name=" + "SBRYDA", swfPath: "../../../Dhtmlx/codebase/ext/uploader.swf", swfUrl: "/ApplyQualifySix/attachUpload?name=" + "SBRYDA" },
+        ];
+        lookWin = dhxWins.createWindow("lookWin", 400, 450, 700, 700);
+        lookWin.setModal(true);
+        lookWin.setText(windowText);
+      
+
+        myLayout = lookWin.attachLayout({
+            pattern: "2E",
+            cells: [
+                {
+                    id: "a",        // id of the cell you want to configure
+                    text: "选择附件",     // header text
+                    collapsed_text: "选择附件",   // header text for a collapsed cell
+                    header: true,      // hide header on init
+                    width: 700,        // cell init width
+                    height: 250,        // cell init height
+                    collapse: false        // collapse on init
+                },
+                {
+                    id: "b",        
+                    text: "附件上传",    
+                    collapsed_text: "附件上传",  
+                    header: true,      
+                    width: 700,        
+                    height: 650,       
+                    collapse: false    
+                }
+            ]
+        });
+        lookForm = myLayout.cells('a').attachForm();
+            myLayout.cells("a").hideHeader();
+            myCarousel = myLayout.cells('b').attachCarousel();
+            myLayout.cells("b").hideHeader();
+            lookForm.load(lookFormStructrue);
+            lookForm.attachEvent("onBeforeFileAdd", function (realName) {
+                var mime = realName.toLowerCase().substr(realName.lastIndexOf("."));
+                if (mime != ".jpg" && mime != ".jpge" && mime != ".png") {
+                    dhtmlx.alert({ text: "请选择jpg、jpge、png格式的图片上传！", ok: "确定" });
+                    return false;
+                }
+                return true;
+            });
+            lookForm.attachEvent("onUploadFile", function (realname, uploadname) {
+                myCarousel.addCell(uploadname);
+                myCarousel.cells(uploadname).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(uploadname) + "' border='0' style='width: 100%;'></div>");
+                myCarousel.cells(uploadname).setActive();
+
+                uploadname += (updatapath != null || updatapath!="" ? "|" : "") + updatapath;
+                updatapath = uploadname
+            });
+            loadToolBar();
+            loadattach();
+    }
+
+
+
+    function loadToolBar() {
+        var toolBar = myCarousel.attachToolbar();
+        toolBar.setIconset("awesome");
+        toolBar.addButton("deletephoto", 0, "[删除]");
+        toolBar.attachEvent("onClick", function (id) {
+            deletephoto();
+        });
+    }
+
+
+    function loadattach() {
+        var uploadedphoto = updatapath;
+        var photoarr = uploadedphoto.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+    }
+
+
+      function deletephoto() {
+        var photopath = myCarousel.getActiveId();
+        dhtmlx.message({
+            type: "confirm",
+            text: "你确定要进行删除操作？",
+            ok: "确定",
+            cancel: "取消",
+            callback: function (u) {
+                if (u) {
+                    window.dhx.ajax.post("/ApplyQualifySix/DeleteImage?", "&itemValue=" + photopath, function (response) {
+                        var t = window.dhx.s2j(response.xmlDoc.responseText);
+                        if (t != null && t.IsSucc) {
+
+                            var uploadedphoto = updatapath;
+                            var photoarr = uploadedphoto.split('|');
+                            photoarr = jQuery.grep(photoarr, function (n) {
+                                return n !== photopath;
+                            });
+                            //console.log(photoarr.split("undefined"));
+                            updatapath = photoarr.split("undefined").join("|");
+                            console.log(updatapath);
+                           // myForm.setItemValue(fileUrl, photoarr.join("|"));
+                            myCarousel.unload();//没找到删除cell的方法，只好把整个myCarousel删掉，再加载
+                            myCarousel = null;
+                            myCarousel = myLayout.cells('b').attachCarousel();
+                            loadToolBar();
+                            loadattach();
+                            dhtmlx.alert({ text: "操作成功！", ok: "确定" });
+                        } else {
+                            dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                        }
+
+                    })
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function Create(id) {
+        //layer.open({
+        //    type: 2,
+        //    area: ['700px', '450px'],
+        //    fixed: false,
+        //    maxmin: true,
+        //    title: '导入专业技术人员',
+        //    content: '/ApplyQualifySix/CreateQualifySix?id=' + id
+        //})
+        dhxWins.attachViewportTo("gridbox");
+        importWin = dhxWins.createWindow("menuW", 20, 30, 1000, 500);
+        importWin.setModal(true);
+        importWin.center();
+        importWin.setText('专业技术人员信息');
+
+        gridTabber = importWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: "查询结果", active: true }
+            ]
+        });
+
+        var gridToolBar = gridTabber.tabs("gridDtails").attachToolbar();
+        gridToolBar.setIconset("awesome");
+        gridToolBar.loadStruct("/ApplyQualifySeven/ImportToolBar");
+        gridToolBar.attachEvent("onClick", function (id) {
+            if (id == "ImportEquips") {//导入逻辑
+                var selectdRows = importGrid.getCheckedRows(0);
+                $.each(selectdRows.split(','), function (index, value) {
+                    console.log(importGrid.cells(value, 10).cell.innerHTML);
+                    console.log(importGrid.cells(value, 9).cell.innerText)
+                    console.log(importGrid.cells(value, 8).cell.innerText)
+                    var strTem = "#Name#,#sex#,#age#,#zhiwu#,#xueli#,#major#,#title#,#selfNum#,#gezsh#,#csjcgzlb#,#csjcgznx#,#shbxh#,#eduPath#,#tiltePath#,#selfPath#,#sgPath#,,删除";
+                    var values = {};
+                    values["Name"] = importGrid.cells(value, 2).cell.innerText.replace(',', ' ');
+                    values["sex"] = importGrid.cells(value, 3).cell.innerText;
+                    values["age"] = importGrid.cells(value, 4).cell.innerText;
+                    values["zhiwu"] = importGrid.cells(value, 12).cell.innerText;
+                    values["xueli"] = importGrid.cells(value, 5).cell.innerText;
+                    values["major"] = importGrid.cells(value, 6).cell.innerText;
+                    values["title"] = importGrid.cells(value, 13).cell.innerText;
+                    values["selfNum"] = importGrid.cells(value, 7).cell.innerText;
+                    values["gezsh"] = importGrid.cells(value, 11).cell.innerText;
+                    values["csjcgzlb"] = importGrid.cells(value, 8).cell.innerText;
+                    values["csjcgznx"] = importGrid.cells(value, 9).cell.innerText;
+                    values["shbxh"] = importGrid.cells(value, 10).cell.innerText;
+                    values["eduPath"] = importGrid.cells(value, 16).cell.innerText;
+                    values["tiltePath"] = importGrid.cells(value, 17).cell.innerText;
+                    values["selfPath"] = importGrid.cells(value, 17).cell.innerText;
+                    values["sgPath"] = importGrid.cells(value, 18).cell.innerText;
+                    values["dataid"] = value;
+                    console.log(window.dhx4.template(strTem, values));
+                    mygrid.addRow(value, window.dhx4.template(strTem, values));
+
+                    //mygrid.addRow(value, ",," + importGrid.cells(value, 3).cell.innerText.replace(',', ' ') + "," + importGrid.cells(value, 4).cell.innerText + "," + importGrid.cells(value, 5).cell.innerText + "," + importGrid.cells(value, 7).cell.innerText + "," + importGrid.cells(value, 8).cell.innerText + ",,,,<a style='text-decoration:none;color:white' onclick='javascript:uploadFile('" + importGrid.cells(value, 10).cell.innerHTML + "'); return false;' data-rowid='" + value + "'href='javascript:;' <button class='layui-btn layui-btn-normal layui-btn-xs'title='检定/校准文件查看'>检定/校准文件查看</button></a> ,删除");
+                });
+                importWin.close();
+            }
+        });
+
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea1'></div><div id='pagingArea1'></div>",
+            paging: true
+        });
+
+        importGrid = gridTabber.tabs("gridDtails").attachGrid();
+
+        importGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        //序号,姓名,性别,年龄,职务,学历,专业,职称,身份证号码,上岗证书号,从事检测工作类别,从事检测工作年限,社会保险证号
+        importGrid.setHeader("勾选,序号,姓名,性别,年龄,学历,专业,身份证号,从事检测工作类别,从事检测工作年限,社会保险证号,岗位证书编号,职务,职称,在职状况,状态,学历证书路径,职称职称路径,身份证扫描件路径,上岗证书路径,&nbsp");//设置列的头文本
+        importGrid.setInitWidths("50,50,100,0,0,0,0,100,0,0,0,160,100,200,80,80,0,0,0,0,40");          //the widths of columns
+        importGrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left,left,left,left,leftt,left,left,left,left,left");       //the alignment of columns
+        importGrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,ro,view");                //the types of columns
+        importGrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server,server");
+        importGrid.init();   //finishes initialization and renders the grid on the page
+        importGrid.enablePaging(true, 30, null, "pagingArea1", true, "recinfoArea1");
+        importGrid.setPagingSkin("bricks");
+        importGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        var gridQStrings = '/ApplyQualifySix/CreateQualifySixSearch?pid=' + id;
+
+        gridTabber.tabs("gridDtails").progressOn();
+        importGrid.load(gridQStrings, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+
+    function Img(url) {
+        myCarousel = lookWin.attachCarousel();
+        // var uploadedphoto = myForm.getItemValue(fileUrl);
+        var photoarr = url.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySix/Edit?id=" + rowId, "编辑专业技术人员");
+    }
+
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySix/Details/" + rowId, "人员查看");
+    }
+
+    function excellDel_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        mygrid.deleteRow(rowId);
+
+    }
+
+    function Check() {
+        dhxWins.attachViewportTo("gridbox");
+        lookWin = dhxWins.createWindow("lookWin", 200, 250, 700, 700);
+        lookWin.setModal(true);
+        lookWin.setText("人员社保档案");
+        dhxWins.window("lookWin").keepInViewport(true);
+
+        myLayout = lookWin.attachLayout({
+            pattern: "1C",
+            cells: [
+                {
+                    id: "a",        // id of the cell you want to configure
+                    text: "人员社保档案",     // header text
+                    collapsed_text: "人员社保档案",   // header text for a collapsed cell
+                    header: true,      // hide header on init
+                    width: 700,        // cell init width
+                    height: 250,        // cell init height
+                    collapse: false        // collapse on init
+                },
+            ]
+        });
+        myCarousel = myLayout.cells("a").attachCarousel();
+        myLayout.cells("a").hideHeader();
+
+        var uploadedphoto = model;
+        var photoarr = uploadedphoto.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+
+    }
+
+    function uploadFile(fileUrl) {//查看附件方法
+        dhxWins.attachViewportTo("gridbox");
+        lookWin = dhxWins.createWindow("lookWin", 200, 250, 700, 700);
+        lookWin.setModal(true);
+        lookWin.setText("检定/校准证书查看");
+        dhxWins.window("lookWin").keepInViewport(true);
+
+        myLayout = lookWin.attachLayout({
+            pattern: "1C",
+            cells: [
+                   {
+                       id: "a",        // id of the cell you want to configure
+                       text: "检定/校准证书查看",     // header text
+                       collapsed_text: "检定/校准证书查看",   // header text for a collapsed cell
+                       header: true,      // hide header on init
+                       width: 700,        // cell init width
+                       height: 250,        // cell init height
+                       collapse: false        // collapse on init
+                   },
+            ]
+        });
+        myCarousel = myLayout.cells("a").attachCarousel();
+        myLayout.cells("a").hideHeader();
+
+        var uploadedphoto = fileUrl;
+        var photoarr = uploadedphoto.split('|');
+
+        for (i = 0; i < photoarr.length; i++) {
+            if (photoarr[i] && photoarr[i].length > 0) {
+                myCarousel.addCell(photoarr[i]);
+
+                myCarousel.cells(photoarr[i]).attachHTMLString("<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 100%;'>" + "<img src='/CheckEquip/Image?itemValue=" + encodeURIComponent(photoarr[i]) + "' border='0' style='width: 100%;'></div>");
+            }
+        }
+    }
+
+</script>

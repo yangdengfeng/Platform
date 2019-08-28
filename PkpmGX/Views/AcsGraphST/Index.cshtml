@@ -1,0 +1,85 @@
+﻿@model PkpmGX.Models.AcsGraphViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+
+
+<div class="container-fluid">
+    <div class="row cl pl-10">
+        @if (Model.IsImage)
+        {
+            @:<div id="acsGraphImag" data-image-url="@Model.FilePath"></div>
+        }
+        else
+        {
+            @:<div id="acsManualGraph" style="width:860px;height:320px" data-file-url="@Model.FilePath"></div>
+        }
+    </div>
+    <input id="chartGraphData" type="hidden" value="@Model.DhtmxChartJsonStr" />
+</div>
+<script type="text/javascript" src="~/echart/echarts.common.min.js"></script>
+<script type="text/javascript">
+    var mychart;
+    function doOnLoad() {
+        if ($('#acsGraphImag').length > 0) {
+            $('#acsGraphImag').empty().append('<img src="/AcsGraph/Image?id=@Model.FilePath"  alt="图片显示出错" width="100%" />');
+        }
+        if ($('#acsManualGraph').length > 0) {
+            var data = $('#chartGraphData').val();
+            var t = window.dhx.s2j(data);
+
+            mychart = echarts.init(document.getElementById('acsManualGraph'));
+            var grachChartData = window.dhx.s2j($('#chartGraphData').val());
+            var chartData = grachChartData.ChartItems;
+            var titleText = '极限荷载值 #yMaxValue# #yAxis#, 加荷时间 #xMaxValue# s , 曲线时间 #acsTime#  ';
+            var yAxisText = '{value}  #yAxis#';
+            // 指定图表的配置项和数据
+            var option = {
+                color: ['#3398DB'],
+                title: {
+                    text: window.dhx.template(titleText, grachChartData)
+                },
+                xAxis: {
+                    splitLine: {
+                        show: true
+                    },
+                    axisLabel: {
+                        formatter: '{value} s'
+                    },
+                    data: chartData.map(function (item) {
+                        return item.xTime;
+                    })
+                },
+                yAxis: {
+                    axisLabel:{
+                        formatter: window.dhx.template(yAxisText, grachChartData)
+                    },
+                    boundaryGap: [0, '10%'],
+                    splitLine: {
+                        show: true
+                    }
+                },
+                series: [{
+                    name: '模拟数据',
+                    type: 'line',
+                    showSymbol: false,
+                    hoverAnimation: false,
+                    data: chartData.map(function (item) {
+                        return item.yValue;
+                    })
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            mychart.setOption(option);
+        }
+    }
+
+    function doOnUnload() {
+
+    }
+</script>
+

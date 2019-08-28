@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "UnitQualification";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<link href="~/static/layuiadmin/layui/css/eleTree.css" rel="stylesheet" />
+<script src="~/static/layuiadmin/lib/layedit.js"></script>
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+    }
+</style>
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckQualify-GetWjlr-Container">
+        <form class="layui-form" action="" lay-filter="CheckQualify-GetWjlr-Form">
+            <div class="layui-form-item">
+                <div class="layui-col-md12">
+                    <table>
+                        <tr>
+                            <td style="height:670px">
+                                <div class="eleTree ele1 " style="height:670px;width:90%">
+                                </div>
+                            </td>
+                            <td style="height:600px ;width:70%">
+                                <textarea id="textarea">
+                                    @Model.Wjlr
+                                </textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            @{
+                if (Model.IsSaveButton)
+                {
+                    <div class="layui-form-item">
+                        <button class="layui-btn" lay-submit lay-filter="checkQualify-SaveQualification-save">保存</button>
+                    </div>
+                }
+            }
+           
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index', //主入口模块
+        eleTree: 'eleTree'
+    });
+
+    layui.use(["form", "layer", "eleTree", "table", "view",'layedit'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            eleTree = layui.eleTree,
+            table = layui.table,
+            layedit=layui.layedit,
+            view = layui.view,
+            router = layui.router();
+
+        eleTree.render({
+            elem: '.ele1',
+            data: @Html.Raw(Model.QualificationTree),
+            showCheckbox: true,
+            // contextmenuList: ["copy", "add", "edit", "remove"],
+            drag: true,
+            accordion: true
+        });
+        layedit.set({
+            height:'629px',
+            width:'500px'
+        })
+        
+       var layEditIndex =  layedit.build('textarea');  //富文本编辑器的索引，读取数据要用
+
+       form.on('submit(checkQualify-SaveQualification-save)',function(data){
+           var formIndex = parent.layer.getFrameIndex(window.name);
+            var datafield = {};
+            var text = layedit.getContent(layEditIndex);
+            var a = [];
+            var i = 0;
+            $.each(eleTree.checkedData(".ele1"),function(index,value){
+                a[i] =  value.label;
+                i++;
+            });
+            datafield["wjlr"] = text;
+            datafield["zzlbmc"] = a.join('、');
+            datafield["customid"] = '@Model.CustomId'
+            $.ajax({
+                type:"POST",
+                dataType:"json",
+                data:datafield,
+                url:"/CheckQualify/UpdateWjlrAndZzlbmc",
+                success:function(d){
+                    if(d.IsSucc){
+                        layer.msg('机构资质信息编辑成功', {
+                            time: 0,
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                parent.layer.close(formIndex);
+                            },
+                            icon: 1
+                        });
+                    }else {
+                        layer.msg('资质信息编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        })
+    });
+
+
+</script>

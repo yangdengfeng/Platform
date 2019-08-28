@@ -1,0 +1,463 @@
+﻿@model PkpmGX.Models.WelcomeViewMoel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-sm6 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        报告总数
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font"><label id="TotalReports">@Model.TotalReports</label></p>
+                        
+                        <p> 
+                            本周报告总数
+                            <span class="layuiadmin-span-color"> <i class="layui-inline layui-icon layui-icon-flag"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        不合格报告数量
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font"><label id="UnqualifyReports">@Model.UnqualifyReports</label></p>
+                        <p>
+                            不合格报告数比例
+                            <span class="layuiadmin-span-color">@Model.UnqualifyPercentage % <i class="layui-inline layui-icon layui-icon-face-smile-b"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        已修改报告数量
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font"><label id="ModifyReports">@Model.ModifyReports</label></p>
+                        <p>
+                            修改报告数量比例
+                            <span class="layuiadmin-span-color">@Model.UnqualifyPercentage % <i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @*<div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        附件上传数量
+                        <span class="layui-badge layui-bg-blue layuiadmin-badge">月</span>
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+
+                        <p class="layuiadmin-big-font">@Model.PKRReports</p>
+                        <p>
+                            附件上传数量比例
+                            <span class="layuiadmin-span-color">@Model.PKRPercentage % <i class="layui-inline layui-icon layui-icon-user"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>*@
+            <div class="layui-col-sm12">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        访问量
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="layui-row">
+                            <div class="layui-col-sm8">
+                                <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagetwo">
+                                    <div id="container" name="container" style="height: 100%;width:100%"></div>
+                                    <div id="contextMenu" style="position: absolute;background:#000;opacity:0.8;cursor: pointer;border-radius: 2px;padding:8px 30px;display:none;color: #fff;font-size:14px;">
+                                        返回上一级
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-sm4">
+                                <div class="layuiadmin-card-list">
+                                    <p class="layuiadmin-normal-font">报告总数</p>
+                                    <span>同上期增长</span>
+                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                        <div class="layui-progress-bar" lay-percent="30%" style="width:30%">
+                                            <span class="layui-progress-text">30%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layuiadmin-card-list">
+                                    <p class="layuiadmin-normal-font">不合格数</p>
+                                    <span>同上期增长</span>
+                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                        <div class="layui-progress-bar" lay-percent="20%" style="width:20%">
+                                            <span class="layui-progress-text">20%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layuiadmin-card-list">
+                                    <p class="layuiadmin-normal-font">报告修改数量</p>
+                                    <span>同上期增长</span>
+                                    <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                        <div class="layui-progress-bar" lay-percent="25%" style="width:25%">
+                                            <span class="layui-progress-text">25%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-sm4">
+                        <div class="layui-card">
+                            <div class="layui-card-header">检测单位资质证书到期提醒</div>
+                            <div class="layui-card-body">
+                                <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                    <colgroup>
+                                        <col width="80">
+                                        <col>
+                                        <col width="150">
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>内容</th>
+                                            <th>到期日期</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ 
+                                            foreach (var item in Model.MeasnumDate)
+                                            {
+                                                <tr>
+                                                    <td><span class="first">@item.Num</span></td>
+                                                    <td><a href="javascript:void(0);" onclick=CheckQualify_Details("@item.Id")>@item.Type</td>
+                                                    <td><span>@item.Date</span></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm4">
+                        <div class="layui-card">
+                            <div class="layui-card-header">检测单位计量认证证书到期提醒</div>
+                            <div class="layui-card-body">
+                                <div class="layui-card-body">
+                                    <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                        <colgroup>
+                                            <col width="80">
+                                            <col>
+                                            <col width="150">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>内容</th>
+                                                <th>到期日期</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                foreach (var item in Model.DetectnumDate)
+                                                {
+                                                    <tr>
+                                                        <td><span class="first">@item.Num</span></td>
+                                                        <td><a href="javascript:void(0);" onclick=CheckQualify_Details("@item.Id")>@item.Type</td>
+                                                        <td><span>@item.Date</span></td>
+                                                    </tr>
+                                                }
+                                            }
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-sm4">
+                        <div class="layui-card">
+                            <div class="layui-card-header">检测单位仪器设备检定过期提醒</div>
+                            <div class="layui-card-body">
+                                <div class="layui-card-body">
+                                    <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                                        <colgroup>
+                                            <col width="80">
+                                            <col>
+                                            <col width="150">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>内容</th>
+                                                <th>到期日期</th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @{
+                                                foreach (var item in Model.Checkdate)
+                                                {
+                                                    <tr>
+                                                        <td><span class="first">@item.Num</span></td>
+                                                        <td><a href="javascript:void(0);" onclick=CheckEquip_Details("@item.Id")>@item.Type</td>
+                                                        <td><span>@item.Date</span></td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+
+    var unqualified = [
+
+        @{
+            foreach (var item in Model.EchartUnqualifyReportsCount)
+            {
+                @:{ name:'@item.name',value:@item.value},
+            }
+        }
+                    //{ name: '来宾市', value: 1 },
+                    //{ name: '贺州市', value: 2 },
+                    //{ name: '桂林市', value: 3163 },
+                    //{ name: '柳州市', value: 69902.6 },
+                    //{ name: '河池市', value: 545.49 },
+                    //{ name: '百色市', value: 4794.64 },
+                    //{ name: '崇左市', value: 41239.64 },
+                    //{ name: '防城港市', value: 44569.64 },
+                    //{ name: '钦州市', value: 4784.64 },
+                    //{ name: '玉林市', value: 734544 },
+                    //{ name: '贵港市', value: 1875.64 },
+                    //{ name: '梧州市', value: 406 },
+                    //{ name: '南宁市', value: 16589.64 },
+                    //{ name: '北海市', value: 16589.64 }
+
+    ]
+
+    var total = [
+
+        @{
+            foreach (var item in Model.EchartTotalReportsCount)
+            {
+                @:{ name:'@item.name',value:@item.value},
+            }
+        }
+    ]
+
+    var modify = [
+
+        @{
+            foreach (var item in Model.EcharModifyReportsCount)
+            {
+                @:{ name:'@item.name',value:@item.value},
+            }
+        }
+    ]
+
+
+    var cityMap = {
+        "来宾市": 451300,
+        "贺州市": 451100,
+        "桂林市": 450300,
+        "柳州市": 450200,
+        "河池市": 451200,
+        "百色市": 451000,
+        "崇左市": 451400,
+        "防城港市": 450600,
+        "钦州市": 450700,
+        "玉林市": 450900,
+        "贵港市": 450800,
+        "梧州市": 450400,
+        "南宁市": 450100,
+        "北海市": 450500
+    };
+
+    //存储切换的每一级地图信息
+    var mapStack = [];
+    var curMap = {};
+    var timeFn = null;
+    
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    option = null;
+    myChart.showLoading();
+
+    //初始化地图
+    loadMap("450000", "广西壮族自治区地图");
+
+     /**
+       加载地图：根据地图所在省市的行政编号，
+       获取对应的json地图数据，然后向echarts注册该区域的地图
+       最后加载地图信息
+       mapCode:地图行政编号,for example['中国':'100000', '湖南': '430000']
+       mapName: 地图名称
+    */
+    function loadMap(mapCode, mapName) {
+        $.getJSON('../Static/' + mapCode + '.json', function (geoJson) {
+            myChart.hideLoading();
+            echarts.registerMap(mapName, geoJson);
+            myChart.setOption(option = {
+                title: {
+                    text: mapName,
+                    //subtext: '数据来自Echarts',
+                    left: 'center'
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (a) {
+                        for (var i = 0; i < unqualified.length; i++) {
+                            if (a.name == unqualified[i].name) {
+
+                                return a.name + '<br/>报告上传总数:' + a.value + '<br/>' + '不合格报告数:' + unqualified[i].value + '<br/>' + '不合格报告比例:' + (Math.round(unqualified[i].value / a.value * 10000) / 100).toFixed(2) + '%' + '<br/>' + '已修改报告数:' + modify[i].value
+                            }
+                        }
+                    }
+                },
+                visualMap: {
+                    min: 800,
+                    max: 50000,
+                    text: ['High', 'Low'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue', 'yellow', 'orangered']
+                    }
+                },
+                series: [
+                    {
+                        name: mapName,
+                        type: 'map',
+                        mapType: mapName, // 自定义扩展图表类型
+                        itemStyle: {
+                            normal: { label: { show: true } },
+                            emphasis: { label: { show: true } }
+                        },
+                        data: total,
+                        // 自定义名称映射
+                    }
+                ]
+            });
+
+            myChart.setOption(option, true);
+            //存储当前地图的信息
+            curMap = {
+                mapCode: mapCode,
+                mapName: mapName
+            };   
+        });
+    }
+
+    /**
+      绑定用户切换地图区域事件
+      cityMap对象存储着地图区域名称和区域的信息(name-code)
+      当mapCode有值说明可以切换到下级地图
+      此时保存上级地图的编号和名称
+    */
+    myChart.on('click', function (params) {
+        
+            var mapCode = cityMap[params.name];
+            if (!mapCode) {
+                var map = mapStack.pop();
+                if (!mapStack.length && !map) {
+                    alert('已经到达最上一级地图了');
+                    return;
+                }
+
+                loadMap(map.mapCode, map.mapName);
+
+                $("#TotalReports").text(@Model.TotalReports);
+                $("#UnqualifyReports").text(@Model.UnqualifyReports);
+                $("#ModifyReports").text(@Model.ModifyReports);
+            }
+            else {
+
+                loadMap(mapCode, params.name);
+
+                for (var i = 0; i < unqualified.length; i++) {
+                    if (params.name == unqualified[i].name) {
+                        $("#TotalReports").text(total[i].value);
+                        $("#UnqualifyReports").text(unqualified[i].value);
+                        $("#ModifyReports").text(modify[i].value);
+                    }
+                }
+
+                //将上一级地图信息压入mapStack
+                mapStack.push({
+                    mapCode: curMap.mapCode,
+                    mapName: curMap.mapName
+                });
+            }
+        }
+        
+    );
+
+
+    /**
+      绑定右键事件
+   */
+    //myChart.on('contextmenu', function (params) { $('#contextMenu').css({ left: params.event.offsetX, top: params.event.offsetY }).show(); });
+
+    /**
+      响应图表的右键事件，返回上一级地图
+   */
+    $('#contextMenu').on('click', function () {
+        $(this).hide(); //获取上一级地图信息 
+        var map = mapStack.pop(); if (!mapStack.length && !map) { alert('已经到达最上一级地图了'); return; } loadMap(map.mapCode, map.mapName);
+    });
+
+
+    function doOnUnload() {
+    }
+
+    function CheckQualify_Details(id){
+        window.parent.Hui_admin_tab_raw("/CheckQualify/Details?id=" + id, "检测报告查看")
+    }
+
+    function CheckEquip_Details(id){
+        window.parent.Hui_admin_tab_raw("/CheckEquip/Details?id=" + id, "检测设备查看")
+    }
+
+</script>

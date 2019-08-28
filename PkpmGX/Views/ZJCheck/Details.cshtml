@@ -1,0 +1,285 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<div class="layui-container">
+    <div class="layui-row">
+        <form class="layui-form" action="">
+            <div class="layui-card">
+                <div class="layui-card-header">工程概况</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">工程名称</div>
+                        <div class="layui-input-block">
+                            <input type="text" value="@Model.programmePileList.projectname" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">检测机构</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.customname" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">所在城市</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.areaname" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">工程备案登记号</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.projectregnum" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md10">
+                        <div class="layui-form-label">工程地址</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.projectaddress" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">建设单位</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.constructionunit" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">监理单位</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.supervisionunit" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">设计单位</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.designunit" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">施工单位</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.constructionunits" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">项目负责人名称</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.personinchargename" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-form-label">项目负责人电话</div>
+                        <div class="layui-input-block">
+                            <input type="text" placeholder="" value="@Model.programmePileList.personinchargetel" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">见证人员 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">姓名</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.JZPeople.name" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">联系电话</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.JZPeople.phone" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">证书号</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.JZPeople.postnum" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-card">
+                <div class="layui-card-header">检测人员 </div>
+                <div class="layui-card-body">
+
+                    <div class="layui-form-item">
+                        @{
+                            foreach (var item in Model.CheckPeople)
+                            {
+
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">姓名</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" value="@item.name" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">联系电话</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" value="@item.phone" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-label">证书号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" value="@item.postnum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="layui-card">
+                <div class="layui-card-header">方案信息 </div>
+                <div class="layui-card-body">
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测设备编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.testingequipment" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">现场检测计划开始结束时间</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.plandate" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">基础形式</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.basictype" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">建筑结构形式</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.structuretype" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">桩型</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.piletype" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">桩顶/基底标高(m)</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.elevation" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计总桩数(根)</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.pilenum" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">单桩(复合地基)承载力特征值(kN/kPa)</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.eigenvalues" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计桩长(m)</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.pilelenght" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">面积置换率</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.areadisplacement" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计桩径(mm)</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.pilediameter" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">设计砼强度</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.concretestrength" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">抽测数量</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.jzsynum" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">基桩号</div>
+                            <div class="layui-input-block">
+                                <input type="text" placeholder="" value="@Model.programmePileList.jzsynos" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测方案</div>
+                            <div class="layui-input-block">
+                                @* <a style="cursor: pointer;" title="点击下载" href="http://175.6.228.209:8090/file/1902371/pile/201905/YRQ30357JNT8FSQM5Q2PXKQD2644TU.doc">[幸福里新城方案.doc]</a>*@
+                                @* <a style="cursor: pointer;" title="点击下载" href="http://175.6.228.209:8090/file/1902371/pile/201905/YRQ30357JNT8FSQM5Q2PXKQD2644TU.doc">@Model.programmePileList.filename</a>*@
+                                <a style="cursor: pointer;" title="点击下载" href="@Model.programmePileList.filepath">@Model.programmePileList.filename</a>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">会签表</div>
+                            <div class="layui-input-block">
+
+                                @* <a style="cursor: pointer;" title="点击查看" href="#" onclick="window.open('http://175.6.228.209:8090/file/1902371/pile/201905/VCESB8CPN25KPMMABQ23SWYRKJDVG8.jpg');">[会签页.jpg]</a>*@
+                                <a style="cursor: pointer;" title="点击查看" href="#" onclick="window.open('@Model.programmePileList.hqfilepath');">@Model.programmePileList.hqfilename</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

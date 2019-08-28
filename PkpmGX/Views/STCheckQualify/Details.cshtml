@@ -1,0 +1,661 @@
+﻿@model PkpmGX.Models.STQualifyViewModels
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+
+@*<nav class="breadcrumb">
+        <i class="Hui-iconfont">&#xe63c;</i> 检测资质监督
+        <span class="c-gray en">&gt;</span> 检测机构信息
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="Hui-iconfont">&#xe68f;</i>
+        </a>
+    </nav>*@
+
+<script type="text/javascript" src="~/Dhtmlx/codebase/ext/swfobject.js"></script>
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckQualify-Details-Container">
+        <form class="layui-form" action="" lay-filter="CheckQualify-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 基本信息 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">企业名称<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="NAME" lay-verify="required" value="@Model.myT_bp_Custom.NAME" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业性质<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="companytype" class="layui-input" lay-verify="required" value="@Model.myT_bp_Custom.companytype" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">组织机构代码<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="id" lay-verify="required" value="@Model.myT_bp_Custom.Id" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">所在区域<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="area" lay-verify="required" value="@Model.myT_bp_Custom.area" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">信用等级</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="credit" value="@(Model.myT_bp_Custom.credit)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业注册资本金(万元)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="regaprice" lay-verify="required" value="@(Model.myT_bp_Custom.REGAPRICE)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业净资产(万元)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="captial" lay-verify="required" value="@(Model.myT_bp_Custom.captial)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">占地面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="floorarea" lay-verify="required" value="@(Model.myT_bp_Custom.floorarea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">年设计生产能力(万m<sup>3</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yearplanproduce" value="@(Model.myT_bp_Custom.yearplanproduce)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">上一年度总产量(万m<sup>3</sup>)</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="preyearproduce" value="@(Model.myT_bp_Custom.preyearproduce)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">营业执照号码<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="businesspermit" value="@(Model.myT_bp_Custom.businesspermit)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">实验面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sysarea" value="@(Model.myT_bp_Custom.sysarea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">养护室面积(万m<sup>2</sup>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="yharea" value="@(Model.myT_bp_Custom.yharea)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">联系方式</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业地址<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="address" value="@(Model.myT_bp_Custom.ADDRESS)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">邮编<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="postcode" value="@(Model.myT_bp_Custom.POSTCODE)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">传真<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fax" value="@(Model.myT_bp_Custom.FAX)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">电子邮箱</div>
+                            <div class="layui-input-block">
+                                <input type="text" name="email" value="@(Model.myT_bp_Custom.EMAIL)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">联系电话<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="tel" value="@(Model.myT_bp_Custom.TEL)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">主要负责人情况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">法定代表人<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="fr" value="@(Model.myT_bp_Custom.FR)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">企业经理<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="enterprisemanager" value="@(Model.myT_bp_Custom.enterprisemanager)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">技术负责人<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jsname" value="@(Model.myT_bp_Custom.JSNAME)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">实验室主任<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="director" value="@(Model.myT_bp_Custom.director)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">资质证书情况</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">资质等级<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="cerfgrade" value="@(Model.myT_bp_Custom.cerfgrade)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">资质证书号<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="cerfno" value="@(Model.myT_bp_Custom.cerfno)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">搅拌系统<span style="color:red">*</span></div>
+                            <a href="javascript:void(0);" onclick="pumpsystem()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">运输车<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <a href="javascript:void(0);" onclick="carriervehicle()" style="color:#5FB878">查看</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">泵车<span style="color:red">*</span></div>
+                            <a href="javascript:void(0);" onclick="pumpvehicle()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">主要试验检测设备</div>
+                            <a href="javascript:void(0);" onclick="checkEquipDetails()" style="color:#5FB878">查看</a>
+                            <div class="layui-input-block">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-label">预拌混凝土用砂量</div>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col>
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th>年份信息</th>
+                                            <th>河砂(万立立方)	</th>
+                                            <th>净化海砂(万立立方)</th>
+                                            <th>机制砂(万立立方)</th>
+                                            <th>其他(万立立方)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>2018年 1月至今</td><td></td><td></td><td></td><td></td></tr>
+                                        <tr><td>2017年</td><td></td><td></td><td></td><td></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">砂石料场面积(m<span>2</span>)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sslcmj" value="@(Model.myT_bp_Custom.sslcmj)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">砂石料场状况<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="sslczk" value="@(Model.myT_bp_Custom.sslczk)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">散装水泥储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="szssccnl" value="@(Model.myT_bp_Custom.szssccnl)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">粉煤灰储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="szssccnl" value="@(Model.myT_bp_Custom.szssccnl)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">掺和料(罐)储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="chlccnl" value="@(Model.myT_bp_Custom.chlccnl)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">液态外加剂(罐)储存能力(t)<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="ytwjjccnl" value="@(Model.myT_bp_Custom.ytwjjccnl)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                人员总量
+                                <br /><a href="javascript:void(0);" onclick="peopleDetail(false,false,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="percount" value="@(Model.myT_bp_Custom.PERCOUNT)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                管理人员数量<br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(true,false,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="managercount" value="@(Model.myT_bp_Custom.managercount)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">工人数量<span style="color:red">*</span></div>
+                            <div class="layui-input-block">
+                                <input type="text" name="workercount" value="@(Model.myT_bp_Custom.workercount)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                有职称的工程技术和经济管理人员<span style="color:red">*</span><br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(false,true,false)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="jsglcount" value="@(Model.myT_bp_Custom.jsglcount)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">
+                                实验室人员数量<br />
+                                <a href="javascript:void(0);" onclick="peopleDetail(false,false,true)" style="color:#5FB878">查看</a>
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="text" name="testcount" value="@(Model.myT_bp_Custom.testcount)" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">其他信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12 layui-col-space25">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title">
+                                    <li>获奖情况</li>
+                                    <li>复查情况</li>
+                                    <li>不良行为记录</li>
+                                </ul>
+                                <div class="layui-tab-content" style="height:100%">
+                                    <div class="layui-tab-item layui-show">
+                                        <label class="layui-form-label">
+                                            获奖情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="100" />
+                                                    <col width="100" />
+                                                    <col width="200" />
+                                                    <col />
+                                                    <col width="200" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>获奖日期</th>
+                                                        <th>获奖名称</th>
+                                                        <th>获奖机构</th>
+                                                        <th>获奖内容</th>
+                                                        <th>备注</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.Cusawards)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.Number</td>
+                                                                <td>@item.AwaDate</td>
+                                                                <td>@item.AwaName</td>
+                                                                <td>@item.AwaUnit</td>
+                                                                <td>@item.AwaContent</td>
+                                                                <td>@item.AwaRem</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            复查情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm" id="stCustomReCheck-table">
+                                                <colgroup>
+                                                    <col width="25%" />
+                                                    <col width="25%" />
+                                                    <col />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>复查时间</th>
+                                                        <th>复查结果</th>
+                                                        <th>备注</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckCustom)
+                                                        {
+                                                            <tr>
+                                                                <td data-CheckCustom="CheDate">@item.CheDate</td>
+                                                                <td data-CheckCustom="CheResult">@item.CheResult</td>
+                                                                <td data-CheckCustom="CheRem">@item.CheRem</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            企业不良行为记录
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="200" />
+                                                    <col />
+                                                    <col width="300" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>变更时间</th>
+                                                        <th>变更描述</th>
+                                                        <th>备注</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CusPunish)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.Number</td>
+                                                                <td>@item.PunDate</td>
+                                                                <td>@item.PunContent</td>
+                                                                <td>@item.PunRem</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space30">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.File)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                                <td>@item.State</td>
+                                                <td><a href="javascript:void(0);" onclick=MemberInformation("@item.Url","@item.Name","@item.Modify")>查看</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "element", "layer", "table", "view"],
+        function () {
+            var $ = layui.$,
+                element = layui.element,
+                form = layui.form,
+                layer = layui.layer,
+                view = layui.view,
+                table = layui.table,
+                router = layui.router();
+
+        });
+
+    $('#zzlbmc').on("click", function () {
+        layer.open({
+            type: 2,
+            area: ['1000px', '550px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: "单位资质信息",
+            content: '/CheckQualify/unitQualification?id=' + '@Model.myT_bp_Custom.Id'
+        });
+    });
+
+    function MemberInformation(Url, name, modify) {
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name,
+            content: '/CheckQualify/GetFile?path=' + Url + "&IsModify=" + modify
+        });
+    }
+</script>
+<script>
+    function Table(CheckUnitName, PeopleStatus, IsTech, TechTitle, HasCert, name) {
+        layui.use(["layer", "view"],
+            function () {
+                var $ = layui.$,
+                    element = layui.element,
+                    layer = layui.layer,
+                    view = layui.view,
+                    router = layui.router();
+                layer.open({
+                    type: 2,
+                    area: ['1000px', '500px'],
+                    fixed: false, //不固定
+                    maxmin: true,
+                    title: name,
+                    content: '/CheckQualify/GetTable?CheckUnitName=' + CheckUnitName + '&HasCert=' + HasCert + '&TechTitle=' + TechTitle + '&IsTech=' + IsTech + '&PeopleStatus=' + PeopleStatus  //'/UserInfo/Details?id=' + id+"&IsModify=0"
+                });
+            });
+    }
+
+    $('#shebaopeoplenum').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', 1, null, null, null, "社保人员信息查看")
+    });
+    $('#percountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, null, null, "人员总数")
+    });
+    $('#midpercountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, 2, null, "中级职称人数")
+    });
+    $('#heipercountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, 3, null, "高级职称人数")
+    });
+    $('#hasNumPerCountBtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, null, null, 1, "持证人员数量")
+    });
+    $('#REGYTSTABtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, 1, null, null, "注册岩土工程师人数")
+    });
+    $('#REGJGSTABtn').on("click", function () {
+        Table('@Model.myT_bp_Custom.Id', null, 2, null, null, "注册结构工程师人数")
+    });
+
+    //搅拌系统
+    function pumpsystem() {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '搅拌系统信息查看',
+            content: '/STCheckQualify/PumpSystem?CustomId=@Model.myT_bp_Custom.Id'
+        });
+    }
+
+    //运输车
+    function carriervehicle() {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '运输车信息查看',
+            content: '/STCheckQualify/Carriervehicle?CustomId=@Model.myT_bp_Custom.Id'
+        });
+    }
+    //泵车
+    function pumpvehicle() {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '泵车信息查看',
+            content: '/STCheckQualify/PumpVehicle?CustomId=@Model.myT_bp_Custom.Id'
+        });
+    }
+    //是否管理，是否有职称，是否检查    暂时没写完 需要曹乐晨写完人员 by振华
+    function peopleDetail(isAdmin, isTitle, isCheck) {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '泵车信息查看',
+            content: '/STCheckPeople/STPeopleDetails?CustomId=@Model.myT_bp_Custom.Id' + '&IsAdmin=' + isAdmin + '&IsTitle=' + isTitle + '&IsCheck=' + isCheck
+        });
+    }
+
+    function checkEquipDetails() {
+        layer.open({
+            type: 2,
+            area: ['1000px', '500px'],
+            fixed: false, //不固定
+            title: '主要仪器设备查看',
+            content: '/STCheckEquip/PumpVehicle?CustomId=@Model.myT_bp_Custom.Id'
+        });
+    }
+</script>

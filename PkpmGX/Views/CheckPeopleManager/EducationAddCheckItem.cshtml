@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "EducationAddCheckItem";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="customcompany-customedit-tableContainer">
+        <form class="layui-form" action="" lay-filter="customcompany-customedit-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">继续教育时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="EducationDate" id="EducationDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">继续教育内容</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="EducationContent" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">培训机构</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="TrainUnit" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">考试时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="TestDate" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="saveCheckItemAndParm">新增</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            router = layui.router();
+
+
+        laydate.render({
+            elem: '#EducationDate',
+        });
+        laydate.render({
+            elem: '#TestDate',
+        });
+    });
+    var index = parent.layer.getFrameIndex(window.name);
+    $('#saveCheckItemAndParm').click(function () {
+        var EducationDate = $('#EducationDate').val();
+        var EducationContent = $('#EducationContent').val();
+        var TrainUnit = $('#TrainUnit').val();
+        var TestDate = $('#TestDate').val();
+
+        if (EducationDate === '') {
+            parent.layer.msg('请填写继续教育时间');
+            return false;
+        }
+        if (EducationContent == '') {
+            parent.layer.msg('请填写继续教育内容');
+            return;
+        }
+        if (TrainUnit == '') {
+            parent.layer.msg('请填写培训机构');
+            return;
+        }
+
+        var str = '<tr><td data-CheckPeopleEducation="TrainDate">' + EducationDate + '</td><td data-CheckPeopleEducation="TrainContent">' + EducationContent + '</td><td data-CheckPeopleEducation="TrainUnit">' + TrainUnit + '</td><td data-CheckPeopleEducation="TestDate">' + TestDate + '</td><td>' + '<button class="layui-btn EducationCheckItems-table-table-btnDel">删除</button>' + '</td></tr>';
+        parent.$('#EducationCheckItems-table  > tbody:last-child').append(str);
+        parent.layer.close(index);
+    });
+</script>
+
+

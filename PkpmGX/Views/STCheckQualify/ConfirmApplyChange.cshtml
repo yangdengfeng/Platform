@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "ConfirmApplyChange";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="STCustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="STCustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">申请人<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="SubmitName" value="@Model.SubmitName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-space15">
+                        <label class="layui-form-label">申请原因<span style="color:red">*</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="SubmitText" value="@Model.SubmitText" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md1">
+                        <div class="layui-input-inline">
+                            <button class="layui-btn" id="Yes">通过</button>
+                            <button class="layui-btn" id="No">不通过</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["layer"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            layer = layui.layer,
+
+            router = layui.router();
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    var ELEM_IFRAME = '.layadmin-iframe';
+    var iframe = $(window.parent.document).find(ELEM_IFRAME);
+
+    $('#Yes').click(function (data) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/STCheckQualify/ConfirmApplyChange?Result=true" + "&SubmitId=@Model.CustomId",
+            success: function (d) {
+                if (d.IsSucc) {
+                    layer.confirm('审核通过操作成功', {
+                        btn: ['确定']
+                    }, function (index) {
+                        layer.close(index);
+                        parent.layer.closeAll();
+                        parent.mygrid.clearAll();
+                        gridQString = '/STCheckQualify/Search?' + parent.getQueryStr();
+                        parent.mygrid.load(gridQString, parent.doOnGridLoaded());
+
+                    })
+                }
+                else {
+                    layer.msg("操作失败，错误信息：" + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        });
+        return false;
+    });
+
+    $('#No').click(function (data) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/STCheckQualify/ConfirmApplyChange?Result=false" + "&SubmitId=@Model.CustomId",
+            success: function (d) {
+                if (d.IsSucc) {
+                    layer.confirm('审核不通过操作成功', {
+                        btn: ['确定']
+                    }, function (index) {
+                        parent.mygrid.clearAll();
+                        gridQString = '/STCheckQualify/Search?' + parent.getQueryStr();
+                        parent.mygrid.load(gridQString, parent.doOnGridLoaded());
+                        layer.close(index);
+                        parent.layer.closeAll();
+                    })
+                }
+                else {
+                    layer.msg("操作失败，错误信息：" + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        });
+        return false;
+    });
+
+
+</script>
+
+
+
+

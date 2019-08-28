@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "Applychange";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-addCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-addCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">申请人<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="SubmitName" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-space15">
+                        <label class="layui-form-label">申请原因<span style="color:red">*</span></label>
+                        <div class="layui-input-block">
+                            <input type="text" id="SubmitText" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" id="save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["layer" ], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+            layer = layui.layer,
+
+            router = layui.router();
+    });
+
+    var index = parent.layer.getFrameIndex(window.name);
+
+    $('#save').click(function (data) {
+
+        var SubmitName = $('#SubmitName').val();
+        var SubmitText = $('#SubmitText').val();
+        var SubmitId=@Model.ID;
+        if (SubmitName == '') {
+            parent.layer.msg('请填写申请人');
+            return false;
+        }
+        if (SubmitName == '') {
+            parent.layer.msg('请填写申请原因');
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/STCheckEquip/ApplyChange?" + "SubmitName=" + SubmitName + "&SubmitText=" + SubmitText + "&SubmitId="+SubmitId,
+
+            success: function (d) {
+                if (d.IsSucc) {
+                    layer.confirm('申请成功', {
+                        btn: ['确定'] //按钮
+                    }, function(index){
+                        //layer.msg('申请成功', {icon: 1});
+                        layer.close(index);
+                        parent.layer.closeAll();
+                        //window.parent.Hui_admin_close("/SysSoftwareVers/Applychang?ID"+SubmitId);
+                    })
+                }
+            else {
+                    layer.msg('申请失败，错误信息：' + d.ErroMsg, {
+                        icon: 2
+                    });
+            }
+
+                }
+            })
+        return false;
+    });
+</script>
+

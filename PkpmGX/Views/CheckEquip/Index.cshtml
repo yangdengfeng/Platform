@@ -1,0 +1,370 @@
+﻿@model Pkpm.Entity.Models.CheckEquipViewModels
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:100%;height:100%;"></div>
+    </div>
+
+    <div class="row mt-5" id="layoutObj" style="height:695px;">
+        <div id="recinfoArea" style="width:100%;"></div>
+        <div id="gridbox" style="width:100%;height:100%;"></div>
+        <div id="pagingArea" style="width:100%;"></div>
+    </div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+@* ---------------------------------------------------------------------------- *@
+<script type="text/javascript">
+
+    var mygrid, myForm, dhxWins, applyWin, applyForm, auditWin, auditForm;
+    var gridQString = '';
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 150, labelWidth: 120 },
+           { type: "combo", label: "检测机构名称", name: "CheckInst" },
+           { type: "input", label: "检定/校准机构", name: "CheckUnit" },
+           //{ type: "input", label: "校准机构", name: "RepairUnit" },
+           { type: "combo", label: "企业性质", name: "CompanyType" },
+           { type: "newcolumn" },
+           { type: "input", label: "仪器型号", name: "EquType" },
+           { type: "input", label: "仪器设备名称", name: "EquName" },
+           //{ type: "combo", label: "仪器类别", name: "EquClass", options: [{ text: "全部", value: "", selected: true }] },
+           { type: "combo", label: "状态", name: "Status", options: [{ text: "全部", value: "", selected: true }] },
+           { type: "newcolumn" },
+           {
+               type: "block", width: 465, list: [
+                    { type: "calendar", label: "检定/校准有效日期", name: "CheckStartDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 100 },
+                    { type: "newcolumn" },
+                    { type: "calendar", label: "至", name: "CheckEndDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 17 },
+               ]
+           },
+           //{
+           //    type: "block", width: 465, list: [
+           //        { type: "calendar", label: "有效日期", name: "RepairStartDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 100 },
+           //        { type: "newcolumn" },
+           //        { type: "calendar", label: "至", name: "RepairEndDt", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 17 },
+           //    ]
+           //},
+           { type: "label", label: "", inputWidth: 300 },
+           {
+               type: "block", width: 465, list: [
+                   { type: "button", name: 'Search', value: "查询", offsetLeft: 100 },
+               ]
+           }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#layoutObj').css('height', layoutHeight + 'px');
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                gridQString = '/CheckEquip/Search?' + getQueryStr();
+                mygrid.clearAll();
+                mygrid.load(gridQString);
+            }
+        });
+
+        //var unitCategoryCombo = myForm.getCombo("CustomType");
+        var checkInstCombo = myForm.getCombo("CheckInst");
+        var companyTypeCombo = myForm.getCombo("CompanyType");
+        var statusCombo = myForm.getCombo("Status");
+
+        checkInstCombo.enableFilteringMode('between');;
+        checkInstCombo.load("/CheckEquip/InstCombo");
+        setComboCustomFilter(checkInstCombo);
+
+
+
+
+        @{
+            foreach (var item in Model.CompayTypes)
+            {
+                @:companyTypeCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                            }
+        }
+
+        @{
+            foreach (var item in Model.personnelStatus)
+            {
+                @:statusCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                    }
+        }
+
+        gridQString = '/CheckEquip/Search?' + getQueryStr();
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+
+        var myToolbar = myTabbar.cells("gridboxOne").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/CheckEquip/ToolBar");
+
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        //先创建 grid
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        //设置列的header名称
+        mygrid.setHeader("勾选,序号,设备编号,仪器设备名称/型号/规格,所属检测机构,检定/校准机构,检定/校准有效日期,检定/校准有效期剩余时间,状态,&nbsp,&nbsp,&nbsp");
+        //设置列的宽度
+        mygrid.setInitWidths("30,30,120,*,250,100,130,120,60,40,40,50");
+        //设置列的左右对其方式
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left");
+        //设置列的类型 ro 为只读，edit,view,del为框架自带的编辑，查看和删除
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,view,edit,layuijslink");
+        //设置列的排序类型
+        mygrid.setColSorting("str,int,str,str,str,str,str,str,str,str,str,str");
+        //mygrid.enableMultiline(true);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        mygrid.init();
+
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        //最后从服务器加载数据
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+
+        var exporter = new ExcelExporter(myForm, mygrid, 30, "/CheckEquip/Export");
+
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Create") {
+                window.parent.Hui_admin_tab_raw("/CheckEquip/Create", "检测设备新增");
+            }
+            if (id == "Export") {
+                exporter.show();
+            }
+            if (id == "deleteById") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId) {
+                    var index = layer.confirm('确定进行删除操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckEquip/Delete", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的设备');
+                }
+            }
+
+            if (id == "Send") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId) {
+                    var index = layer.confirm('确定进行递交操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckEquip/Send", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的设备');
+                }
+            }
+            if (id == "ReturnState") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId) {
+                    var index = layer.confirm('确定进行返回状态操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckEquip/ReturnState", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('返回状态成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckEquip/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选需要返回状态的设备');
+                }
+            }
+        });
+
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function applyChange(id, name, customId) {
+        applyWin = dhxWins.createWindow("menuW", 20, 30, 380, 280);
+        applyWin.setModal(true);
+        applyWin.center();
+        applyWin.setText(name + '申请修改');
+
+        applyForm = applyWin.attachForm();
+        var menuFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "input", name: "SubmitName", label: "申请人", required: true },
+             { type: "input", name: "SubmitText", label: "申请原因", required: true, rows: 2 },
+             { type: "hidden", value: id, name: 'SubmitId' },
+              { type: "hidden", value: customId, name: 'SubmitCustomId' },
+             { type: "button", name: 'Save', value: "保存", offsetLeft: 150 }
+        ];
+        applyForm.load(menuFormStructrue);
+
+        applyForm.attachEvent("onButtonClick", function (name) {
+            applyForm.send("/CheckEquip/ApplyChange", "post", function (loader, response) {
+                var t = window.dhx.s2j(response);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.message("申请修改操作成功！");
+                    applyWin.close();
+                    mygrid.clearAll();
+                    myTabbar.tabs("gridboxOne").progressOn();
+                    mygrid.load(gridQString, doOnGridLoaded);
+                } else {
+                    dhtmlx.alert(t.ErroMsg);
+                }
+
+            });
+        });
+    }
+
+    function equipChange(id) {
+        window.parent.Hui_admin_tab_raw("/CheckEquip/Edit/" + id, "检测设备编辑");
+    }
+
+    //点击查看列的js方法
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/CheckEquip/Details/" + rowId, "检测设备查看");
+    }
+
+    //点击编辑列的js方法
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.dhx.ajax.get("/CheckEquip/CheckEdit?Id=" + rowId, function (r) {
+            var r = window.dhx.s2j(r.xmlDoc.responseText);
+            if (r != null && r.approvalstatus == "0") {
+                window.parent.Hui_admin_tab_raw("/CheckEquip/Edit/" + rowId, "检测设备编辑");
+            }
+            else {
+                alert("该条记录已被递交，请按确定刷新");
+                window.location.replace(location.href);
+            }
+        });
+    }
+
+
+    //审核
+    function AuditEquipment(id) {
+        auditWin = dhxWins.createWindow("auditWin", 50, 50, 800, 500);
+        dhxWins.window("auditWin").denyResize();
+        dhxWins.window("auditWin").button("minmax").hide();
+        dhxWins.window("auditWin").centerOnScreen();
+        auditWin.setModal(true);
+        auditWin.setText("审核");
+        auditForm = auditWin.attachForm();
+        auditForm.loadStruct("/CheckEquip/AuditEquipment?Id=" + id);
+        auditForm.attachEvent("onButtonClick", function (name) {
+            var auditData = [];
+            if (name == "Y") {
+                var auditFormData = auditForm.getFormData(true);
+                for (var key in auditFormData) {
+                    if (key.indexOf("|new") > 0) {
+                        auditData.push(key.split('|')[0] + "=" + encodeURIComponent(auditFormData[key]));
+                    }
+                }
+                auditData.push("Id=" + id);
+                auditData.push("Operate=Y");
+            }
+            else if (name = "N") {
+                auditData.push("Id=" + id);
+                auditData.push("Operate=N");
+            }
+
+            var QueryString = auditData.join('&');
+            window.dhx.ajax.post("/CheckEquip/AuditEquipment", QueryString, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                console.log(t);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({
+                        text: "审核完成！", ok: "确定",
+                        callback: function (result) {
+                            window.location.replace(location.href);
+                        }
+                    });
+                }
+                else {
+                    dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                }
+            });
+
+        });
+    }
+
+    //点击删除的js方法
+    function excellDel_click(obj) {
+
+    }
+</script>

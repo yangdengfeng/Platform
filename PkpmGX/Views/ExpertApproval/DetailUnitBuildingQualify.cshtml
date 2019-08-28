@@ -1,0 +1,242 @@
+﻿@model PkpmGX.Models.ExpertUnitQualifySaveModel
+
+@{
+    ViewBag.Title = "DetailUnitBuildingQualify";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<link href="~/static/layuiadmin/layui/css/formSelects-v4.css" rel="stylesheet" />
+
+<div class="layui-container">
+        <div class="layui-row" id="UnitBuildingQualify-Details-Container">
+            <form class="layui-form" action="" lay-filter="UnitBuildingQualify-Edit-form">
+                <div class="layui-card">
+
+                    <table class="layui-table"  lay-even>
+                        <thead>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="layui-card-header">
+                                        <span>建设厅政务服务中心行政审批事项审查表</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" align="center">（建设工程质量检测机构资质）</td>
+                            </tr>
+                            <tr>
+                                <td width="8%">申请单位</td>
+                                <td>
+                                    <input type="text" name="unitName" id="unitName" value="@Model.unitName" readonly placeholder="" autocomplete="off" class="layui-input">
+                                </td>
+                                <td width="10%">法定代表人</td>
+                                <td width="15%"><input type="text" name="frdb" id="frdb" value="@Model.frdb" readonly placeholder="" autocomplete="off" class="layui-input"></td>
+                                <td>原有检测资质</td>
+                                <td colspan="2"><input type="text" name="yyjczz" id="yyjczz" value="@Model.yyjczz" readonly placeholder="" autocomplete="off" class="layui-input"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" align="center">资质标准考核指标及审查情况</td>
+                            </tr>
+                            <tr>
+                                <td>序号</td>
+                                <td colspan="2">考核指标</td>
+                                <td>资质类别及标准值</td>
+                                <td>检测机构上报信息值</td>
+                                <td>实际值</td>
+                                <td>达标情况</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td colspan="2">计量认证</td>
+                                <td>所申请的检测项目应通过计量认证</td>
+                                <td>
+                                    <a href="#" onclick="LookMeasnumPhoto()"><lable name="onesSb" id="onesSb">@Model.OnesSb</lable></a>
+                                    <input type="hidden" id="measnumpath" name="measnumpath" value="@Model.MeasnumPath" />
+                                </td>
+                                <td><input type="text" name="onesjz" id="onesjz" value="@Model.onesjz" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="onedbqk" id="onedbqk" value="@Model.onedbqk" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr>
+                                <td id="td_zyry1">2</td>
+                                <td id="td_zyry2">专业人员</td>
+                                <td colspan="2">不少于10人，边远县（区）不少于6人</td>
+                                <td><a href="#" onclick="LooksSb()"><lable name="twosSb" id="twosSb">查看</lable></a></td>
+                                <td><input type="text" name="twosjz" id="twosjz" value="@Model.twosjz" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twodbqk" id="twodbqk" value="@Model.twodbqk" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr id="tr_djjcgcjc" style="display:none;">
+                                <td>地基基础工程检测</td>
+                                <td>高级或中级职称不少于4人，其中注册岩土工程师1人</td>
+                                <td><a href="#" onclick="Lookjz()"><lable name="twodjjcsSb" id="twodjjcsSb">查看</lable></a></td>
+                                <td><input type="text" name="twodjjcsjz" id="twodjjcsjz" value="@Model.twodjjcsjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twodjjcdbqk" id="twodjjcdbqk" value="@Model.twodjjcdbqk"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr id="tr_ztjggcxcjc" style="display:none;">
+                                <td>主体结构工程现场检测</td>
+                                <td>高级或中级职称不少于4人，其中二级注册结构工程师1人</td>
+                                <td><a href="#" onclick="Lookjz()"><lable name="twodztjgsSb" id="twodztjgsSb">查看</lable></a></td>
+                                <td><input type="text" name="twodztjgsjz" id="twodztjgsjz" value="@Model.twodztjgsjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twoztjgdbqk" id="twoztjgdbqk" value="@Model.twoztjgdbqk"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr id="tr_jzmqgcjc" style="display:none;">
+                                <td>建筑幕墙工程检测</td>
+                                <td>高级或中级职称不少于4人</td>
+                                <td><a href="#" onclick="Lookjz()"><lable name="twojzmqsSb" id="twojzmqsSb">查看</lable></a></td>
+                                <td><input type="text" name="twojzmqsjz" id="twojzmqsjz" value="@Model.twojzmqsjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twojzmqdbqk" id="twojzmqdbqk" value="@Model.twojzmqdbqk"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr id="tr_gjggcjc" style="display:none;">
+                                <td>钢结构工程检测</td>
+                                <td>高级或中级职称不少于4人，其中二级注册结构工程师1人</td>
+                                <td><a href="#" onclick="Lookjz()"><lable name="twogjgsSb" id="twogjgsSb">查看</lable></a></td>
+                                <td><input type="text" name="twogjgsjz" id="twogjgsjz" value="@Model.twogjgsjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twogjgdbqk" id="twogjgdbqk" value="@Model.twogjgdbqk"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr id="tr_jzqyjc" style="display:none;">
+                                <td>见证取样检测</td>
+                                <td>高级或中级职称不少于3人，边远县（区）不少于2人</td>
+                                <td><a href="#" onclick="Lookjz()"><lable name="twojzqysSb" id="twojzqysSb">查看</lable></a></td>
+                                <td><input type="text" name="twojzqysjz" id="twojzqysjz" value="@Model.twojzqysjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="twojzqydbqk" id="twojzqydbqk" value="@Model.twojzqydbqk" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>检测仪器设备</td>
+                                <td colspan="2">具有检测所需的仪器设备。其中属于强制检定的计量器具计量检定合格。</td>
+                                <td><a href="#" onclick="Looksb()"><lable name="threesSb" id="threesSb">查看</lable></a></td>
+                                <td><input type="text" name="threesjz" id="threesjz" value="@Model.threesjz"  readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                                <td><input type="text" name="threedbqk" id="threedbqk" value="@Model.threedbqk" readonly placeholder="" autocomplete="off" class="layui-input" /></td>
+                            </tr>
+                            <tr>
+                                <td>审查意见</td>
+                                <td colspan="6">
+                                    <div class="layui-form-item">
+                                        <textarea id="textarea" name="shyj" readonly autocomplete="off" class="layui-input">@Model.shyj 
+                                        </textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>专家/项承办人</td>
+                                <td colspan="2"><input type="text" name="username" id="username" value="@Model.username" disabled placeholder="" autocomplete="off" class="layui-input"></td>
+                                <td></td>
+                                <td>日期</td>
+                                <td colspan="2"><input type="text" name="createtime" id="createtime" value="@Model.createtime" disabled placeholder="" autocomplete="off" class="layui-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+        </form>
+
+        </div>
+    </div>>
+
+    
+
+
+<script>
+
+
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        formSelects: 'formSelects-v4'
+    });
+
+    layui.use(["form", "element", "layer", "table", "view", 'formSelects', 'upload', 'layedit', 'laydate'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            laydate = layui.laydate,
+            upload = layui.upload,
+            layedit = layui.layedit,
+            view = layui.view,
+            formSelects = layui.formSelects,
+            element = layui.element,
+            router = layui.router();
+
+
+        layedit.build('textarea');
+        laydate.render({
+            elem: '#createtime',
+            type: 'date'
+        });
+
+
+    });
+
+    $(function () {
+
+        var zyryC = 0;
+        var sqlcywStr = "@Model.sqjcyw";
+        if (sqlcywStr.indexOf("地基基础工程检测") >= 0) {
+            $("#tr_djjcgcjc").show();
+            zyryC++;
+        }
+        if (sqlcywStr.indexOf("主体结构工程现场检测") >= 0) {
+            $("#tr_ztjggcxcjc").show();
+            zyryC++;
+        }
+        if (sqlcywStr.indexOf("建筑幕墙工程检测") >= 0) {
+            $("#tr_jzmqgcjc").show();
+            zyryC++;
+        }
+        if (sqlcywStr.indexOf("钢结构工程检测") >= 0) {
+            $("#tr_gjggcjc").show();
+            zyryC++;
+        }
+        if (sqlcywStr.indexOf("见证取样检测") >= 0) {
+            $("#tr_jzqyjc").show();
+            zyryC++;
+        }
+
+        $("#td_zyry1").attr("rowspan", zyryC + 1);
+        $("#td_zyry2").attr("rowspan", zyryC + 1);
+
+
+
+
+
+
+
+    });
+
+    function LooksSb() {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySix/Index?id=" + @Model.pid, "专业技术人员情况总表");
+    }
+
+    function Lookjz() {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifyFive/Details?pid=" + @Model.pid + "&customid=0", "具备注册工程师资格人员情况");
+    }
+
+    function Looksb() {
+        window.parent.Hui_admin_tab_raw("/ApplyQualifySeven/Details?pid=" + @Model.pid + "&customid=0", "设备仪器信息");
+    }
+
+    function LookMeasnumPhoto() {
+        var imagePath = $("#measnumpath").val();
+        if (imagePath == "") {
+            layer.msg('请先上传扫描件或照片')
+        } else {
+            layer.open({
+                type: 1,
+                title: '扫描件查看',
+                closeBtn: 0,
+                offset: ['100px', '500px'],
+                area: ['500px'],
+                shadeClose: true,
+                content: "<div style='position: relative; left: 0px; top: 0px; overflow: auto; width: auto; height: 500px;'>" + "<img src='/ExpertApproval/Image?itemValue=" + imagePath + "' border='0' style='width: 500px;height:500px'></div>"
+            });
+        }
+    }
+
+
+
+
+</script>

@@ -1,0 +1,507 @@
+﻿
+@model Pkpm.Entity.Models.CheckPeopleViewModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+<script src="~/static/layuiadmin/lib/layedit.js"></script>
+<script src="~/static/layuiadmin/lib/formSelects-v4.js"></script>
+
+<div class="layui-container">
+    <div class="layui-row" id="CheckPeopleManager-Details-Container">
+        <form class="layui-form" action="" lay-filter="CheckPeopleManager-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header">基本信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">检测机构名称</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="CustomName" value="@Model.CustomName" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">性别</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="sex" value="@(Model.people.Sex)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">姓名</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Name" value="@Model.people.Name" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">出生年月</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Birthday" value="@(Model.people.Birthday.HasValue ? Model.people.Birthday.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">身份证号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="SelfNum" value="@Model.people.SelfNum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书编号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="PostNum" value="@Model.people.PostNum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否有岗位证书</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="ishaspostnum" value="@Model.people.ishaspostnum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书有效期</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="sex" value="@(Model.people.postnumstartdate.HasValue?Model.people.postnumstartdate.Value.ToString("yyyy-MM-dd"):string.Empty) - @(Model.people.postnumenddate.HasValue ? Model.people.postnumenddate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">岗位证书获得时间</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="NAME" value="@(Model.people.PostDate.HasValue ? Model.people.PostDate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">毕业学校</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="School" value="@(Model.people.School)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">最高学历</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Education" value="@Model.people.Education" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">职称</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Title" value="@Model.people.Title" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">专业</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Professional" value="@Model.people.Professional" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">联系电话</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Tel" value="@Model.people.Tel" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">职务</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="zw" value="@Model.people.zw" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">电子邮箱</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="Email" value="@Model.people.Email" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否为注册工程师</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="iszcgccs" value="@Model.iszcgccs" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">在职状况</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="iscb" value="@(Model.people.iscb)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">是否注册在本单位</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="isreghere" value="@Model.people.isreghere" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">社保号码</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="SBNum" value="@Model.people.SBNum" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">注册工程师证书号</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="zcgccszh" value="@Model.people.zcgccszh" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">注册工程师证书有效期</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="sex" value="@(Model.people.zcgccszhstartdate.HasValue ? Model.people.zcgccszhstartdate.Value.ToString("yyyy-MM-dd") : string.Empty) - @(Model.people.zcgccszhenddate.HasValue ? Model.people.zcgccszhenddate.Value.ToString("yyyy-MM-dd") : string.Empty)" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-col-md6">
+                                    <div class="layui-form-label">从事检测工作年限</div>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="gznx" value="@Model.people.gznx" placeholder="" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-label">照片</div>
+                            <div class="layui-input-block">
+                                <img src="/CheckPeopleManager/Image?itemValue=+ @Model.people.PhotoPath" width="180px" height="200px" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">岗位信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md3">
+                            <div class="layui-col-md-offset1">
+                                <button type="button" class="layui-btn" id="PublicNumber">自动生成公示序号</button>
+                            </div>
+                        </div>
+                        <div class="layui-col-md5">
+                            <div class="layui-input-block">
+                                <textarea rows="6" name="postTypeView" id="postTypeView" class="layui-textarea" readonly="true">
+                                    @*@Model.postTypeView*@
+                                </textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md1 layui-col-md-offset1">
+                            <text>岗位证书延续注册情况</text>
+                        </div>
+                        <div class="layui-col-md10">
+                            <textarea id="textarea">
+                                @Model.people.postDelayReg
+                            </textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">其他信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12 layui-col-space15">
+                            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                                <ul class="layui-tab-title">
+                                    <li>变更情况</li>
+                                    @*<li>年审情况</li>*@
+                                    <li>继续教育情况</li>
+                                    <li>获奖情况</li>
+                                    <li>处罚情况</li>
+                                </ul>
+                                <div class="layui-tab-content" style="height:100%">
+                                    <div class="layui-tab-item layui-show">
+                                        <label class="layui-form-label">
+                                            变更情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="200" />
+                                                    <col />
+
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>变更时间</th>
+                                                        <th>变更内容</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckPeopleChange)
+                                                        {
+                                                    <tr>
+                                                        <td>@item.Number</td>
+                                                        <td>@item.ChaDate</td>
+                                                        <td>@item.ChaContent</td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    @*<div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            年审情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="100" />
+                                                    <col />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>年审时间</th>
+                                                        <th>内容</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckPeopleVerification)
+                                                        {
+                                                    <tr>
+                                                        <td>@item.Number</td>
+                                                        <td>@item.AddTime</td>
+                                                        <td>@item.Pcontext</td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>*@
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            继续教育情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="100" />
+                                                    <col />
+                                                    <col width="200" />
+                                                    <col width="200" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>时间</th>
+                                                        <th>内容</th>
+                                                        <th>培训机构</th>
+                                                        <th>考试时间</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckPeopleEducation)
+                                                        {
+                                                    <tr>
+                                                        <td>@item.Number</td>
+                                                        <td>@item.TrainDate</td>
+                                                        <td>@item.TrainContent</td>
+                                                        <td>@item.TrainUnit</td>
+                                                        <td>@item.TestDate</td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            获奖情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="200" />
+                                                    <col />
+                                                    <col width="200" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>日期</th>
+                                                        <th>获奖名称</th>
+                                                        <th>发奖单位</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckPeopleAwards)
+                                                        {
+                                                    <tr>
+                                                        <td>@item.Number</td>
+                                                        <td>@item.AwaDate</td>
+                                                        <td>@item.AwaContent</td>
+                                                        <td>@item.AwaUnit</td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="layui-tab-item">
+                                        <label class="layui-form-label">
+                                            处罚情况
+                                        </label>
+                                        <div class="layui-input-block">
+                                            <table class="layui-table" lay-size="sm">
+                                                <colgroup>
+                                                    <col width="100" />
+                                                    <col width="100" />
+                                                    <col />
+                                                    <col width="150" />
+                                                    <col width="150" />
+                                                </colgroup>
+                                                <thead>
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>日期</th>
+                                                        <th>处罚名称</th>
+                                                        <th>处罚机构</th>
+                                                        <th>处罚内容</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        foreach (var item in Model.CheckPeoplePunish)
+                                                        {
+                                                    <tr>
+                                                        <td>@item.Number</td>
+                                                        <td>@item.PunDate</td>
+                                                        <td>@item.PunName</td>
+                                                        <td>@item.PunUnit</td>
+                                                        <td>@item.PunContent</td>
+
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">附件上传</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-space15">
+                        <label class="layui-form-label">附件上传</label>
+                        <div class="layui-input-block">
+                            <table class="layui-table" lay-size="sm">
+                                <colgroup>
+                                    <col width="200" />
+                                    <col />
+                                    <col width="100" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>名称</td>
+                                        <td>状态</td>
+                                        <td>操作</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        foreach (var item in Model.CheckPeopleFile)
+                                        {
+                                    <tr>
+                                        <td>@item.FileName</td>
+                                        <td>@item.FileState</td>
+                                        <td><a href="javascript:void(0);" onclick=ViewFileImg("@item.Path","@item.FileName")>查看</a></td>
+                                    </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../Static/layuiadmin/lib/' //静态资源所在路径
+    });
+    layui.use(["form", "element", "layer", "table", "view", 'layedit'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            layedit = layui.layedit,
+            view = layui.view,
+            element = layui.element,
+            router = layui.router();
+        form.val('CheckPeopleManager-Details-form', {
+            "postTypeView": "@Html.Raw(Model.postTypeView)"
+        });
+        layedit.build('textarea');
+    });
+
+    function ViewFileImg(Url, name) {
+        layer.open({
+            type: 2,
+            area: ['800px', '700px'],
+            fixed: false, //不固定
+            maxmin: true,
+            title: name,
+            content: '/CheckQualify/GetFile?path=' + Url + "&IsModify=0"
+        });
+    }
+
+    $('#PublicNumber').on("click", function () {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/CheckPeopleManager/AutoTypePeople?" + "userId=" + "@(Model.people.id)",
+            success: function (d) {
+                if (d != null) {
+                    layer.alert(d)
+                }
+            }
+        })
+    })
+</script>

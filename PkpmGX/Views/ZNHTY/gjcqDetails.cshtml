@@ -1,0 +1,285 @@
+﻿@model PkpmGX.Models.HTYGjcqDetailViewModel
+@{
+    ViewBag.Title = "gjcqDetails";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row layui-col-space15">
+    </div>
+    <div class="layui-row" id="ZJLiveInfos-Details-Container">
+        <form class="layui-form" action="" lay-filter="ZJLiveInfos-Details-form">
+            <div class="layui-card">
+                <div class="layui-card-header"> 智能回弹仪回弹强度实测实量记录表 </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">项目名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.PROJECTNAME)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">楼栋号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.BuildingNum)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">构件编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.gjNo)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">楼层</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.Floor)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">构件名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.gjName)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">测区数量</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.gjcqNum)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">弹击角度</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.tjjd)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">浇筑面</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.jzm)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">泵送方式</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.bsfs)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">测强曲线</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.cqqxNo)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">最小推定值</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.minTd)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">强度推定值</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.gjqdTd" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">混凝土推定值</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.hnttdz)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">混凝土标号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.hntbh" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">是否合格</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.hg)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">施工队名称</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.ShiGongDuiName" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">碳化模式</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.thms)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">碳化均值</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.avgth" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">碳化最大值</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.maxTh)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">检测日期</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.checkTime" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">回弹仪类型</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@(Model.Data.htyType)" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-label">回弹仪编号</div>
+                            <div class="layui-input-block">
+                                <input type="text" value="@Model.Data.htyNo" readonly="" placeholder="" autocomplete="off" class="layui-input" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header"> 检测点实测值（单位：Mpa） </div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md12">
+
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col width="50" />
+                                    <col />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>测区</td>
+                                        <td>点1</td>
+                                        <td>点2</td>
+                                        <td>点3</td>
+                                        <td>点4</td>
+                                        <td>点5</td>
+                                        <td>点6</td>
+                                        <td>点7</td>
+                                        <td>点8</td>
+                                        <td>点9</td>
+                                        <td>点10</td>
+                                        <td>点11</td>
+                                        <td>点12</td>
+                                        <td>点13</td>
+                                        <td>点14</td>
+                                        <td>点15</td>
+                                        <td>点16</td>
+                                        <td>碳化值1</td>
+                                        <td>碳化值2</td>
+                                        <td>碳化值3</td>
+                                        <td>平均碳化值</td>
+                                        <td>测区推定值</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int index = 0;
+                                        foreach (var item in Model.SubDatas)
+                                        {
+                                            <tr>
+                                                <td>@item.cqno</td>
+                                                <td>@item.sub01</td>
+                                                <td>@item.sub02</td>
+                                                <td>@item.sub03</td>
+                                                <td>@item.sub04</td>
+                                                <td>@item.sub05</td>
+                                                <td>@item.sub06</td>
+                                                <td>@item.sub07</td>
+                                                <td>@item.sub08</td>
+                                                <td>@item.sub09</td>
+                                                <td>@item.sub10</td>
+                                                <td>@item.sub11</td>
+                                                <td>@item.sub12</td>
+                                                <td>@item.sub13</td>
+                                                <td>@item.sub14</td>
+                                                <td>@item.sub15</td>
+                                                <td>@item.sub16</td>
+                                                <td>@(item.thz1.HasValue ? (item.thz1.Value == (decimal)9.90 ? "--" : item.thz1.Value.ToString()) : "--")</td>
+                                                <td>@(item.thz2.HasValue ? (item.thz2.Value == (decimal)9.90 ? "--" : item.thz2.Value.ToString()) : "--")</td>
+                                                <td>@(item.thz3.HasValue ? (item.thz3.Value == (decimal)9.90 ? "--" : item.thz3.Value.ToString()) : "--")</td>
+                                                <td>@(item.avgthz.HasValue ? (item.avgthz.Value == (decimal)9.90 ? "--" : item.avgthz.Value.ToString()) : "--")</td>
+                                                <td>@item.cqtdz</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.config({
+        base: '../../static/layuiadmin/lib/' //静态资源所在路径
+    });
+
+    layui.use(["form", "layer", "upload"], function () {
+        var $ = layui.$,
+            form = layui.form;
+    });
+
+
+</script>
+
+

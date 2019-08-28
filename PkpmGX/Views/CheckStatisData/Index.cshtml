@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+<nav class="breadcrumb">
+    检测数据统计
+    <span class="c-gray en">&gt;</span> 数据上传统计报表
+</nav>
+
+<div class="container-fluid">
+    <div class="row cl ml-5">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="mt-10">
+        <div id="gridbox" style="position:fixed;width:100%; top:100px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var mygrid, myForm, myTabbar, gridQString, ApplyWin, ApplyForm, dhxWins;
+
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        var formStructure = [
+           { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+          {
+              type: "combo", label: "统计时间类型", name: "Type", options: [
+                { value: 0, text: "报告打印时间" },
+                { value: 1, text: "批准日期" },
+                { value: 2, text: "样品检测时间" },
+                { value: 3, text: "上传时间" },
+              ]
+          },
+          { type: "newcolumn" },
+          { type: "button", name: 'Search', value: "查询", offsetLeft: 20, offsetTop: 0 }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            gridQString = '/CheckStatisData/Search?' + getQueryStr();
+            mygrid.clearAll();
+            myTabbar.tabs("gridboxOne").progressOn();
+            mygrid.load(gridQString, doOnGridLoaded);
+        });
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+        gridQString = '/CheckStatisData/Search?' + getQueryStr();
+
+        // mygrid = new dhtmlXGridObject('gridbox');
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,检测机构名称,今天及今天以后,本周,本月,本季度,今年,总上传");//the headers of columns
+        mygrid.setInitWidths("40,*,150,150,150,150,150,150");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ro,ro,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink,layuijslink");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server");          //the sorting types
+        mygrid.init();      //finishes initialization and renders the grid on the page
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/TBpProject/Details?id=" + rowId, "检测报告查看");
+    }
+
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function detailsReport(id) {
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + id, "检测报告查看");
+    }
+
+    function Details(customid, type) {
+        dhxWins.attachViewportTo("gridbox");
+        detailWin = dhxWins.createWindow("detailWin", 50, 50, 900, 600);
+        detailWin.setModal(true);
+        detailWin.center();
+        detailWin.setText("报告信息查看");
+
+        gridTabber = detailWin.attachTabbar({
+            tabs: [
+                    { id: "gridDtails", text: "查询结果", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDtails").attachStatusBar({
+            text: "<div id='recinfoArea3'></div><div id='pagingArea3'></div>",
+            paging: true
+        });
+
+        unqualifyGrid = gridTabber.tabs("gridDtails").attachGrid();
+        unqualifyGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        unqualifyGrid.setHeader("序号,检测机构名称,工程名称,检测项目,检测日期,报告日期,报告编号,&nbsp");//the headers of columns
+        unqualifyGrid.setInitWidths("40,250,150,*,80,80,150,25");          //the widths of columns
+        unqualifyGrid.setColAlign("right,left,left,left,left,left,left,left");       //the alignment of columns
+        unqualifyGrid.setColTypes("ro,ro,ro,ro,ro,ro,layuijslink,view");                //the types of columns
+        unqualifyGrid.setColSorting("server,server,server,server,server,server,server,server");          //the sorting types
+        unqualifyGrid.init();      //finishes initialization and renders the grid on the page
+        unqualifyGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        unqualifyGrid.enablePaging(true, 30, null, "pagingArea3", true, "recinfoArea3");
+        unqualifyGrid.setPagingSkin("bricks");
+        customGrid(unqualifyGrid);
+        var dataGridSeach = '/CheckStatisData/GridSearch?' + getQueryStr() + "&CustomId=" + customid + "&SearchType=" + type;
+
+        unqualifyGrid.load(dataGridSeach, function () {
+            gridTabber.tabs("gridDtails").progressOff();
+        });
+    }
+
+    function sortGridOnServer() {
+        return false;
+    }
+
+    function doOnUnload() {
+
+    }
+</script>
+

@@ -1,0 +1,185 @@
+﻿<error errorId="e5326f20-5910-402b-8d78-a51b401cf138" host="SKY-20190312RGH" type="System.Reflection.AmbiguousMatchException" message="对控制器类型“ApplyQualifyController”的操作“Delete”的当前请求在下列操作方法之间不明确: &#xD;&#xA;类型 PkpmGX.Controllers.ApplyQualifyController 的 System.Web.Mvc.ActionResult Delete(Int32)&#xD;&#xA;类型 PkpmGX.Controllers.ApplyQualifyController 的 System.Web.Mvc.ActionResult Delete(System.String, System.Web.Mvc.FormCollection)" source="System.Web.Mvc" detail="System.Reflection.AmbiguousMatchException: 对控制器类型“ApplyQualifyController”的操作“Delete”的当前请求在下列操作方法之间不明确: &#xD;&#xA;类型 PkpmGX.Controllers.ApplyQualifyController 的 System.Web.Mvc.ActionResult Delete(Int32)&#xD;&#xA;类型 PkpmGX.Controllers.ApplyQualifyController 的 System.Web.Mvc.ActionResult Delete(System.String, System.Web.Mvc.FormCollection)&#xD;&#xA;   在 System.Web.Mvc.ActionMethodSelectorBase.FindActionMethod(ControllerContext controllerContext, String actionName)&#xD;&#xA;   在 System.Web.Mvc.Async.ReflectedAsyncControllerDescriptor.FindAction(ControllerContext controllerContext, String actionName)&#xD;&#xA;   在 System.Web.Mvc.ControllerActionInvoker.FindAction(ControllerContext controllerContext, ControllerDescriptor controllerDescriptor, String actionName)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncControllerActionInvoker.BeginInvokeAction(ControllerContext controllerContext, String actionName, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.Controller.&lt;BeginExecuteCore&gt;b__1c(AsyncCallback asyncCallback, Object asyncState, ExecuteCoreState innerState)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)&#xD;&#xA;   在 System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.Controller.&lt;BeginExecute&gt;b__14(AsyncCallback asyncCallback, Object callbackState, Controller controller)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)&#xD;&#xA;   在 System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.&lt;BeginProcessRequest&gt;b__4(AsyncCallback asyncCallback, Object asyncState, ProcessRequestState innerState)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallBeginDelegate(AsyncCallback callback, Object callbackState)&#xD;&#xA;   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.Begin(AsyncCallback callback, Object state, Int32 timeout)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)&#xD;&#xA;   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)&#xD;&#xA;   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()&#xD;&#xA;   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)" user="tester007" time="2019-05-10T03:23:09.5040000Z">
+  <serverVariables>
+    <item name="ALL_HTTP">
+      <value string="HTTP_CONNECTION:keep-alive&#xD;&#xA;HTTP_CONTENT_LENGTH:12&#xD;&#xA;HTTP_CONTENT_TYPE:application/x-www-form-urlencoded&#xD;&#xA;HTTP_ACCEPT:*/*&#xD;&#xA;HTTP_ACCEPT_ENCODING:gzip, deflate, br&#xD;&#xA;HTTP_ACCEPT_LANGUAGE:zh-CN,zh;q=0.9&#xD;&#xA;HTTP_COOKIE:ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=05GLntVeBqRhBGamRpK268LbmX8mefGVp33saLD8srb8NDHX7Q8OQG4AbOWMTkpftTxvo5tTLbyCVLyhhSJUf35JJJawjzoxUliPN39_x8R37XtP019DDnqVZxxjHBJvsP0IOngKqUIT-qP-by68U1Vng8sCv6osLrKETFV60_fhlZ2YHtEdCX1a3OyOj9R5HdnQbi_LzPfT7tPlzF6alEGKNs6k4_mvaVgl6fQUrnoHSJUWSv2NZvg7QQIY8XtKM2w39gtq2K23L9o8suTQWSveoTp-bQbTmup65GtOlXDFFbzpsMR_Jq4of8FU8EnEOvPCggTctcYQGYFZDbK0xbPx-Yk8lhBtJlRwNYEaB46czHLg-d5yh-120EKg6_hD-gdFQZdfyugE_DyMr_iVdZ8Lcql1K0xvWrvVHo2AsgwIEFpt2u24SDwttOk3Yt5e9o8UAIEOc29TF9TkNjO-5YbWZ0eTjJNflGneQmUBdD8sUGKSSnCxngbwMKwUktw0&#xD;&#xA;HTTP_HOST:localhost:57189&#xD;&#xA;HTTP_REFERER:http://localhost:57189/ApplyQualify&#xD;&#xA;HTTP_USER_AGENT:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36&#xD;&#xA;HTTP_ORIGIN:http://localhost:57189&#xD;&#xA;HTTP_X_REQUESTED_WITH:XMLHttpRequest&#xD;&#xA;" />
+    </item>
+    <item name="ALL_RAW">
+      <value string="Connection: keep-alive&#xD;&#xA;Content-Length: 12&#xD;&#xA;Content-Type: application/x-www-form-urlencoded&#xD;&#xA;Accept: */*&#xD;&#xA;Accept-Encoding: gzip, deflate, br&#xD;&#xA;Accept-Language: zh-CN,zh;q=0.9&#xD;&#xA;Cookie: ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=05GLntVeBqRhBGamRpK268LbmX8mefGVp33saLD8srb8NDHX7Q8OQG4AbOWMTkpftTxvo5tTLbyCVLyhhSJUf35JJJawjzoxUliPN39_x8R37XtP019DDnqVZxxjHBJvsP0IOngKqUIT-qP-by68U1Vng8sCv6osLrKETFV60_fhlZ2YHtEdCX1a3OyOj9R5HdnQbi_LzPfT7tPlzF6alEGKNs6k4_mvaVgl6fQUrnoHSJUWSv2NZvg7QQIY8XtKM2w39gtq2K23L9o8suTQWSveoTp-bQbTmup65GtOlXDFFbzpsMR_Jq4of8FU8EnEOvPCggTctcYQGYFZDbK0xbPx-Yk8lhBtJlRwNYEaB46czHLg-d5yh-120EKg6_hD-gdFQZdfyugE_DyMr_iVdZ8Lcql1K0xvWrvVHo2AsgwIEFpt2u24SDwttOk3Yt5e9o8UAIEOc29TF9TkNjO-5YbWZ0eTjJNflGneQmUBdD8sUGKSSnCxngbwMKwUktw0&#xD;&#xA;Host: localhost:57189&#xD;&#xA;Referer: http://localhost:57189/ApplyQualify&#xD;&#xA;User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36&#xD;&#xA;Origin: http://localhost:57189&#xD;&#xA;X-Requested-With: XMLHttpRequest&#xD;&#xA;" />
+    </item>
+    <item name="APPL_MD_PATH">
+      <value string="/LM/W3SVC/2/ROOT" />
+    </item>
+    <item name="APPL_PHYSICAL_PATH">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\" />
+    </item>
+    <item name="AUTH_TYPE">
+      <value string="ApplicationCookie" />
+    </item>
+    <item name="AUTH_USER">
+      <value string="tester007" />
+    </item>
+    <item name="AUTH_PASSWORD">
+      <value string="" />
+    </item>
+    <item name="LOGON_USER">
+      <value string="" />
+    </item>
+    <item name="REMOTE_USER">
+      <value string="tester007" />
+    </item>
+    <item name="CERT_COOKIE">
+      <value string="" />
+    </item>
+    <item name="CERT_FLAGS">
+      <value string="" />
+    </item>
+    <item name="CERT_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="CERT_SERIALNUMBER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="CERT_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CERT_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="CONTENT_LENGTH">
+      <value string="12" />
+    </item>
+    <item name="CONTENT_TYPE">
+      <value string="application/x-www-form-urlencoded" />
+    </item>
+    <item name="GATEWAY_INTERFACE">
+      <value string="CGI/1.1" />
+    </item>
+    <item name="HTTPS">
+      <value string="off" />
+    </item>
+    <item name="HTTPS_KEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SECRETKEYSIZE">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_ISSUER">
+      <value string="" />
+    </item>
+    <item name="HTTPS_SERVER_SUBJECT">
+      <value string="" />
+    </item>
+    <item name="INSTANCE_ID">
+      <value string="2" />
+    </item>
+    <item name="INSTANCE_META_PATH">
+      <value string="/LM/W3SVC/2" />
+    </item>
+    <item name="LOCAL_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="PATH_INFO">
+      <value string="/ApplyQualify/Delete" />
+    </item>
+    <item name="PATH_TRANSLATED">
+      <value string="E:\JianYan\PkpmGX\PkpmGX\ApplyQualify\Delete" />
+    </item>
+    <item name="QUERY_STRING">
+      <value string="" />
+    </item>
+    <item name="REMOTE_ADDR">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_HOST">
+      <value string="::1" />
+    </item>
+    <item name="REMOTE_PORT">
+      <value string="59035" />
+    </item>
+    <item name="REQUEST_METHOD">
+      <value string="POST" />
+    </item>
+    <item name="SCRIPT_NAME">
+      <value string="/ApplyQualify/Delete" />
+    </item>
+    <item name="SERVER_NAME">
+      <value string="localhost" />
+    </item>
+    <item name="SERVER_PORT">
+      <value string="57189" />
+    </item>
+    <item name="SERVER_PORT_SECURE">
+      <value string="0" />
+    </item>
+    <item name="SERVER_PROTOCOL">
+      <value string="HTTP/1.1" />
+    </item>
+    <item name="SERVER_SOFTWARE">
+      <value string="Microsoft-IIS/10.0" />
+    </item>
+    <item name="URL">
+      <value string="/ApplyQualify/Delete" />
+    </item>
+    <item name="HTTP_CONNECTION">
+      <value string="keep-alive" />
+    </item>
+    <item name="HTTP_CONTENT_LENGTH">
+      <value string="12" />
+    </item>
+    <item name="HTTP_CONTENT_TYPE">
+      <value string="application/x-www-form-urlencoded" />
+    </item>
+    <item name="HTTP_ACCEPT">
+      <value string="*/*" />
+    </item>
+    <item name="HTTP_ACCEPT_ENCODING">
+      <value string="gzip, deflate, br" />
+    </item>
+    <item name="HTTP_ACCEPT_LANGUAGE">
+      <value string="zh-CN,zh;q=0.9" />
+    </item>
+    <item name="HTTP_COOKIE">
+      <value string="ASP.NET_SessionId=m32hhi0dtp0l1xxjjvxucqyn; UserId=E6cRWY6BMu/yzFSDqWmO9w==; .AspNet.ApplicationCookie=05GLntVeBqRhBGamRpK268LbmX8mefGVp33saLD8srb8NDHX7Q8OQG4AbOWMTkpftTxvo5tTLbyCVLyhhSJUf35JJJawjzoxUliPN39_x8R37XtP019DDnqVZxxjHBJvsP0IOngKqUIT-qP-by68U1Vng8sCv6osLrKETFV60_fhlZ2YHtEdCX1a3OyOj9R5HdnQbi_LzPfT7tPlzF6alEGKNs6k4_mvaVgl6fQUrnoHSJUWSv2NZvg7QQIY8XtKM2w39gtq2K23L9o8suTQWSveoTp-bQbTmup65GtOlXDFFbzpsMR_Jq4of8FU8EnEOvPCggTctcYQGYFZDbK0xbPx-Yk8lhBtJlRwNYEaB46czHLg-d5yh-120EKg6_hD-gdFQZdfyugE_DyMr_iVdZ8Lcql1K0xvWrvVHo2AsgwIEFpt2u24SDwttOk3Yt5e9o8UAIEOc29TF9TkNjO-5YbWZ0eTjJNflGneQmUBdD8sUGKSSnCxngbwMKwUktw0" />
+    </item>
+    <item name="HTTP_HOST">
+      <value string="localhost:57189" />
+    </item>
+    <item name="HTTP_REFERER">
+      <value string="http://localhost:57189/ApplyQualify" />
+    </item>
+    <item name="HTTP_USER_AGENT">
+      <value string="Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.12 Safari/537.36" />
+    </item>
+    <item name="HTTP_ORIGIN">
+      <value string="http://localhost:57189" />
+    </item>
+    <item name="HTTP_X_REQUESTED_WITH">
+      <value string="XMLHttpRequest" />
+    </item>
+  </serverVariables>
+  <form>
+    <item name="selectedId">
+      <value string="4" />
+    </item>
+  </form>
+  <cookies>
+    <item name="ASP.NET_SessionId">
+      <value string="m32hhi0dtp0l1xxjjvxucqyn" />
+    </item>
+    <item name="UserId">
+      <value string="E6cRWY6BMu/yzFSDqWmO9w==" />
+    </item>
+    <item name=".AspNet.ApplicationCookie">
+      <value string="05GLntVeBqRhBGamRpK268LbmX8mefGVp33saLD8srb8NDHX7Q8OQG4AbOWMTkpftTxvo5tTLbyCVLyhhSJUf35JJJawjzoxUliPN39_x8R37XtP019DDnqVZxxjHBJvsP0IOngKqUIT-qP-by68U1Vng8sCv6osLrKETFV60_fhlZ2YHtEdCX1a3OyOj9R5HdnQbi_LzPfT7tPlzF6alEGKNs6k4_mvaVgl6fQUrnoHSJUWSv2NZvg7QQIY8XtKM2w39gtq2K23L9o8suTQWSveoTp-bQbTmup65GtOlXDFFbzpsMR_Jq4of8FU8EnEOvPCggTctcYQGYFZDbK0xbPx-Yk8lhBtJlRwNYEaB46czHLg-d5yh-120EKg6_hD-gdFQZdfyugE_DyMr_iVdZ8Lcql1K0xvWrvVHo2AsgwIEFpt2u24SDwttOk3Yt5e9o8UAIEOc29TF9TkNjO-5YbWZ0eTjJNflGneQmUBdD8sUGKSSnCxngbwMKwUktw0" />
+    </item>
+  </cookies>
+</error>

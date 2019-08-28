@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+@*<div id="form_container" style="width:100%;height:130px;overflow:auto"></div>
+<div id="gridbox" style="position:fixed; top:130px; left: 0; right: 0; bottom: 43px"></div>*@
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="row mt-10">
+        <div id="gridbox" style="width:100%;overflow:auto"></div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var mygrid, myForm, myTabbar, myToolbar, itemWin, selectedItem;
+    dhxWins = new dhtmlXWindows();
+    dhxWins.attachViewportTo("gridbox");
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        selectedItem = [];
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 220, labelWidth: 120 },
+            { type: "combo", label: "单位名称", name: "customId" },
+            { type: "input", label: "检测人员", name: "testpeople" },
+            { type: "calendar", label: "开始日期", name: "StartDate", dateFormat: "%Y-%m-%d"},
+            { type: "newcolumn" },
+            { type: "input", label: "工程名称", name: "projectname" },
+            {
+                type: "combo", label: "报告", name: "IsReport", options: [
+                    { value: "", text: "全部" },
+                    { value: true, text: "有" },
+                    { value: false, text: "无" },
+                ]
+            },
+            { type: "calendar", label: "结束日期", name: "EndDate", dateFormat: "%Y-%m-%d" },
+            { type: "newcolumn" },
+            { type: "combo", label: "所在城市", name: "areainfo" },
+            {
+                type: "combo", label: "照片", name: "IsPhoto", options: [
+                    { value: "", text: "全部" },
+                    { value: true, text: "有" },
+                    { value: false, text: "无" },
+                ]
+            },
+            { type: "block", width: 340, list: [{ type: "button", name: 'Search', value: "查询", offsetLeft: 150 }] },
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        var CheckUnitNameCombo = myForm.getCombo("customId");
+        CheckUnitNameCombo.enableFilteringMode('between');
+        CheckUnitNameCombo.load("/ZJCheck/InstCombo");
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#gridbox').css('height', layoutHeight + 'px');
+
+        var areaInfoCombo = myForm.getCombo("areainfo");
+        areaInfoCombo.enableFilteringMode('between');
+        areaInfoCombo.load("/LiftingEquipment/AreaCombo");
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/LiftingEquipment/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+
+        });
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,单位名称,工程名称,所在城市,现场检测项目,检测人员,上报时间,检测流水号,报告数量,照片信息,地理位置,&nbsp");//设置列的头文本
+        mygrid.setInitWidths("40,*,300,80,160,100,100,150,80,80,80,80");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,ro,ro,ro,layuijslink,ro,ro,layuijslink");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/LiftingEquipment/Search?' + getQueryStr();
+
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+
+    function getGirdSortStr(ind, direct) {
+        var data = [];
+        data.push("orderColInd" + "=" + encodeURIComponent(ind));
+        data.push("direct" + "=" + encodeURIComponent(direct));
+        return data.join('&');
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+    }
+
+    function DetailsQrInfo(qrinfo) {
+        window.parent.Hui_admin_tab_raw("/LiftingEquipment/Details?qrinfo=" + qrinfo, "二维码查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function detailsReport(checknum, projectnum) {
+        detailsReportWin = dhxWins.createWindow("detailsReportWin", 50, 50, 1000, 600);
+        detailsReportWin.setModal(true);
+        detailsReportWin.center();
+        detailsReportWin.setText("报告列表");
+        var gridTabber = detailsReportWin.attachTabbar({
+            tabs: [
+                { id: "gridDetailsReport", text: "查询结果", active: true }
+            ]
+        });
+        gridTabber.tabs("gridDetailsReport").attachStatusBar({
+            text: "<div id='recinfo1'></div><div id='paging1'></div>",
+        });
+
+        dataGrid = gridTabber.tabs("gridDetailsReport").attachGrid();
+        dataGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        dataGrid.setHeader("序号,检测流水号,报告编号,查看");//the headers of columns
+        dataGrid.setInitWidths("40,400,*,80");          //the widths of columns
+        dataGrid.setColAlign("right,left,left,left");       //the alignment of columns
+        dataGrid.setColTypes("ro,ro,ro,jslink");                //the types of columns
+        dataGrid.setColSorting("server,server,server,server");          //the sorting types
+        dataGrid.init();      //finishes initialization and renders the grid on the page
+        dataGrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        dataGrid.setPagingSkin("bricks");
+        customGrid(dataGrid);
+
+        gridTabber.tabs("gridDetailsReport").progressOn();
+        var dataGridSearch = '/LiftingEquipment/GetProgrammeReports?checknum' + checknum + '&projectnum=' + projectnum;
+        dataGrid.load(dataGridSearch, function () {
+            gridTabber.tabs("gridDetailsReport").progressOff();
+        });
+    }
+
+    function Details(customid, reportnum) {
+        window.dhx.ajax.get("/LiftingEquipment/GetSysPrimaryKey?reportNum=" + reportnum + "&customId=" + customid, function (r) {
+            var r = window.dhx.s2j(r.xmlDoc.responseText);
+            if (r.sysPrimaryKey != null && r.sysPrimaryKey != "") { //判断只有sysPrimaryKey有值的时候才打开报告查看对话框
+                window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + r.sysPrimaryKey, "检测报告查看");
+            }
+            else {
+                dhtmlx.alert('报告信息查询出错');
+            }
+        })
+
+
+    }
+
+
+</script>
+
+

@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+
+<div class="layui-container">
+    <div class="layui-row" id="checkcustom-editCusAchieve-tableContainer">
+        <form class="layui-form" action="" lay-filter="checkcustom-editCusAchieve-form">
+            <div class="layui-card">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">企业名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                       
+                        <select name="CustomName" id="CustomName" lay-verify="required">
+                            <option value=""></option>
+                            @{ 
+                                foreach (var item in Model.allSTUnit)
+                                {
+                                    if (item.Key == Model.STCheckEquip.CustomId)
+                                    {
+                                        <option value="@item.Key" selected>@item.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                }
+                            }
+                        </select>
+
+                        @*//<input type="text" id="CustomName" value="@(Model.STCheckEquip.CustomName)" lay-verify="required" placeholder="" autocomplete="off" class="layui-input">*@
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备名称<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="EquipName" id="EquipName" lay-verify="required" value="@Model.STCheckEquip.EquipName" placeholder="" autocomplete="off" class="layui-input">
+                        <input type="text" name="id" id="id" lay-verify="required" value="@Model.STCheckEquip.id" placeholder=""  autocomplete="off" class="layui-hide">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备型号<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="EquipType" id="EquipType" placeholder="" value="@Model.STCheckEquip.EquipType" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">设备规格<span style="color:red">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="EquipSpec" id="EquipSpec" placeholder="" value="@Model.STCheckEquip.EquipSpec" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">购买时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="BuyTime" id="BuyTime" placeholder="" value="@Model.STCheckEquip.BuyTime" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">校定时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="CheckTime" id="CheckTime" placeholder="" value="@Model.STCheckEquip.CheckTime" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">有效期</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="Time" id="Time" placeholder="" value="@Model.STCheckEquip.Time" autocomplete="off" class="layui-input">
+                       
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <center>
+                            <button class="layui-btn" lay-submit lay-filter="STCheckEquip-Edit-save">保存</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    layui.use(["form",  "laydate", "layer", ], function () {
+        var $ = layui.$,
+            form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate;
+        laydate.render({
+            elem: '#BuyTime'
+        });
+        laydate.render({
+            elem: '#CheckTime'
+        });
+        laydate.render({
+            elem: '#Time'
+             , range: true
+        });
+
+        form.on('submit(STCheckEquip-Edit-save)', function (data) {
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/STCheckEquip/Edit",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg("编辑成功", {
+                            btn: ['确定']
+                        }, function (index) {
+                            layer.close(index);
+                            parent.layer.closeAll();
+                        })
+                    }
+                    else {
+                        layer.msg('编辑失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            });
+            return false;
+        })
+    })
+
+
+
+    @*$('#save').click(function (data) {
+        var CustomName = $('#CustomName').val();
+        var EquipName = $('#EquipName').val();
+        var EquipType = $('#EquipType').val();
+        var EquipSpec = $('#EquipSpec').val();
+        var BuyTime = $('#BuyTime').val();
+        var CheckTime = $('#CheckTime').val();
+        var Tiem = $('#Tiem').val();
+        console.log(CustomName, EquipName, EquipType);
+        console.log("@Model.STCheckEquip.id");
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "STCheckEquip/Edit?id=" + "@Model.STCheckEquip.id" + "&CustomName=" + CustomName + "&EquipName=" + EquipName + "&EquipType=" + EquipType + "&EquipSpec=" + EquipSpec + "&BuyTime=" + BuyTime + "&CheckTime=" + CheckTime + "&Tiem=" + Tiem,
+            success: function (d) {
+                if (d.IsSucc) {
+                    layer.msg("编辑成功", {
+                        btn: ['确定']
+                    },  function (index) {
+                            layer.close(index);
+                            parent.layer.closeAll();
+                    })
+                }
+                else {
+                    layer.msg('编辑失败，错误信息：' + d.ErroMsg, {
+                        icon: 2
+                    });
+                }
+            }
+        })
+    })*@
+</script>

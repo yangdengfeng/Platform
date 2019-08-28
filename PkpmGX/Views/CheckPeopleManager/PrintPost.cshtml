@@ -1,0 +1,692 @@
+﻿@model Pkpm.Web.Models.PrintPostViewModel
+@{
+    ViewBag.Title = "PrintPost";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+<script type="text/javascript" src="../printcard/js/printcard.js"></script>
+    <SCRIPT LANGUAGE=javascript FOR=DCellWeb1 EVENT=SheetChanged(oldsheet,newsheet)>
+
+        <!--//DCellWeb1_SheetChanged(oldsheet,newsheet);-->
+
+    </SCRIPT>
+
+    <style>
+        body {
+            font-size: 9pt;
+            text-align: center;
+        }
+
+        ul {
+            padding: 0px;
+            margin: 0px;
+            height: 23px;
+        }
+
+            ul li {
+                display: inline;
+                padding: 0px;
+                margin: 0px;
+            }
+    </style>
+
+    <form id="form_printPost">
+        <DIV style="LEFT: 0px; POSITION: absolute; TOP: 0px">
+            <OBJECT ID="dlgHelper" CLASSID="clsid:3050f819-98b5-11cf-bb82-00aa00bdce0b" WIDTH="0px" HEIGHT="0px"></OBJECT>
+            <script src="../Scripts/FontFacesMenu.js" language="javascript" type="text/javascript"></script>
+        </DIV>
+        <div id="div_printPost" style="display:block;width:950px;background-color:#FFFFCC;border:solid 3px #c9d6ed;padding:5px;">
+            <table style="width:100%;" cellpadding="5">
+                <tr>
+                    <td style="text-align:center">
+                        <OBJECT id=DCellWeb1 style="margin:0px;border:0px;WIDTH: 950px; HEIGHT: 490px;" classid="clsid:3F166327-8030-4881-8BD2-EA25350E574A" VIEWASTEXT><PARAM NAME="_Version" VALUE="65536"><PARAM NAME="_ExtentX" VALUE="17251"><PARAM NAME="_ExtentY" VALUE="10901"><PARAM NAME="_StockProps" VALUE="0"></OBJECT>
+                    </td>
+                </tr>
+                <tr><td colspan="4" style="height:5px"></td></tr>
+                <tr><td colspan="4" style="text-align:center;"><img src="../printcard/images/confirm.gif" style="cursor:pointer;" onclick="cell_printPost();" />&nbsp;&nbsp;<img src="../printcard/images/baocun.gif" style="cursor:pointer;" onclick="savePostBook(peopleId)" /><a href="#" onclick="openModelEditPage({model:currentModel});return false;">[编辑模板]</a>&nbsp;&nbsp;<a href="#" onclick="printPost(peopleId,true,currentModel,additemdate);return false;">[重新]</a>&nbsp;&nbsp;<span id="span_saving_msg" style="color:red;"></span></td></tr>
+            </table>
+            <ul>
+                <li><img src="../printcard/images/charulie.gif" alt="插入列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCurrentCol(),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/charuhang.gif" alt="插入行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertRow(DCellWeb1.GetCurrentRow(),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/zhuijialie.gif" alt="追加列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/zhuijiahang.gif" alt="追加行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.InsertRow(DCellWeb1.GetRows(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/shanchulie.gif" alt="删除列" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.DeleteCol(DCellWeb1.GetCurrentCol(),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/shanchuhang.gif" alt="删除行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.DeleteRow(DCellWeb1.GetCurrentRow(),1,DCellWeb1.GetCurSheet());" /></li>
+                <li><img src="../printcard/images/zhuhedanyuange.gif" alt="组合单元格" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="mergeCells();" /></li>
+                <li><img src="../printcard/images/quxiaozhuhedanyuange.gif" alt="取消单元格组合" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="unMergeCells();" /></li>
+                <li>
+                    <SELECT ID="blessingWords_FontFamily_DL" name="blessingWords_FontFamily_DL" onChange="SetFontFace(this[this.selectedIndex].innerText,this[this.selectedIndex].value);this.selectedIndex=0;" style="width:140px;" onmouseenter="fontFacesMenuEnter(this,'dlgHelper');//updateFontList();">
+                        <OPTION VALUE=""><- 设置字体 -></OPTION>
+                    </SELECT>
+                </li>
+                <li>
+                    <select onchange="setFontSize(this.value);">
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                    </select>
+                </li>
+                <li><img src="../printcard/images/bold.gif" width="23px" alt="加粗" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(2);" /></li>
+                <li><img src="../printcard/images/italic.gif" width="23px" alt="斜体" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(4);" /></li>
+                <li><img src="../printcard/images/underline.gif" width="23px" alt="下划线" height="23px" border="0" style="cursor:pointer;" onclick="setFontStyle(8);" /></li>
+                <!--<li><img src="../printcard/images/backgroundcolor.gif" width="23px" height="23px" border="0" style="cursor:hand;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());"/>li>-->
+                <!--<li><img src="../printcard/images/fontcolor.gif" width="23px" height="23px" border="0" style="cursor:hand;" onclick="DCellWeb1.InsertCol(DCellWeb1.GetCols(DCellWeb1.GetCurSheet()),1,DCellWeb1.GetCurSheet());"/></li>-->
+                <li><img src="../printcard/images/zhidongzhehang.gif" alt="自动换行" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setTextStyle();" /></li>
+                <li><img src="../printcard/images/alignleft.gif" alt="左对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(1);" /></li>
+                <li><img src="../printcard/images/aligncenter.gif" alt="居中对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(4);" /></li>
+                <li><img src="../printcard/images/alignright.gif" alt="右对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(2);" /></li>
+                <li><img src="../printcard/images/verticaltop.gif" alt="顶端对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(8);" /></li>
+                <li><img src="../printcard/images/vertialmiddle.gif" alt="垂直居中对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(32);" /></li>
+                <li><img src="../printcard/images/verticalbottom.gif" alt="底端对齐" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAlign(16);" /></li>
+                <li><img src="../printcard/images/zhidongshuofang.gif" alt="自动缩放" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="setCellAutoZoom();" /></li>
+                <li><img src="../printcard/images/geshishua.gif" alt="格式刷" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="formatPainter();" /></li>
+                <li><img src="../printcard/images/cellproperty.gif" alt="单元格格式" width="23px" height="23px" border="0" style="cursor:pointer;" onclick="DCellWeb1.CellPropertyDlg();" /></li>
+                <li><span id="span_saving_msg" style="color:red;"></span></li>
+            </ul>
+        </div>
+    </form>
+
+<script type="text/javascript">
+
+    var peopleId = "@Model.peopleId";
+    var currentModel = "@Model.model";
+    var customname = unescape("@Model.customname");
+    var additemdate = "@Model.additemdate";
+    var columnsHaveValuesAr = [];
+    var reportModelColumnListAr = [];
+    var postTypeAr = [];
+    var postTypeNameAr = [];
+    var forceNew = false;
+    function doOnLoad() {
+        printPost(peopleId, forceNew, currentModel, additemdate);
+    }
+
+    function printPost(peopleId, forceNew, model, additemdate) {
+        var isexist=false;
+        if (!forceNew) {
+            window.dhx.ajax.post('/CheckPeopleManager/IsExistFile?id=' + peopleId , function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    showPrintPostDiv({ peopleId: peopleId, noLoadFile: true });
+                    document.getElementById("DCellWeb1").OpenFile(getLocation() + "/printcard/html/peoplePostBook/" + peopleId + ".html?t=" + (new Date().getTime()), "");
+                    isexist = true;
+                    return;
+                }
+                else {
+                    isexist = false;//dhtmlx.alert({ text: "错误!请重试！", ok: "确定" });
+                }
+            });
+        }
+        if (forceNew || !isexist) {
+            window.dhx.ajax.post("/CheckPeopleManager/GetPrintCardPeople?id=" + peopleId, function (response) {
+                var data = window.dhx.s2j(response.xmlDoc.responseText);
+                fillPost(data, peopleId, model, additemdate);
+            });
+        }
+    }
+    function showPrintPostDiv(config) {
+        var configStr = "";
+        for (var p in config) {
+            configStr += p + ":'" + config[p] + "',";
+        }
+        if (configStr != "") configStr = configStr.substr(0, configStr.length - 1);
+        configStr = "{" + configStr + "}";
+
+        var myLocation = getLocation();
+        var cell = document.getElementById("DCellWeb1");
+        try {
+            cell.Login('长沙建研信息技术有限公司', '', '13100105585', '6440-0105-7775-6003');
+            cell.LocalizeControl(2052);
+        } catch (e) {
+            showCellDownLoad();
+            return;
+        }
+        var cellVersion = cell.GetVersionStr();
+        var cv = cellVersion.split(",");
+
+        var v = cv[cv.length - 1];
+        if (parseInt(v) < 15) {
+            showCellDownLoad();
+            return;
+        }
+        if (!config.noLoadFile){
+        //if (true) {
+            cell.OpenFile(myLocation + "/printcard/reportModel/published" + config.model + ".html?t=" + (new Date().getTime()), "");
+            for (var sheet = 0; sheet < 3; sheet++) {
+                cell.ShowGridLine(0, sheet);
+                cell.ShowSideLabel(0, sheet);
+                cell.ShowTopLabel(0, sheet);
+            }
+            //cell.SetInitPreviewScale(100);
+            //cell.PrintPreviewEx(0,0,true);
+        }
+    }
+
+    function fillPost(data, peopleId, model, additemdate) {
+        if (data && data.length == 0) {
+            alert({ text: "未检索到数据，请重试！", ok: "确定" });
+            return;
+        }
+        showPrintPostDiv({ peopleId: peopleId, model: model }); //加载华表打印页面
+
+        var posttypecode = data[0]["posttypecode"];
+        var posttype = data[0]["posttype"];
+
+        var c = [];
+        var orderAr = [];
+        var postTypeTimeAr = [];
+
+        var cHB = [];
+        var orderArHB = [];
+        var postTypeTimeArHB = [];
+
+        //第二页
+        var c2 = [];
+        var orderAr2 = [];
+        var postTypeTimeAr2 = [];
+        //alert(posttypecode);
+        if (posttypecode && posttypecode != "") {
+            var codeAr = posttypecode.split("|"); //8_33|9_34|9_35|9_36|9_37|16_59|16_60
+            var postTypeAr = new Array();
+            postTypeAr = posttype.split(";<br>"); //砼砂浆;<br>简易土工检验及岩石;<br>砌墙砖及砌块;<br>钢材及连接;<br>水泥.砂.石;<br>混凝土结构工程现场检测;<br>砌体工程现场检测;<br>
+
+            var postTypeArHBr = new Array();
+            for (var hb = 0; hb < postTypeAr.length - 1; hb++) {
+                postTypeArHBr[hb] = postTypeAr[hb];
+            }
+            postTypeAr = postTypeArHBr;
+            var temp = "";
+            for (var hb = 0; hb < postTypeAr.length; hb++) {
+                for (var i = 0; i < postTypeAr.length - hb - 1; i++) {
+                    var pos1 = postTypeAr[i].indexOf("[T]") + "[T]".length;
+                    var pos2 = postTypeAr[i].indexOf("[/T]");
+                    var postTypeTime1 = postTypeAr[i].substr(pos1, pos2 - pos1);
+
+                    var pos3 = postTypeAr[i + 1].indexOf("[T]") + "[T]".length;
+                    var pos4 = postTypeAr[i + 1].indexOf("[/T]");
+                    var postTypeTime2 = postTypeAr[i + 1].substr(pos3, pos4 - pos3);
+                    var HBadditemdate = "";
+                    var HBadditemdate2 = "";
+                    if (postTypeTime1 == "") {
+                        HBadditemdate = new Date("1986-07-25");
+                    } else {
+                        HBadditemdate = new Date(postTypeTime1.replace(".", "-") + "-01");
+                    }
+                    if (postTypeTime2 == "") {
+                        HBadditemdate2 = new Date("1986-07-25");
+                    } else {
+                        HBadditemdate2 = new Date(postTypeTime2.replace(".", "-") + "-01");
+                    }
+
+                    if (HBadditemdate > HBadditemdate2) {
+                        temp = postTypeAr[i];
+                        postTypeAr[i] = postTypeAr[i + 1];
+                        postTypeAr[i + 1] = temp;
+                    }
+                }
+            }
+
+            var codeObjAr = [];
+
+            for (var i = 0; i < codeAr.length; i++) {
+                var subcodeAr = codeAr[i].split("_");
+
+                if (postTypeAr[i].indexOf("[X]") != -1 || postTypeAr[i].indexOf("[x]") != -1) {
+                    postTypeAr[i] = postTypeAr[i].replace(/\[X\].*\[\/X\]/g, "").replace(/\[x\].*\[\/x\]/g, "");
+                }
+                var ttt = postTypeAr[i]; //砼砂浆
+                var pos1 = ttt.indexOf("[T]");
+                var pos2 = ttt.indexOf("[/T]");
+                var postTypeTime = "";
+                var postTypeName = "";
+                if (pos1 != -1) //存了时间的
+                {
+                    postTypeName = postTypeAr[i].substring(0, pos1);
+                    pos1 = pos1 + "[T]".length;
+                    postTypeTime = ttt.substr(pos1, pos2 - pos1);
+                }
+                else //没存时间的
+                {
+                    postTypeName = postTypeAr[i];
+                }
+                //一条记录一个对象
+                codeObjAr.push({ parentId: parseInt(subcodeAr[0]), thisId: subcodeAr[1], posttypename: postTypeName, postTypeTime: postTypeTime });
+
+            } //先把所有东西放在 codeObjAr
+            sortRecord(codeObjAr, 'parentId', false);
+
+            var t = -1;
+            var k = -1;
+
+            var tmpAr = [];
+            var tmpStr = "";
+            var tmpPostTypeTimeAr = [];
+
+            for (var i = 0; i < codeObjAr.length; i++)//遍历每个对象
+            {
+                if (codeObjAr[i].parentId != t) {
+                    t = codeObjAr[i].parentId;
+                    if (tmpStr != "") {
+                        k++;
+                        tmpAr[k] = tmpStr.substring(0, tmpStr.length - 1);
+                        tmpPostTypeTimeAr.push(codeObjAr[i - 1].postTypeTime);
+                        tmpStr = "";
+                    }
+                }
+                tmpStr += codeObjAr[i].posttypename + "、"; //把所有的项目名拼起来，用、
+            }
+
+            tmpAr[++k] = tmpStr.substring(0, tmpStr.length - 1);
+
+            tmpPostTypeTimeAr.push(codeObjAr[i - 1].postTypeTime);
+
+            var pianyi = 0;
+            for (var i = 0; i < tmpAr.length; i++) {
+                var splitLen = 30;
+                var count = Math.ceil(tmpAr[i].length / splitLen);
+                pianyi = 0;
+                for (var k = 0; k < count; k++) {
+                    var order = "";
+                    var content = "";
+                    if (k == 0) order = getChNum(i + 1);
+                    var splitPos1 = k * splitLen + pianyi;
+                    var splitPos2 = k * splitLen + pianyi + splitLen;
+                    if (k < count - 1) {
+                        var t1 = tmpAr[i].substring(splitPos2, splitPos2 + 1);
+                        content = tmpAr[i].substring(splitPos1, splitPos2);
+                        if (t1 != "、") {
+                            var tmpPos = content.lastIndexOf("、") + k * splitLen;
+                            pianyi += tmpPos - splitPos2 + 1;
+                            splitPos2 = tmpPos;
+                            content = tmpAr[i].substring(splitPos1, splitPos2);
+                        }
+                        else {
+                            pianyi += 1;
+                        }
+                    }
+                    else {
+                        content = tmpAr[i].substring(splitPos1);
+                    }
+                    //alert(additemdate);
+                    if (tmpPostTypeTimeAr[i].replace(".", "-") + "-28" < additemdate || tmpPostTypeTimeAr[i] == "" || additemdate == "") {
+                        c.push(content);
+                        orderAr.push(order);
+                        postTypeTimeAr.push(tmpPostTypeTimeAr[i]);
+                    }
+                    else {
+                        c2.push(content);
+                        orderAr2.push(order);
+                        postTypeTimeAr2.push(tmpPostTypeTimeAr[i]);
+                    }
+
+                }
+            }
+        }
+        c[c.length] = "--此页以下空白--";
+        var v = data[0]["postdate"] ? data[0]["postdate"].toString() : "";
+        v = v.replace("-", "/");
+        var t = Date.parse(v);
+        if (!isNaN(t)) {
+            var date = new Date(t);
+            postTypeTimeAr[postTypeTimeAr.length] = date.getFullYear() + "." + padZero(date.getMonth() + 1);
+        }
+
+        if (c2.length > 0) {
+            c2[c2.length] = "--此页以下空白--";
+            if (!isNaN(t)) {
+                var date = new Date(t);
+                postTypeTimeAr2[postTypeTimeAr2.length] = date.getFullYear() + "." + padZero(date.getMonth() + 1);
+            }
+        }
+
+        var iNum = 0;
+        for (var i = 0; i < (c.length <= 5 ? 5 : 10) ; i++) {
+            if (i <= c.length - 1) {
+                cHB.push(c[i]);
+                if (c[i] != "--此页以下空白--") {
+                    orderArHB.push(getChNum(iNum + 1));
+                    iNum++;
+                } else {
+                    orderArHB.push("");
+                }
+                postTypeTimeArHB.push(postTypeTimeAr[i]);
+            } else {
+                cHB.push("");
+                orderArHB.push("");
+                postTypeTimeArHB.push("");
+            }
+        }
+
+        for (var i = 0; i < (cHB.length == 10 ? 15 : 10) ; i++) {
+            if (i <= c2.length - 1) {
+                cHB.push(c2[i]);
+                if (c2[i] != "--此页以下空白--") {
+                    orderArHB.push(getChNum(iNum + 1));
+                    iNum++
+                } else {
+                    orderArHB.push("");
+                }
+
+                postTypeTimeArHB.push(postTypeTimeAr2[i]);
+            } else {
+                cHB.push("");
+                orderArHB.push("");
+                postTypeTimeArHB.push("");
+            }
+        }
+
+        var cell = document.getElementById("DCellWeb1");
+
+        var s = "";
+        var strParams = "";
+        var paramid = "renyuanzhengshu" + model;
+        data[0]["postnum"] = data[0]["postnum"] ? data[0]["postnum"].replace(/渝/g, "").replace(/建/g, "").replace(/试/g, "").replace(/字/g, "").replace(/第/g, "").replace(/号/g, "") : "";
+        window.dhx.ajax.post("/CheckPeopleManager/GetcellModelParams?id=" + paramid, function (response) {
+            var dataParams = window.dhx.s2j(response.xmlDoc.responseText);
+            strParams = dataParams[0]["modelParams"];
+            eval(strParams);
+
+            var d = [];
+            window.dhx.ajax.post("/CheckPeopleManager/GetPeoChange?id=" + peopleId, function (response) {
+                d = window.dhx.s2j(response.xmlDoc.responseText);
+
+                var strAr = reportModelColumnListAr;
+                for (sheet = 0; sheet < 3; sheet++) {
+                    if (sheet < 2) {
+                        setPrintValues(strAr[sheet], data, cHB, d, orderArHB, postTypeTimeArHB, peopleId);
+                    }
+                    else {
+                        if (cHB.length == 15) {
+                            var cHB2 = [];
+                            var orderArHB2 = [];
+                            var postTypeTimeArHB2 = [];
+
+                            for (var i = 10; i < 15; i++) {
+                                cHB2.push(cHB[i]);
+                                orderArHB2.push(orderArHB[i]);
+                                postTypeTimeArHB2.push(postTypeTimeArHB[i]);
+                            }
+                            setPrintValues(strAr[sheet], data, cHB2, d, orderArHB2, postTypeTimeArHB2, peopleId);
+                        }
+
+                    }
+                }
+            });
+        });
+
+        clearNoValuesColumn();
+    }
+
+    function setPrintValues(str, data, c, d, orderAr, postTypeTimeAr) {
+
+        var cell = document.getElementById("DCellWeb1");
+        var a = str?str.split("|"):"";
+        for (var i = 0; i < a.length; i++) {
+            var b = a[i].split(","); //a[1]=39,13,2,[#postnum#]
+
+            switch (b[3]) {
+                case '[#fwmm#]':
+                    var t = "防伪:" + GetDateIdKey(peopleId);
+                    cell.SetCellString(b[0], b[1], b[2], t);
+
+                    columnsHaveValuesAr.push(a[i]);
+                    break;
+                case '[#photo#]':
+                    var imageindex = data[0]["photopath"] ? cell.AddImage(data[0]["photopath"]) : 0;
+                    if (imageindex > 0) {
+                        cell.SetCellImage(b[0], b[1], b[2], imageindex, 3, 2, 2);
+                    }
+                    columnsHaveValuesAr.push(a[i]);
+                    break;
+                case '[#postnum#]':
+                case '[#name#]':
+                case '[#sex#]':
+                case '[#selfnum#]':
+                    var t = b[3].substr(2, b[3].length - 4);
+                    cell.SetCellString(b[0], b[1], b[2], data[0][t]);
+                    columnsHaveValuesAr.push(a[i]);
+                    break;
+                case '[#fzn#]':
+                case '[#fzy#]':
+                case '[#fzr#]':
+                    var v = data[0]["postdate"] ? data[0]["postdate"].toString() : "";
+                    v = v.replace("-", "/");
+                    var t = Date.parse(v);
+                    if (!isNaN(t)) {
+                        var date = new Date(t);
+                        if (b[3] == "[#fzn#]") {
+                            cell.SetCellString(b[0], b[1], b[2], date.getFullYear());
+                        }
+                        else if (b[3] == "[#fzy#]") {
+                            cell.SetCellString(b[0], b[1], b[2], padZero(date.getMonth() + 1));
+                        }
+                        else if (b[3] == "[#fzr#]") {
+                            cell.SetCellString(b[0], b[1], b[2], padZero(date.getDate()));
+                        }
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    else {
+                        cell.SetCellString(b[0], b[1], b[2], "");
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    break;
+                case '[#csn#]':
+                case '[#csy#]':
+                case '[#csr#]':
+
+                    var v = data[0]["birthday"] ? data[0]["birthday"].toString() : "";
+                    v = v.replace("-", "/");
+                    var t = Date.parse(v);
+                    if (!isNaN(t)) {
+                        var date = new Date(t);
+                        if (b[3] == "[#csn#]") {
+                            cell.SetCellString(b[0], b[1], b[2], date.getFullYear());
+                        }
+                        else if (b[3] == "[#csy#]") {
+                            cell.SetCellString(b[0], b[1], b[2], padZero(date.getMonth() + 1));
+                        }
+                        else if (b[3] == "[#csr#]") {
+                            cell.SetCellString(b[0], b[1], b[2], padZero(date.getDate()));
+                        }
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    else {
+                        cell.SetCellString(b[0], b[1], b[2], "");
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    break;
+                case '[#gzdw#]':
+                    var t = data[0]["customid"] ? customname : "";
+                    if (d.length > 0) {
+                        var t1 = d[0]["chacontent"].substring(5);
+                        t = t1.substring(0, t1.indexOf("变更为"));
+                    }
+                    cell.SetCellString(b[0], b[1], b[2], t);
+                    columnsHaveValuesAr.push(a[i]);
+                    break;
+
+
+            }
+            if (b[3].indexOf("[#xuhao") != -1 || b[3].indexOf("[#jcxm") != -1 || b[3].indexOf("[#hezhunshijian") != -1) {
+                var t = b[3].replace("[#xuhao", "").replace("[#jcxm", "").replace("[#hezhunshijian", "").replace("#]", "");
+
+                var order = parseInt(t) - 1;
+
+                var order = 0;
+                if (sheet < 2) {
+                    order = parseInt(t) - 1;
+                }
+                else {
+                    order = parseInt(t) - 11;
+                }
+
+                if (order < c.length) {
+                    //var additemdate = new Date(URLParams["additemdate"]);
+                    //var additemdate2 = new Date(postTypeTimeAr[order].replace(".", "-") + "-28");
+
+                    //alert(URLParams["additemdate"] <= postTypeTimeAr[order].replace(".", "-") + "-28");
+                    //if (URLParams["additemdate"] <= postTypeTimeAr[order].replace(".", "-") + "-28" || c[order].toString() == "--此页以下空白--" || URLParams["additemdate"].toString() == "") {
+
+                    if (b[3].indexOf("[#xuhao") != -1) {
+                        //if (c[order] != "") {
+                            //if (URLParams["additemdate"].toString() == "") {
+                            cell.SetCellString(b[0], b[1], b[2], orderAr[order]);
+                            columnsHaveValuesAr.push(a[i]);
+                            // }
+                        //}
+                    }
+                    else if (b[3].indexOf("[#jcxm") != -1) {
+                        cell.SetCellString(b[0], b[1], b[2], c[order].replace(/;/g, ""));
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    else if (b[3].indexOf("[#hezhunshijian") != -1) {
+                        cell.SetCellString(b[0], b[1], b[2], postTypeTimeAr[order]);
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                    //}
+                }
+            }
+            if (d.length > 0) {
+                if (b[3].indexOf("[#biangen") != -1 || b[3].indexOf("[#bgn") != -1 || b[3].indexOf("[#bgy") != -1 || b[3].indexOf("[#bgr") != -1) {
+                    var t = b[3].replace("[#biangen", "").replace("[#bgn", "").replace("[#bgy", "").replace("[#bgr", "").replace("#]", "");
+                    var order = parseInt(t) - 1;
+                    if (order < d.length) {
+                        if (b[3].indexOf("[#biangen") != -1) {
+                            cell.SetCellString(b[0], b[1], b[2], d[order]["chacontent"]);
+                            columnsHaveValuesAr.push(a[i]);
+                        }
+                        else {
+                            var v = d[order]["chadate"] ? d[order]["chadate"].toString() : "";
+                            v = v.replace("-", "/");
+
+                            var t = Date.parse(v);
+
+                            if (!isNaN(t)) {
+                                var date = new Date(t);
+                                if (b[3].indexOf("[#bgn") != -1) {
+                                    cell.SetCellString(b[0], b[1], b[2], date.getFullYear());
+                                }
+                                else if (b[3].indexOf("[#bgy") != -1) {
+                                    cell.SetCellString(b[0], b[1], b[2], padZero(date.getMonth() + 1));
+                                }
+                                else if (b[3].indexOf("[#bgr") != -1) {
+                                    cell.SetCellString(b[0], b[1], b[2], padZero(date.getDate()));
+                                }
+                                columnsHaveValuesAr.push(a[i]);
+                            }
+                            else {
+                                cell.SetCellString(b[0], b[1], b[2], "");
+                                columnsHaveValuesAr.push(a[i]);
+                            }
+                        }
+                    }
+                    else {
+                        cell.SetCellString(b[0], b[1], b[2], "");
+                        columnsHaveValuesAr.push(a[i]);
+                    }
+                }
+            }
+            else if (b[3].indexOf("[#biangen") != -1 || b[3].indexOf("[#bgn") != -1 || b[3].indexOf("[#bgy") != -1 || b[3].indexOf("[#bgr") != -1) {
+                cell.SetCellString(b[0], b[1], b[2], "");
+                columnsHaveValuesAr.push(a[i]);
+                if (b[3].indexOf("[#bgn") != -1) {
+                    cell.SetCellString(b[0], b[1], b[2], "");
+                }
+                else if (b[3].indexOf("[#bgy") != -1) {
+                    cell.SetCellString(b[0], b[1], b[2], "");
+                }
+                else if (b[3].indexOf("[#bgr") != -1) {
+                    cell.SetCellString(b[0], b[1], b[2], "");
+                }
+                columnsHaveValuesAr.push(a[i]);
+            }
+        }
+    }
+
+    function clearNoValuesColumn() {
+        var cell = document.getElementById("DCellWeb1");
+        for (var sheet = 0; sheet < 3; sheet++) {
+            var str = reportModelColumnListAr[sheet];
+            var a = str?str.split("|"):"";
+            for (var i = 0; i < columnsHaveValuesAr.length; i++) {
+                str = str.replace(columnsHaveValuesAr[i], "");
+            }
+            for (var i = 0; i < a.length; i++) {
+                if (str.indexOf(a[i]) != -1) {
+                    var b = a[i].split(",");
+                    if (cell.GetCellString(b[0], b[1], b[2]).indexOf("[#") != -1) {
+                        cell.SetCellString(b[0], b[1], b[2], "");
+                    }
+                }
+            }
+        }
+        columnsHaveValuesAr.length = 0;
+    }
+
+    function close_printPost() {
+        $("#div_printPost").css("display", "none");
+    }
+    function cell_printPost() {
+        var cell = document.getElementById("DCellWeb1");
+        for (var sheet = 0; sheet < 3; sheet++) {
+            cell.PrintPara1(-1, sheet);
+        }
+        cell.PrintSheet(1, cell.GetCurSheet());
+    }
+    function DCellWeb1_SheetChanged(oldsheet, newsheet) {
+        var cell = document.getElementById("DCellWeb1");
+        cell.ShowGridLine(0, newsheet);
+        cell.ShowSideLabel(0, newsheet);
+        cell.ShowTopLabel(0, newsheet);
+    }
+    function savePostBook(peopleId) {
+        $("#span_saving_msg").html("正在保存数据，请耐心等待....");
+        setTimeout(function () {
+            document.getElementById("DCellWeb1").UploadFile('/CheckPeopleManager/SavePeoplePostBook?id=' + peopleId);
+            alert("保存成功！");
+            $("#span_saving_msg").html("");
+        }, 50);
+    }
+    function openModelEditPage(config) {
+        window.open("/CheckPeopleManager/EditReportModel?model=" + config.model, "", "height=" + screen.height + ", width=" + screen.width + ", top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no");
+    }
+
+
+
+    function showCellDownLoad() {
+        if ($("#div_downloadcell").html() != null) {
+            $("#div_downloadcell").css("display", "block");
+            return;
+        }
+        var s = '<div id="div_downloadcell" style="display:block;position:absolute;top:0px;left:0px;width:500px;background-color:#FFFFCC;border:solid 3px #c9d6ed;">'
+             + '   <table style="width:100%;">'
+             + '       <tr><td><img src="../html/images/info.gif" /></td><td>您的电脑还没有安装报告预览控件，请<a href="../../OfficeReport/JCCJ/PKPMJGSetup.exe"><font color=red>[点此]</font></a>下载安装</td></tr>'
+             + '       <tr><td colspan="2" align="right" style="padding-bottom:5px;padding-right:10px;"><a href=# onclick=\'$("#div_downloadcell").css("display","none");\'><font color=red>[暂不安装]</font></a></td></tr>	            '
+             + '   </table>'
+            + '</div> ';
+        $(document.body).append(s);
+        var w1 = document.getElementById("div_downloadcell").clientWidth;
+        var w2 = document.body.clientWidth;
+        var h1 = document.getElementById("div_downloadcell").clientHeight;
+        var h2 = document.body.clientHeight;
+        var scrollLeft = document.body.scrollLeft;
+        var scrollTop = document.body.scrollTop;
+        document.getElementById("div_downloadcell").style.left = (parseFloat(w2) - parseFloat(w1)) / 2 + scrollLeft;
+        document.getElementById("div_downloadcell").style.top = (parseFloat(h2) - parseFloat(h1)) / 2 + scrollTop;
+        document.getElementById("div_downloadcell").style.display = "block";
+    }
+    
+
+    function doOnUnload() {
+
+    }
+</script>
+

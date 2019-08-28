@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "ZTJGEdit";
+    Layout = "~/Views/Shared/LayuiTab_Layout.cshtml";
+}
+
+<div class="layui-container">
+    <div class="layui-row" id="InstBaseRecord-ZTJGCreate-Container">
+        <div class="layui-form" action="" lay-filter="InstBaseRecord-ZTJGCreate-form">
+            <p style="text-align:center;font-size:22px">检测（试验）机构监督检查（网上）记录表</p>
+            <table class="layui-table">
+                <tbody>
+                    <tr>
+                        <td style="text-align:center" colspan="2">受检单位</td>
+                        <td>
+                            
+                            <select name="UnitName" lay-filter="UnitName" lay-search="">
+                                <option value=""></option>
+                                @{
+                                    foreach (var item in Model.allUnit)
+                                    {
+                                        if (Model.Major.CustomId == item.Key)
+                                        {
+                                            <option value="@item.Key" selected>@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+
+                                    }
+                                }
+                            </select>
+                        </td>
+                        @*<td colspan="2"><input name="unitName" style="width:90%" /></td>*@
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">序号</td>
+                        <td style="text-align:center">项目</td>
+                        <td style="text-align:center">检查内容</td>
+                        <td style="text-align:center">检查方法</td>
+                        <td style="text-align:center">存在问题</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="6" style="text-align:center">七</td>
+                        <td rowspan="6" style="text-align:center">主<br />体<br />结<br />构<br />(含<br />钢<br />结<br />构<br />)检<br />测</td>
+                        <td>检测报告上传</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.JCBGSCS == "1")
+                                    {
+                                        <input type="radio" name="BGSCS" value="1" title="是" checked="">
+                                        <input type="radio" name="BGSCS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="BGSCS" value="1" title="是">
+                                        <input type="radio" name="BGSCS" value="0" title="否" checked="">
+                                    }
+                                }
+                               
+                            </div>
+                        </td>
+                        <td>
+                            <input name="BGSCQ" value="@Model.Major.JCBGSCQ" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>抽样数量满足规范要求</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.CYSLMZGFYQS == "1")
+                                    {
+                                        <input type="radio" name="CYSLMZGFYQS" value="1" title="是" checked="">
+                                        <input type="radio" name="CYSLMZGFYQS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="CYSLMZGFYQS" value="1" title="是">
+                                        <input type="radio" name="CYSLMZGFYQS" value="0" title="否" checked="">
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td><input name="CYSLMZGFYQQ" value="@Model.Major.CYSLMZGFYQq" /></td>
+                    </tr>
+                    <tr>
+                        <td>报告完整<br />报告结论正确</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.BGWZZQS == "1")
+                                    {
+                                        <input type="radio" name="BGWZZQS" value="1" title="是" checked="">
+                                        <input type="radio" name="BGWZZQS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="BGWZZQS" value="1" title="是">
+                                        <input type="radio" name="BGWZZQS" value="0" title="否" checked="">
+                                    }
+                                }
+                            </div>
+                            
+                        </td>
+                        <td><input name="BGWZZQQ"  value="@Model.Major.BGWZZQQ"/></td>
+                    </tr>
+                    <tr>
+                        <td>使用仪器设备在有效期</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.SYYQSBZYXQS == "1")
+                                    {
+                                        <input type="radio" name="SYYQSBZYXQS" value="1" title="是" checked="">
+                                        <input type="radio" name="SYYQSBZYXQS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="SYYQSBZYXQS" value="1" title="是">
+                                        <input type="radio" name="SYYQSBZYXQS" value="0" title="否" checked="">
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td><input name="SYYQSBZYXQQ" value="@Model.Major.SYYQSBZYXQQ" /></td>
+                    </tr>
+                    <tr>
+                        <td>报告更改符合程序</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.BGGGFHCXS == "1")
+                                    {
+                                        <input type="radio" name="BGGGFHCXS" value="1" title="是" checked="">
+                                        <input type="radio" name="BGGGFHCXS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="BGGGFHCXS" value="1" title="是">
+                                        <input type="radio" name="BGGGFHCXS" value="0" title="否" checked="">
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td><input name="BGGGFHCXQ"  value="@Model.Major.BGGGFHCXQ" /></td>
+                    </tr>
+                    <tr>
+                        <td>不合格台账</td>
+                        <td>
+                            <div class="layui-input-block">
+                                @{
+                                    if (Model.Major.BHGTZS == "1")
+                                    {
+                                        <input type="radio" name="BHGTZS" value="1" title="是" checked="">
+                                        <input type="radio" name="BHGTZS" value="0" title="否">
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="BHGTZS" value="1" title="是">
+                                        <input type="radio" name="BHGTZS" value="0" title="否" checked="">
+                                    }
+                                }
+                            </div>
+                            
+                        </td>
+                        <td><input name="BHGTZQ" value="@Model.Major.BHGTZQ" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align:center">备注</td>
+                        <td colspan="3">
+                        <input type="text" name="Remark" value="@Model.Major.Remark"/>
+                            <input type="text" name="id" value="@Model.Major.Id" hidden />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align:center">检测人员：<input name="CheckPeople" value="@Model.Major.CheckPeople" /></td>
+                        <td style="text-align:right">检测日期：</td>
+                        <td><input type="text" name="CheckDate" id="CheckDate" autocomplete="off" class="layui-input"  value="@Model.Major.CheckDate" ></td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <div class="layui-col-md1 layui-col-md-offset6">
+                                <button class="layui-btn" lay-submit lay-filter="InstBaseRecord-ZTJGCreate-save">保存</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: '../../static/layuiadmin/lib/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+    });
+
+    layui.use(["form", "laydate"], function () {
+        var $ = layui.$,
+            laydate = layui.laydate,
+        form = layui.form;
+        laydate.render({
+            elem:'#CheckDate'
+        });
+        form.on('submit(InstBaseRecord-ZTJGCreate-save)', function (data) {
+            var dataField = data.field;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/InstBaseRecord/ZTJGEdit",
+                data: dataField,
+                success: function (d) {
+                    if (d.IsSucc) {
+                        layer.msg('主体结构新增成功', {
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                                window.parent.Hui_admin_close("/InstBaseRecord/ZTJGEdit/id");
+                            },
+                            icon:1
+                        });
+                    }
+                    else {
+                        layer.msg('主体结构新增失败，错误信息：' + d.ErroMsg, {
+                            icon: 2
+                        });
+                    }
+                }
+            })
+            return false;
+        })
+
+
+        form.render();
+
+    });
+</script>
+
+

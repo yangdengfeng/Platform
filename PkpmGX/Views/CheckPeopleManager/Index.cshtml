@@ -1,0 +1,889 @@
+﻿@model Pkpm.Entity.Models.CheckPeopleViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<style>
+    html, body {
+        height: 100%;
+    }
+</style>
+
+<nav class="breadcrumb" style="position: absolute; right:0">
+    <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="container-fluid">
+    <div class="row cl">
+        <div id="form_container" style="width:100%;height:100%;"></div>
+    </div>
+    <div class="mt-10" id="layoutObj" style="width:100%;"></div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=2"></script>
+@* ---------------------------------------------------------------------------- *@
+
+
+<script type="text/javascript">
+    var mygrid, myForm, myTabbar, layoutAge, AgeForm, pieChart, AgeGrid, dhxWins, playCardWin, seleteWin, applyWin, applyForm,
+        playCardForm, unitChangeWin, unitChangeForm, changeWin, changeForm, myToolbar, myMenu, seleteForm, seleteGrid, auditWin, auditForm;
+
+    function doOnLoad() {
+
+        dhxWins = new dhtmlXWindows();
+
+        formStructure = [
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 150, labelWidth: 120 },
+            { type: "hidden", name: "SearchRule", value: "AllSearch" },
+            { type: "hidden", name: "postTypeCode" },
+            { type: "combo", label: "检测机构名称", name: "CheckUnitName" },
+            { type: "input", label: "姓名", name: "Name" },
+            { type: "input", label: "身份证号", name: "IDNum" },
+            { type: "combo", label: "是否有岗位证书", name: "HasCert", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "input", label: "岗位证书编号", name: "PostCertNum" },
+            { type: "newcolumn" },
+            //{ type: "combo", label: "单位性质", name: "UnitCategory" },
+            //{ type: "input", label: "公示序号", name: "PubSeqNo" },
+            { type: "combo", label: "企业性质", name: "CompanyType", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "combo", label: "状态", name: "Status", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "combo", label: "职称", name: "TechTitle", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "combo", label: "是否为注册工程师", name: "IsTech", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "combo", label: "职务", name: "Position", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "newcolumn" },
+            {
+                type: "block", width: "auto", list: [
+                   { type: "input", label: "岗位资格类别", name: "PositionCategory", labelWidth: 100 },
+                   { type: "newcolumn" },
+                   { type: "template", label: "", value: "[选择]", format: format_b, inputWidth: 40, labelWidth: 40 },
+                   { type: "newcolumn" },
+                   { type: "template", label: "", value: "[清除]", format: format_a, inputWidth: 40, labelWidth: 40 }
+                ]
+            },
+            {
+                type: "block", width: "auto", list: [
+                  { type: "input", label: "年龄段", name: "AgeStart", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 100 },
+                   { type: "newcolumn" },
+                   { type: "input", label: "至", name: "AgeEnd", dateFormat: "%Y-%m-%d", inputWidth: 110, labelWidth: 17 },
+                ]
+            },
+            { type: "combo", label: "在职状况", name: "PeopleStatus", options: [{ text: "全部", value: "", selected: true }] },
+            { type: "label", label: "", inputWidth: 300 },
+            {
+                type: "block", width: "auto", list: [
+                    { type: "button", name: 'Search', value: "查询", offsetLeft: 120 }
+                ]
+            }
+        ];
+
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        var layoutHeight = $('body').height() - $('#form_container').height() - 10;
+        $('#layoutObj').css('height', layoutHeight + 'px');
+
+        //var unitCategoryCombo = myForm.getCombo("UnitCategory");
+        var checkUnitNameCombo = myForm.getCombo("CheckUnitName");
+        var companyTypeCombo = myForm.getCombo("CompanyType");
+        var hasCertCombo = myForm.getCombo("HasCert");
+        var peopleStatusCombo = myForm.getCombo("PeopleStatus");
+        var techTitleCombo = myForm.getCombo("TechTitle");
+        var isTechCombo = myForm.getCombo("IsTech");
+        var statusCombo = myForm.getCombo("Status");
+        var positionCombo = myForm.getCombo("Position");
+
+        checkUnitNameCombo.enableFilteringMode('between');;
+        checkUnitNameCombo.load("/CheckPeopleManager/InstCombo");
+        setComboCustomFilter(checkUnitNameCombo);
+
+        var myPop = new dhtmlXPopup({
+            form: myForm,
+            id: ["PositionCategory"] //attaches the same popup to 2 inputs: "Full Name" and "Password"
+        });
+
+        var PositionForm = myPop.attachForm([
+            { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "container", name: "Menu", label: "模块", inputHeight: 550, inputWidth: 250 },
+             { type: "button", name: 'MenuAdd', value: "确定", offsetLeft: 80 }
+        ]);
+
+
+        //PositionForm.load();
+        //myTree = new dhtmlXTreeView(menuForm.getContainer("Menu"));
+        //myTree.enableCheckboxes(true);
+        //myTree.loadStruct("/SysRole/Menu/" + roleId);
+
+        //menuForm.attachEvent("onButtonClick", function (name) {
+        //    var menuIds = myTree.getAllChecked().join(',');;
+        //    window.dhx.ajax.post("/SysRole/AddMenu", "id=" + roleId + "&menuIds=" + menuIds, function (response) {
+        //        var t = window.dhx.s2j(response.xmlDoc.responseText);
+        //        if (t != null && t.IsSucc) {
+        //            dhtmlx.message("角色模块设置成功！");
+        //            menuWin.close();
+        //        } else {
+        //            dhtmlx.alert(t.ErroMsg);
+        //        }
+        //    });
+        //});
+
+        @{
+            foreach (var item in Model.CompayTypes)
+            {
+                @:companyTypeCombo.addOption('@item.KeyValue', '@item.Name');
+                    }
+        }
+
+        @{
+            foreach (var item in Model.HasCerts)
+            {
+                @:hasCertCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        @{
+            foreach (var item in Model.WorkStatus)
+            {
+                @:peopleStatusCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        @{
+            foreach (var item in Model.PersonnelTitles)
+            {
+                @:techTitleCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        @{
+            foreach (var item in Model.EngineersType)
+            {
+                @:isTechCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        @{
+            foreach (var item in Model.PersonnelStatus)
+            {
+                @:statusCombo.addOption('@(item.KeyValue)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        @{
+            foreach (var item in Model.PersonnelStaff)
+            {
+                @:positionCombo.addOption('@(item.Name)', '@(item.Name)');
+                                                                                                    }
+        }
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "layoutObj",
+            tabs: [
+                { id: "TabbarSearch", text: "检测人员查询", active: true },
+                //{ id: "TabbarAge", text: "人员年龄段分布" },
+                //{ id: "TabbarTitle", text: "人员职称分布" },
+                //{ id: "TabbarChange", text: "换证信息汇总表" }
+            ]
+        });
+        var myMenu = myTabbar.cells('TabbarSearch').attachMenu({
+            iconset: "awesome"
+        });
+        myMenu.loadStruct('/CheckPeopleManager/Menu');
+        myMenu.attachEvent("onClick", function (id, zoneId, cas) {
+            if (id == "AllSearch") {
+                gridQString = '/CheckPeopleManager/Search?SearchRule=AllSearch';
+                mygrid.clearAll();
+                myTabbar.tabs("TabbarSearch").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+                myForm.setItemValue("SearchRule", "AllSearch");
+                myForm.showItem("PeopleStatus");
+            }
+            //if (id == "RegisterOnJob") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=RegisterOnJob';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //    myForm.setItemValue("SearchRule", "RegisterOnJob");
+            //    myForm.hideItem("PeopleStatus");
+            //}
+            //if (id == "NotRegister") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=NotRegister';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //    myForm.setItemValue("SearchRule", "NotRegister");
+            //    myForm.showItem("PeopleStatus");
+            //}
+            //if (id == "RegisterLeaveJob") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=RegisterLeaveJob';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //    myForm.setItemValue("SearchRule", "RegisterLeaveJob");
+            //    myForm.hideItem("PeopleStatus");
+            //}
+            //if (id == "Logout") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=Logout';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //    myForm.setItemValue("SearchRule", "Logout");
+            //    myForm.hideItem("PeopleStatus");
+            //}
+        });
+
+        var myToolbar = myTabbar.cells("TabbarSearch").attachToolbar();
+        myToolbar.setIconset("awesome");
+        myToolbar.loadStruct("/CheckPeopleManager/ToolBar");
+
+        myTabbar.attachEvent("onTabClick", function (id, lastId) {
+            // your code here
+            //if (id == 'TabbarAge') {
+            //    myTabbar.cells(id).attachURL('/PeopleAgeDistr');
+            //}
+            //else if (id == 'TabbarTitle') {
+            //    myTabbar.cells(id).attachURL('/PeopleTitleDistr');
+            //}
+            //else if (id == 'TabbarChange') {
+            //    myTabbar.cells(id).attachURL('/PeopleCardChangeDistr');
+            //}
+        });
+
+
+        mygrid = myTabbar.tabs("TabbarSearch").attachGrid();
+
+        myTabbar.cells("TabbarSearch").attachStatusBar({
+            text: "<div id='pagingArea'></div><div id='recinfoArea'></div>",
+            paging: true
+        });
+
+        myTabbar.enableAutoReSize();
+        gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("勾选,序号,姓名,所属机构名称,身份证号,岗位证书编号,职务,职称,在职状况,状态,&nbsp,&nbsp,&nbsp");//the headers of columns
+        mygrid.setInitWidths("50,50,100,*,160,100,200,100,80,80,40,40,50");          //the widths of columns
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left,left,left,left");       //the alignment of columns
+        mygrid.setColTypes("ch,ro,ro,ro,ro,ro,ro,ro,ro,ro,view,edit,layuijslink");                //the types of columns
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server,server,server,server");          //the sorting types
+        //mygrid.enableMultiline(true);
+        mygrid.enableAutoWidth(true);
+        //gridScrollHeight = layoutHeight - 29 - 33 - 33; // - toolbar - toolbar - paging
+        //mygrid.enableAutoHeight(true, gridScrollHeight, true);
+        mygrid.enablePaging(true, 30, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        myTabbar.tabs("TabbarSearch").progressOn();
+        mygrid.init();
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.load(gridQString, doOnGridLoaded);
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == "Search") {
+                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("TabbarSearch").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+        });
+
+        myToolbar.attachEvent("onClick", function (id) {
+            if (id == "Create") {
+                window.parent.Hui_admin_tab_raw("/CheckPeopleManager/Create", "检测人员新增");
+            }
+            if (id == "deleteById") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定进行删除操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/Delete", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('删除成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要删除的人员');
+                }
+            }
+            if (id == "Send") {
+                var selectedId = mygrid.getCheckedRows(0);
+
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行递交操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/Send", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('递交成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                            }
+
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要递交的人员');
+                }
+            }
+
+            if (id == "ReturnState") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行返回状态操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/ReturnState", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('返回状态成功');
+                                //dhtmlx.alert({ text: "返回状态成功！", ok: "确定" });
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                                layer.alert(t.ErroMsg);
+                            }
+
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要返回状态的人员');
+                }
+
+            }
+
+
+
+            if (id == "AnnualTest") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定通过年审？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/AnnualTest", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('年审通过');
+                                //dhtmlx.alert({ text: "年审通过！", ok: "确定" });
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                                //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要年审核的人员');
+                }
+
+            }
+
+            if (id == "Fire") {
+                var selectedId = mygrid.getCheckedRows(0);
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定进行离职操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/FirePeople", "selectedId=" + selectedId, function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('离职操作');
+                                //dhtmlx.alert({ text: "离职操作！", ok: "确定" });
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                                //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要离职的人员');
+                }
+            }
+            if (id == "Screening") {
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('确定进行屏蔽操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/Screening", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('屏蔽成功');
+                                //dhtmlx.alert({ text: "屏蔽成功", ok: "确定" });
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                                //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                            }
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要屏蔽的人员');
+                }
+            }
+            if (id == "RelieveScreening") {
+                var selectedId = mygrid.getCheckedRows(0)
+                if (selectedId.length > 0) {
+                    var index = layer.confirm('你确定要进行解除屏蔽操作？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        window.dhx.ajax.post("/CheckPeopleManager/RelieveScreening", "selectedId=" + selectedId + "&state=1", function (response) {
+                            var t = window.dhx.s2j(response.xmlDoc.responseText);
+                            if (t != null && t.IsSucc) {
+                                layer.alert('解除屏蔽成功');
+                                mygrid.clearAll();
+                                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                                mygrid.load(gridQString, doOnGridLoaded);
+                            } else {
+                                layer.alert(t.ErroMsg);
+                            }
+
+                        })
+                    }, function () {
+                        layer.close(index);
+                    });
+                }
+                else {
+                    layer.alert('请勾选要解除屏蔽的人员');
+                }
+
+            }
+
+            //if (id == "RegisterOnJob") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=RegisterOnJob';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //}
+            //if (id == "NotRegister") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=NotRegister';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //}
+            //if (id == "RegisterLeaveJob") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=RegisterLeaveJob';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //}
+            //if (id == "Logout") {
+            //    gridQString = '/CheckPeopleManager/Search?SearchRule=Logout';
+            //    mygrid.clearAll();
+            //    myTabbar.tabs("TabbarSearch").progressOn();
+            //    mygrid.load(gridQString, doOnGridLoaded);
+            //}
+            if (id == "Export") {
+                exporter.show();
+            }
+        });
+
+        var exporter = new ExcelExporter(null, mygrid, 30, "/CheckPeopleManager/Export");
+        exporter.onGetQueryString = function () {
+            return getQueryStr(myForm);
+        };
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("TabbarSearch").progressOff();
+    }
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        return data.join('&');
+    }
+
+    function format_a(name, value) {
+
+        //seleteGrid.load("/CheckPeopleManager/Grid6");
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='custom_clean();'>" + value + "</a></div>";
+    }
+
+    function format_b(name, value) {
+
+        //seleteGrid.load("/CheckPeopleManager/Grid6");
+        return "<div class='simple_link'><a href='javascript:void(0);' onclick='custom_func();'>" + value + "</a></div>";
+    }
+
+    function postTypeClose(postTypeCode, postTypeView) {
+        if (seleteWin) {
+            seleteWin.close();
+            myForm.setItemValue("postTypeCode", postTypeCode);
+            myForm.setItemValue("PositionCategory", postTypeView);
+        }
+    }
+
+    function custom_clean() {
+        myForm.setItemValue("postTypeCode", "");
+        myForm.setItemValue("PositionCategory", "");
+    }
+
+    function custom_func() {
+        if (dhxWins == null || dhxWins == undefined) {
+            dhxWins = new dhtmlXWindows();
+            //dhxWins.attachViewportTo("form_container");
+        }
+        seleteWin = dhxWins.createWindow("seleteWin", 150, 200, 1100, 600);
+        seleteWin.setModal(true);
+        seleteWin.setText("岗位资格类别表");
+
+        seleteForm = seleteWin.attachURL("/CheckPeopleManager/PostType?id=-1" + "&postTypeCode=" + myForm.getItemValue("postTypeCode") + "&displaytype=1");
+
+        //if (dhxWins == null || dhxWins == undefined) {
+        //    dhxWins = new dhtmlXWindows();
+        //    dhxWins.attachViewportTo("form_container");
+        //}
+        //seleteWin = dhxWins.createWindow("seleteWin", 1000, 50, 500, 600);
+        //seleteWin.setModal(true);
+        //seleteWin.setText("岗位资格类别表");
+        //seleteForm = seleteWin.attachForm();
+        //var seleteFormStructrue = [
+        //     { type: "settings", position: "label-top" },
+        //     { type: "container", name: "seleteGrid", label: "请进行勾选及编辑↓", inputHeight: 420, inputWidth: 420, offsetLeft: 40 },
+        //     { type: "button", name: "Save", value: "保存", offsetLeft: 400 }
+        //];
+        //seleteForm.load(seleteFormStructrue);
+        //seleteGrid = new dhtmlXGridObject(seleteForm.getContainer("seleteGrid"));
+        ////myLayout.cells("b").setText('模块');
+        //seleteGrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        //seleteGrid.setHeader("检测类别,勾选,编码");//the headers of columns
+        //seleteGrid.setInitWidths("*,50,50");          //the widths of columns
+        //seleteGrid.setColAlign("left,left,left");       //the alignment of columns
+        //seleteGrid.setColTypes("tree,ch,ro");                //the types of columns
+        //seleteGrid.setColSorting("str,str,str");
+        //seleteGrid.setColumnHidden(2, true);
+        //seleteGrid.init();      //finishes initialization and renders the grid on the page
+        //seleteGrid.load("/CheckPeopleManager/SeleteGrid");
+        //seleteForm.attachEvent("onButtonClick", function (name) {
+        //    if (name == "Save") {
+        //        seleteWin.close();
+        //        var checked = seleteGrid.getCheckedRows(1);
+        //        var siArray = checked.split(',');
+        //        var str = "";
+        //        var strcode = "";
+        //        for (var i = 0; i < siArray.length; i++) {
+        //            str = str + seleteGrid.cells(siArray[i], 0).getValue() + "|";
+        //            strcode = strcode + seleteGrid.cells(siArray[i], 2).getValue() + "|";
+        //        }
+        //        myForm.setItemValue("PositionCategory", str);
+        //        myForm.setItemValue("postTypeCode", strcode);
+        //    }
+        //});
+    }
+
+    function excellView_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+        window.parent.Hui_admin_tab_raw("/CheckPeopleManager/Details/" + rowId, "检测人员查看");
+    }
+
+    function excellEdit_click(obj) {
+        var rowId = $(obj).attr('data-rowId');
+
+        window.dhx.ajax.get("/CheckPeopleManager/CheckEdit?Id=" + rowId, function (r) {
+            var r = window.dhx.s2j(r.xmlDoc.responseText);
+            if (r != null && r.Approvalstatus == "0") {
+                window.parent.Hui_admin_tab_raw("/CheckPeopleManager/Edit?id=" + rowId, "检测人员编辑");
+            }
+            else {
+                alert("该条记录已被递交，请按确定刷新");
+                window.location.replace(location.href);
+            }
+        });
+
+        @*var isAdmin = '@Model.IsAdmin';
+        if (isAdmin == 'True' || isAdmin == 'true') {
+            return window.parent.Hui_admin_tab_raw("/CheckPeopleManager/Edit/" + rowId, "检测人员编辑");
+        }
+        else {
+            return window.parent.Hui_admin_tab_raw("/CheckPeopleManager/EditPeople/" + rowId, "检测人员编辑");
+        }*@
+    }
+
+
+    //审核
+    function AuditPeople(id) {
+        auditWin = dhxWins.createWindow("auditWin", 50, 50, 800, 500);
+        dhxWins.window("auditWin").denyResize();
+        dhxWins.window("auditWin").button("minmax").hide();
+        dhxWins.window("auditWin").centerOnScreen();
+        auditWin.setModal(true);
+        auditWin.setText("审核");
+        auditForm = auditWin.attachForm();
+        auditForm.loadStruct("/CheckPeopleManager/AuditPeople?Id=" + id);
+        auditForm.attachEvent("onButtonClick", function (name) {
+            var auditData = [];
+            if (name == "Y") {
+                var auditFormData = auditForm.getFormData(true);
+                for (var key in auditFormData) {
+                    if (key.indexOf("|new") > 0) {
+                        auditData.push(key.split('|')[0] + "=" + encodeURIComponent(auditFormData[key]));
+                    }
+                }
+                auditData.push("Id=" + id);
+                auditData.push("Operate=Y");
+            }
+            else if (name = "N") {
+                auditData.push("Id=" + id);
+                auditData.push("Operate=N");
+            }
+
+            var QueryString = auditData.join('&');
+            window.dhx.ajax.post("/CheckPeopleManager/AuditPeople", QueryString, function (response) {
+                var t = window.dhx.s2j(response.xmlDoc.responseText);
+                if (t != null && t.IsSucc) {
+                    dhtmlx.alert({
+                        text: "审核完成！", ok: "确定",
+                        callback: function (result) {
+                            window.location.replace(location.href);
+                        }
+                    });
+                }
+                else {
+                    dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                }
+            });
+
+        });
+    }
+
+
+    function playCard(peopleName, peopleId, postdate, customid, customname) {
+        playCardWin = dhxWins.createWindow("w1", 40, 40, 350, 320);
+        dhxWins.window("w1").denyResize();
+        dhxWins.window("w1").button("minmax").hide();
+        playCardWin.setModal(true);
+        playCardWin.center();
+        playCardWin.setText("打证");
+
+        playCardForm = playCardWin.attachForm();
+
+        var playCardFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right" },
+             { type: "label", label: "人员：" + peopleName + "打证时间设置:", labelWidth: 200, offsetLeft: 20 },
+             { type: "calendar", label: "增项时间：", name: "AddDate", dateFormat: "%Y-%m-%d", inputWidth: 180, labelWidth: 120 },
+             { type: "calendar", label: "打证时间：", name: "PostDate", dateFormat: "%Y-%m-%d", inputWidth: 180, labelWidth: 120, value: postdate },
+             { type: "label", label: "选择模板：", labelWidth: 120, offsetLeft: 20 },
+             {
+                 type: "block", width: 250, list: [
+                     { type: "radio", name: "ModelType", value: "1", label: "模板1", checked: true, labelWidth: 80 },
+                     { type: "newcolumn" },
+                     { type: "radio", name: "ModelType", value: "2", label: "模板2", labelWidth: 80 },
+                 ]
+             },
+             { type: "button", name: 'certain', value: "确定", offsetLeft: 230 }
+        ];
+        playCardForm.load(playCardFormStructrue);
+
+        playCardForm.attachEvent("onButtonClick", function () {
+            //打证页面
+            var model = playCardForm.getItemValue("ModelType");
+            var additemdate = playCardForm.getItemValue("AddDate", true);
+            var postdate = playCardForm.getItemValue("PostDate", true);
+            window.open("/CheckPeopleManager/PrintPost?peopleId=" + peopleId + "&model=" + model + "&additemdate=" + additemdate + "&postdate=" + postdate + "&customid=" + customid + "&customname=" + escape(customname), "", "height=" + screen.height + ", width=" + screen.width + ", top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no");
+        });
+    }
+
+    function unitChange(peopleName, peopleId) {
+        layer.open({
+            type: 2,
+            area: ['700px', '450px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: '/CheckPeopleManager/UnitChange?peopleId='+peopleId
+        });
+        //unitChangeWin = dhxWins.createWindow("w2", 40, 40, 450, 200);
+        //dhxWins.window("w2").denyResize();
+        //dhxWins.window("w2").button("minmax").hide();
+        //unitChangeWin.setModal(true);
+        //unitChangeWin.center();
+        //unitChangeWin.setText("单位变更");
+
+        //unitChangeForm = unitChangeWin.attachForm();
+
+        //var unitChangeFormStructrue = [
+        //     { type: "settings", position: "label-left", labelAlign: "right" },
+        //     { type: "label", label: "将人员：" + peopleName + "转移到:", labelWidth: 200, offsetLeft: 20 },
+        //     { type: "combo", label: "检测机构：", name: "organization", inputWidth: 280, labelWidth: 120 },
+        //     { type: "button", name: 'certain', value: "确定", offsetLeft: 330 }
+        //];
+        //unitChangeForm.load(unitChangeFormStructrue);
+
+
+        //var checkUnitNameCombo = unitChangeForm.getCombo("organization");
+        //checkUnitNameCombo.load("/CheckPeopleManager/InstCombo");
+
+        //checkUnitNameCombo.enableFilteringMode('between');;
+
+
+
+
+        //unitChangeForm.attachEvent("onButtonClick", function (name) {
+        //    if (name == "certain") {
+        //        var Customid = unitChangeForm.getItemValue('organization');
+        //        window.dhx.ajax.post("/CheckPeopleManager/unitChange", "peopleId=" + peopleId + "&&Customid=" + Customid, function (response) {
+        //            var t = window.dhx.s2j(response.xmlDoc.responseText);
+        //            if (t != null && t.IsSucc) {
+        //                dhtmlx.alert({
+        //                    text: "变更单位成功！", ok: "确定",
+        //                    callback: function (result) {
+        //                        dhxWins.window("w2").close();
+        //                    }
+        //                });
+        //                mygrid.clearAll();
+        //                gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+        //                mygrid.load(gridQString, doOnGridLoaded);
+        //            } else {
+        //                layer.alert(t.ErroMsg);
+        //                //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+        //            }
+        //        })
+        //    }
+        //});
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        //mygrid.clearAll();
+        //mygrid.load(gridQString + (gridQString.indexOf("?") >= 0 ? "&amp;" : "?")
+        // + "orderby=" + ind + "&amp;direct=" + direct);
+        //mygrid.setSortImgState(true, ind, direct);
+        return false;
+    }
+
+    function applyChange(id, name, customId) {
+        applyWin = dhxWins.createWindow("menuW", 20, 30, 380, 280);
+        applyWin.setModal(true);
+        applyWin.center();
+        applyWin.setText(name + '申请修改');
+
+        applyForm = applyWin.attachForm();
+        var menuFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 180, labelWidth: 120 },
+             { type: "input", name: "SubmitName", label: "申请人", required: true },
+             { type: "input", name: "SubmitText", label: "申请原因", required: true, rows: 2 },
+             { type: "hidden", value: id, name: 'SubmitId' },
+              { type: "hidden", value: customId, name: 'SubmitCustomId' },
+             { type: "button", name: 'Save', value: "保存", offsetLeft: 150 }
+        ];
+        applyForm.load(menuFormStructrue);
+
+        applyForm.attachEvent("onButtonClick", function (name) {
+            applyForm.send("/CheckPeopleManager/ApplyChange", "post", function (loader, response) {
+                var t = window.dhx.s2j(response);
+                if (t != null && t.IsSucc) {
+                    //dhtmlx.message("申请修改操作成功！");
+                    layer.alert('申请修改操作成功');
+                    applyWin.close();
+                    mygrid.clearAll();
+                    //myTabbar.tabs("gridboxOne").progressOn();
+                    mygrid.load(gridQString, doOnGridLoaded);
+                } else {
+                    layer.alert(t.ErroMsg);
+                    //dhtmlx.alert(t.ErroMsg);
+                }
+
+            });
+        });
+    }
+
+    function change(peopleName, peopleId, Customid) {
+        changeWin = dhxWins.createWindow("w3", 40, 40, 450, 200);
+        dhxWins.window("w3").denyResize();
+        dhxWins.window("w3").button("minmax").hide();
+        changeWin.setModal(true);
+        changeWin.center();
+        changeWin.setText("变动");
+
+        changeForm = changeWin.attachForm();
+
+        var changeFormStructrue = [
+             { type: "settings", position: "label-left", labelAlign: "right" },
+             { type: "label", label: "将人员：" + peopleName + "转移到分支:", labelWidth: 200, offsetLeft: 20 },
+             { type: "container", label: "检测机构：", name: "organization", inputWidth: 280, labelWidth: 120 },
+             { type: "button", name: 'certain', value: "确定", offsetLeft: 230 }
+        ];
+        changeForm.load(changeFormStructrue);
+
+        var checkUnitNameCombo = new dhtmlXCombo(changeForm.getContainer("organization"));
+
+        checkUnitNameCombo.load("/CheckPeopleManager/Change?Customid=" + Customid);
+
+        changeForm.attachEvent("onButtonClick", function (name) {
+            if (name == "certain") {
+                var Custom = checkUnitNameCombo.getSelectedValue();
+                window.dhx.ajax.post("/CheckPeopleManager/unitChange", "peopleId=" + peopleId + "&&Customid=" + Custom, function (response) {
+                    var t = window.dhx.s2j(response.xmlDoc.responseText);
+                    if (t != null && t.IsSucc) {
+                        var index = layer.confirm('变动单位成功', {
+                            btn: ['确定'] //按钮
+                        }, function () {
+                            layer.close(index);
+                            dhxWins.window("w3").close();
+                        });
+                        mygrid.clearAll();
+                        gridQString = '/CheckPeopleManager/Search?' + getQueryStr();
+                        mygrid.load(gridQString, doOnGridLoaded);
+                    } else {
+                        layer.alert(t.ErroMsg);
+                        //dhtmlx.alert({ text: t.ErroMsg, ok: "确定" });
+                    }
+                })
+            }
+        });
+    }
+
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = playCardWin = unitChangeWin = seleteWin = changeWin = null;
+        }
+    }
+
+</script>

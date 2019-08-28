@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Tab_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row cl ml-5">
+        <div id="form_container" style="width:auto;height:100%"></div>
+    </div>
+    <div class="mt-10">
+        <div id="gridbox" style="position:fixed;width:100%; top:180px; left: 0; right: 0; bottom: 10px; background-color:white;overflow:hidden"></div>
+    </div>
+</div>
+
+@* xxf: 为导出Excel添加以下代码 ---------------------------------------------------- *@
+<style>
+    legend {
+        margin-bottom: 0;
+    }
+</style>
+<script type="text/javascript" src="~/Dhtmlx/ext/excel_exporter.js?v=1"></script>
+<script type="text/javascript">
+    var mygrid, myForm, dhxWins, applyWin, applyForm, auditWin, auditForm;
+    function doOnLoad() {
+        dhxWins = new dhtmlXWindows();
+        formStructure = [
+             { type: "settings", position: "label-left", labelAlign: "right", inputWidth: 150, labelWidth: 120 },
+             { type: "combo", label: "检测机构名称", name: "CUSTOMID" },
+               { type: "container", label: "地区选择", name: "Area" },
+             { type: "input", label: "工程名称", name: "ProjectName" },
+                { type: "combo", label: "强度等级", name: "SHEJIDENGJI" },
+                  { type: "checkbox", label: "无效值", name: "qiangduwuxiao" },
+             { type: "newcolumn" },
+             { type: "calendar", label: "开始日期", name: "StartDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")' },
+             { type: "input", label: "高于(%)", name: "BAIFENBIStart" },
+             { type: "input", label: "龄期大于", name: "LINQIStart" },
+             { type: "combo", label: "养护条件", name: "YANGHUTIAOJIAN" },
+             { type: "newcolumn" },
+             { type: "calendar", label: "结束日期", name: "EndDt", dateFormat: "%Y-%m-%d", value: '@DateTime.Now.ToString("yyyy-MM-dd")' },
+             { type: "input", label: "低于(%)", name: "BAIFENBIEnd" },
+             { type: "input", label: "龄期小于", name: "LINQIEnd" },
+               { type: "button", name: 'Search', value: "查询", offsetLeft: 100 },
+        
+             
+           
+        ];
+        myForm = new dhtmlXForm("form_container", formStructure);
+
+        areaCombo = new dhtmlXCombo(myForm.getContainer("Area"), null, null, "checkbox");
+        areaCombo.load('/CheckStatisHNKY/AreaCombo');
+        areaCombo.attachEvent("onClose", function () {
+            areaCombo.setComboText(areaCombo.getChecked().join(','));
+        });
+     
+
+
+        myForm.attachEvent("onButtonClick", function (name) {
+            if (name == 'Search') {
+                gridQString = '/CheckStatisHNKY/Search?' + getQueryStr();
+                mygrid.clearAll();
+                myTabbar.tabs("gridboxOne").progressOn();
+                mygrid.load(gridQString, doOnGridLoaded);
+            }
+        });
+
+        var CUSTOMIDCombo = myForm.getCombo("CUSTOMID");
+        var YANGHUTIAOJIANCombo = myForm.getCombo("YANGHUTIAOJIAN");
+        var SHEJIDENGJICombo = myForm.getCombo("SHEJIDENGJI");
+
+        CUSTOMIDCombo.enableFilteringMode('between');
+        YANGHUTIAOJIANCombo.enableFilteringMode('between');
+        SHEJIDENGJICombo.enableFilteringMode('between');
+
+
+        CUSTOMIDCombo.load("/CheckStatisHNKY/InstCombo");
+        SHEJIDENGJICombo.load("/CheckStatisHNKY/QiangDuDengJiCombo");
+        YANGHUTIAOJIANCombo.load("/CheckStatisHNKY/YangHuTiaoJianCombo");
+
+        setComboCustomFilter(CUSTOMIDCombo);
+        setComboCustomFilter(YANGHUTIAOJIANCombo);
+        setComboCustomFilter(SHEJIDENGJICombo);
+
+
+        myTabbar = new dhtmlXTabBar({
+            parent: "gridbox",
+            tabs: [
+                 { id: "gridboxOne", text: "查询结果", active: true }
+            ]
+        });
+        myTabbar.enableAutoReSize();
+
+        myToolBar = myTabbar.tabs("gridboxOne").attachToolbar();
+        myToolBar.setIconset("awesome");
+        myToolBar.loadStruct("/CheckStatisHNKY/ToolBar");
+
+        myToolBar.attachEvent("onClick", function (id) {
+            if (id = 'Export') {
+                exporter.show();
+            }
+        });
+
+        myTabbar.tabs("gridboxOne").attachStatusBar({
+            text: "<div id='recinfoArea'></div><div id='pagingArea'></div>",
+            paging: true
+        });
+
+        mygrid = myTabbar.tabs("gridboxOne").attachGrid();
+        mygrid.setImagePath("../../Dhtmlx/codebase/imgs/");
+        mygrid.setHeader("序号,工程名称,工程部位,机构名称,报告日期,报告编号,龄期,设计强度等级,强度代表值(MPa),达到设计强度的百分比");//设置列的头文本
+        mygrid.setInitWidths("40,200,*,100,100,100,100,100,100,150");          //设置列的宽度，其中* 为动态宽度
+        mygrid.setColAlign("left,left,left,left,left,left,left,left,left,left");       //设置列的左右对齐
+        mygrid.setColTypes("ro,ro,ro,ro,ro,layuijslink,ro,ro,ro,ro");                //设置列的类型，一般ro 为只读类型，用的也最多
+        mygrid.setColSorting("server,server,server,server,server,server,server,server,server,server");          //设置列的排序 int还是str
+        mygrid.init();      //最后初始化列
+        mygrid.attachEvent("onBeforeSorting", sortGridOnServer);
+        mygrid.enablePaging(true, 15, null, "pagingArea", true, "recinfoArea");
+        mygrid.setPagingSkin("bricks");
+        gridQString = '/CheckStatisHNKY/Search?' + getQueryStr();
+        myTabbar.tabs("gridboxOne").progressOn();
+        mygrid.load(gridQString, doOnGridLoaded);
+        var exporter = new ExcelExporter(myForm, mygrid, 15, "/CheckStatisHNKY/Export");
+    }
+
+
+    function getQueryStr() {
+        var data = [];
+        var formData = myForm.getFormData(true);
+        for (var key in formData) {
+            data.push(key + "=" + encodeURIComponent(formData[key]));
+        }
+        data.push('Area' + '=' + encodeURIComponent(areaCombo.getComboText()));
+        return data.join('&');
+    }
+
+    function sortGridOnServer(ind, gridObj, direct) {
+        return false;
+    }
+
+    function doOnGridLoaded() {
+        myTabbar.tabs("gridboxOne").progressOff();
+    }
+
+    function doOnUnload() {
+
+    }
+
+    function detailsReport(id) {
+        window.parent.Hui_admin_tab_raw("/TotalSearch/Details?id=" + id, "检测报告查看");
+    }
+</script>
+
